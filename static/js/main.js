@@ -1,3 +1,39 @@
-/**
- * Created by ahmetkucuk on 01/01/16.
- */
+var app = angular.module("app", ["ngResource", "ngRoute"])
+    .constant("apiUrl", "http://127.0.0.1:8080/api/")
+    .config(["$routeProvider", function($routeProvider) {
+        return $routeProvider.when("/", {
+            templateUrl: "/static/html/event-list.html",
+            controller: "AppCtrl"
+        }).when("/about", {
+            templateUrl: "/static/html/about.html",
+            controller: "AboutCtrl"
+        }).otherwise({
+            redirectTo: "/"
+        });
+    }
+    ]).config([
+        "$locationProvider", function($locationProvider) {
+            return $locationProvider.html5Mode({
+                enabled: true,
+                requireBase: false
+            }).hashPrefix("!"); // enable the new HTML5 routing and history API
+            // return $locationProvider.html5Mode(true).hashPrefix("!"); // enable the new HTML5 routing and history API
+        }
+    ]);
+
+app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
+
+    var GetEvents = $resource(apiUrl + "event");
+    GetEvents.get(function(response) {
+        $scope.events = response.Tasks;
+        console.log($scope.events);
+        console.log(response);
+    });
+
+    console.log("in app ctrl");
+
+}]);
+
+app.controller("AboutCtrl", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
+
+}]);

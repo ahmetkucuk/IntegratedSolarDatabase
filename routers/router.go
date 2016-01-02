@@ -7,6 +7,7 @@ import (
 
 func init() {
     beego.Router("/", &controllers.MainController{})
-	beego.Router("/event/", &controllers.EventController{}, "get:ListEvents")
-	beego.Router("/eventByRange/", &controllers.EventController{}, "get:ListEventsByRange")
+	beego.Router("/api/event/", &controllers.EventController{}, "get:ListEvents")
+	beego.Router("/api/eventByRange/", &controllers.EventController{}, "get:ListEventsByRange")
+	beego.Router("/*", &controllers.MainController{})
 }
