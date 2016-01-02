@@ -1,5 +1,7 @@
+
+var apiUrl = document.location.origin+"/api/";
 var app = angular.module("app", ["ngResource", "ngRoute"])
-    .constant("apiUrl", "http://127.0.0.1:8080/api/")
+    .constant("apiUrl", apiUrl)
     .config(["$routeProvider", function($routeProvider) {
         return $routeProvider.when("/", {
             templateUrl: "/static/html/event-list.html",
@@ -26,8 +28,6 @@ app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function
     var GetEvents = $resource(apiUrl + "event");
     GetEvents.get(function(response) {
         $scope.events = response.Tasks;
-        console.log($scope.events);
-        console.log(response);
     });
 
     console.log("in app ctrl");

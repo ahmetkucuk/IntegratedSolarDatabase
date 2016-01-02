@@ -7,8 +7,8 @@ import (
 )
 
 func main() {
-	dao.OpenDBConnection()
 
+	dao.OpenDBConnection()
 	beego.Run()
 }
 
