@@ -2,7 +2,7 @@ package utils
 import (
 	"database/sql"
 	"encoding/json"
-	"fmt"
+//	"fmt"
 )
 
 
@@ -43,6 +43,6 @@ func GetJSON(db *sql.DB, sqlString string) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	fmt.Println(string(jsonData))
+//	fmt.Println(string(jsonData))
 	return string(jsonData), nil
 }

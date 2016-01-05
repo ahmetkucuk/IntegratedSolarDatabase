@@ -6,6 +6,7 @@ import (
 //	"solardatabase/dao"
 	"strconv"
 	"os"
+	"solardatabase/dao"
 )
 
 func main() {
@@ -13,7 +14,7 @@ func main() {
 	if err == nil {
 		beego.HttpPort = port
 	}
-//	dao.OpenDBConnection()
+	dao.OpenDBConnection()
 	beego.Run()
 }
 

@@ -18,7 +18,7 @@ func (this *EventController) ListEvents() {
 }
 
 func (this *EventController) ListEventsByRange() {
-//	res := struct{ Tasks string }{dao.EventsByTimeRange()}
-	this.Data["json"] = dao.EventsByTimeRange()
+	request, _ := models.CreateEventByTimeRangeRequest(this.Ctx.Input)
+	this.Data["json"] = dao.EventsByTimeRange(request)
 	this.ServeJson()
 }
