@@ -6,7 +6,7 @@ import (
 )
 
 
-func GetJSON(db *sql.DB, sqlString string) (string, error) {
+func GetJSON(db *sql.DB, sqlString string) (JSONString, error) {
 	rows, err := db.Query(sqlString)
 	if err != nil {
 		return "", err
@@ -44,5 +44,5 @@ func GetJSON(db *sql.DB, sqlString string) (string, error) {
 		return "", err
 	}
 //	fmt.Println(string(jsonData))
-	return string(jsonData), nil
+	return JSONString(jsonData), nil
 }

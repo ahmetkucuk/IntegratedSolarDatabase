@@ -53,10 +53,12 @@ func GetAllEvents() ([]*models.Event) {
 	return events
 }
 
-func EventsByTimeRange(r models.EventByTimeRangeRequest) (string) {
+func EventsByTimeRange(r models.EventByTimeRangeRequest) (utils.JSONString) {
 
 	fmt.Println("r.Startime:" + r.StartTime)
-	resultJson, err := utils.GetJSON(db, "Select * from ar")
+	query := fmt.Sprintf("Select * from ar WHERE event_starttime > '%s' AND event_endtime < '%s';", r.StartTime, r.EndTime)
+	fmt.Printf(query)
+	resultJson, err := utils.GetJSON(db, query)
 	if err != nil {
 		fmt.Println("error %e", err)
 	}
