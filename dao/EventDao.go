@@ -64,3 +64,12 @@ func EventsByTimeRange(r models.EventByTimeRangeRequest) (utils.JSONString) {
 	}
 	return resultJson;
 }
+
+func GetEventsByTimeFilter(r models.TemporalRequest) (utils.JSONString) {
+	query := fmt.Sprintf(utils.QUERY_TEMPORAL, r.TableName, r.QueryType, r.StartTime, r.EndTime)
+	resultJson, err := utils.GetJSON(db, query)
+	if err != nil {
+		fmt.Println("error %e", err)
+	}
+	return resultJson
+}

@@ -14,6 +14,7 @@ func main() {
 	if err == nil {
 		beego.HttpPort = port
 	}
+
 	dao.OpenDBConnection()
 	beego.Run()
 }

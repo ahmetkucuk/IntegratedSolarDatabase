@@ -22,3 +22,9 @@ func (this *EventController) ListEventsByRange() {
 	this.Data["json"] = dao.EventsByTimeRange(request)
 	this.ServeJson()
 }
+
+func (this *EventController) TemporalQuery() {
+	request, _ := models.CreateTemporalRequest(this.Ctx.Input)
+	this.Data["json"] = dao.GetEventsByTimeFilter(request)
+	this.ServeJson()
+}
