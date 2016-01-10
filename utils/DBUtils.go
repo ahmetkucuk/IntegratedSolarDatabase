@@ -7,14 +7,31 @@ import (
 
 
 func GetJSON(db *sql.DB, sqlString string) (JSONString, error) {
-	rows, err := db.Query(sqlString)
+	jsonData, err := GetResultInBytes(db, sqlString)
 	if err != nil {
 		return "", err
+	}
+	return JSONString(jsonData), nil
+}
+
+func GetAsString(db *sql.DB, sqlString string) (string, error) {
+	jsonData, err := GetResultInBytes(db, sqlString)
+	if err != nil {
+		return "", err
+	}
+	return string(jsonData), nil
+}
+
+
+func GetResultInBytes(db *sql.DB, sqlString string) ([]byte, error) {
+	rows, err := db.Query(sqlString)
+	if err != nil {
+		return nil, err
 	}
 	defer rows.Close()
 	columns, err := rows.Columns()
 	if err != nil {
-		return "", err
+		return nil, err
 	}
 	count := len(columns)
 	tableData := make([]map[string]interface{}, 0)
@@ -41,8 +58,8 @@ func GetJSON(db *sql.DB, sqlString string) (JSONString, error) {
 	}
 	jsonData, err := json.Marshal(tableData)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-//	fmt.Println(string(jsonData))
-	return JSONString(jsonData), nil
+	return jsonData, nil
 }
+

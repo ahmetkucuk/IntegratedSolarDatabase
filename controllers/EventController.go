@@ -5,6 +5,7 @@ import (
 	"github.com/astaxie/beego"
 	"solardatabase/models"
 	"solardatabase/dao"
+	"solardatabase/services"
 )
 
 type EventController struct {
@@ -25,6 +26,6 @@ func (this *EventController) ListEventsByRange() {
 
 func (this *EventController) TemporalQuery() {
 	request, _ := models.CreateTemporalRequest(this.Ctx.Input)
-	this.Data["json"] = dao.GetEventsByTimeFilter(request)
+	this.Data["json"] = services.EventsByTimeFilter(request)
 	this.ServeJson()
 }
