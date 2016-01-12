@@ -15,3 +15,14 @@ const (
 	HTTPMethodDelete string = "DELETE"
 )
 
+/*
+static final double CDELT = 0.599733;
+static final double HPCCENTER = 4096.0 / 2.0;
+
+public static Coordinate convertHPCToPixXY(Coordinate pointIn) {
+double PixX = (CoordinateSystemConverter.HPCCENTER + (pointIn.getX() / CoordinateSystemConverter.CDELT));
+double PixY = (CoordinateSystemConverter.HPCCENTER - (pointIn.getY() / CoordinateSystemConverter.CDELT));
+return new Coordinate(PixX, PixY);
+}
+ */
+
