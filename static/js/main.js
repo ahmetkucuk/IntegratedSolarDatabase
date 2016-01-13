@@ -1,4 +1,3 @@
-
 var apiUrl = document.location.origin+"/api/";
 var app = angular.module("app", ["ngResource", "ngRoute"])
     .constant("apiUrl", apiUrl)
@@ -26,6 +25,46 @@ var app = angular.module("app", ["ngResource", "ngRoute"])
         }
     ]);
 
+app.service("canvas", function() {
+
+    var canvas = document.getElementById("testCanvas");
+    console.log(canvas);
+    var stage = new createjs.Stage(canvas);
+    createjs.Ticker.addEventListener("tick", stage);
+
+    var container = new createjs.Container();
+    stage.addChild(container);
+
+    this.loadCanvasBackground = function(urlImage) {
+
+        var bitmap = new createjs.Bitmap(urlImage);
+        bitmap.image.onload = function() {
+            bitmap.scaleX = (canvas.width / bitmap.getBounds().width);
+            bitmap.scaleY = (canvas.height / bitmap.getBounds().height);
+            container.addChild(bitmap);
+            container.setChildIndex(bitmap, 0);
+            stage.update();
+        };
+
+    };
+
+    this.addMarker = function(coordinate) {
+
+        console.log(coordinate.y);
+        var overlay1 = new createjs.Bitmap("http://i.stack.imgur.com/uvFaG.png");
+        overlay1.x = coordinate.x;
+        overlay1.y = coordinate.y;
+        container.addChild(overlay1);
+        stage.update();
+    };
+
+    this.getWidth = function() {
+        return canvas.width;
+    }
+
+});
+
+
 app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
 
     //var GetEvents = $resource(apiUrl + "event");
@@ -41,14 +80,16 @@ app.controller("AboutCtrl", ["$scope","$resource", "$location", "apiUrl", functi
 
 }]);
 
-app.controller("DrawingCtrl", ["$scope","$resource", "$location", "apiUrl","$timeout", function($scope, $resource, $location, apiUrl, $timeout) {
-    //
-    $timeout(function(){
-        drawOnSun();
-    });
+app.controller("DrawingCtrl", ["$scope","$resource", "$location", "apiUrl", "$timeout", "canvas", function($scope, $resource, $location, apiUrl, $timeout, canvas) {
+
     var GetEvents = $resource(apiUrl + "event");
     GetEvents.get(function(response) {
-        drawOnSun(response.Tasks);
+        $timeout(function(){
+
+            canvas.loadCanvasBackground("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
+            drawOnSun(response.Tasks);
+
+        });
     });
 
     function drawOnSun(events) {
@@ -57,21 +98,9 @@ app.controller("DrawingCtrl", ["$scope","$resource", "$location", "apiUrl","$tim
 
             var CDELT = 0.599733;
             var HPCCENTER = 4096 / 2.0;
-            pointIn.x = (HPCCENTER + (pointIn.x / CDELT)) * canvas.width / 4096;
-            pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * canvas.width / 4096;
+            pointIn.x = (HPCCENTER + (pointIn.x / CDELT)) * canvas.getWidth() / 4096;
+            pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * canvas.getWidth() / 4096;
         }
-
-        var canvas = document.getElementById("testCanvas");
-        var stage = new createjs.Stage(canvas);
-        createjs.Ticker.addEventListener("tick", stage);
-
-        var container = new createjs.Container();
-        stage.addChild(container);
-
-        var image = new createjs.Bitmap("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
-        image.scaleX = (canvas.width / image.getBounds().width);
-        image.scaleY = (canvas.height / image.getBounds().height);
-        container.addChild(image);
 
         for(var i = 0; i < events.length; i++) {
             var c = events[i].Coordinate.split(" ");
@@ -81,28 +110,9 @@ app.controller("DrawingCtrl", ["$scope","$resource", "$location", "apiUrl","$tim
                 x : parseFloat(x),
                 y : parseFloat(y)
             };
+            console.log(point);
             convertHPCToPixXY(point);
-            addMarker(point);
-            console.log(i);
+            canvas.addMarker(point);
         }
-
-
-        function addMarker(coordinate) {
-
-            console.log(coordinate.y);
-            var overlay1 = new createjs.Bitmap("http://i.stack.imgur.com/uvFaG.png");
-            overlay1.x = coordinate.x;
-            overlay1.y = coordinate.y;
-            container.addChild(overlay1);
-        }
-
-        function drawShapes() {
-            drawRectangle();
-            stage.update();
-        }
-
-        drawShapes();
     }
-
-
 }]);
