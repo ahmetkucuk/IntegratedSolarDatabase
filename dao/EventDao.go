@@ -29,17 +29,17 @@ func OpenDBConnection() {
 
 func GetAllEvents() ([]*models.Event) {
 
-	rows, err := db.Query("SELECT kb_archivid as id, event_starttime as starttime, ST_AsText(hpc_bbox) as hpcbbox FROM ar")
+	rows, err := db.Query("SELECT kb_archivid as id, event_starttime as starttime, ST_AsText(hpc_bbox) as hpcbbox, ST_AsText(hpc_coord) as coordinate FROM ar LIMIT 10")
 
 	if err != nil {
 		fmt.Println("error %e", err)
 	}
 
-	var id, hpcbbox string
+	var id, hpcbbox, coordinate string
 	var starttime time.Time
 	events := models.NewEvents()
 	for rows.Next() {
-		err := rows.Scan(&id, &starttime, &hpcbbox)
+		err := rows.Scan(&id, &starttime, &hpcbbox, &coordinate)
 		if err != nil {
 			fmt.Println("error", err)
 		}
@@ -47,6 +47,7 @@ func GetAllEvents() ([]*models.Event) {
 			Id: id,
 			StartTime:  starttime,
 			HpcBBox:  hpcbbox,
+			Coordinate:  coordinate,
 		}
 		events = append(events, event)
 	}

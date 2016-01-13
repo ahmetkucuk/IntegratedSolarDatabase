@@ -46,27 +46,53 @@ app.controller("DrawingCtrl", ["$scope","$resource", "$location", "apiUrl","$tim
     $timeout(function(){
         drawOnSun();
     });
-    drawOnSun();
-    function drawOnSun() {
+    var GetEvents = $resource(apiUrl + "event");
+    GetEvents.get(function(response) {
+        drawOnSun(response.Tasks);
+    });
 
+    function drawOnSun(events) {
+
+        function convertHPCToPixXY(pointIn) {
+
+            var CDELT = 0.599733;
+            var HPCCENTER = 4096 / 2.0;
+            pointIn.x = (HPCCENTER + (pointIn.x / CDELT)) * canvas.width / 4096;
+            pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * canvas.width / 4096;
+        }
 
         var canvas = document.getElementById("testCanvas");
         var stage = new createjs.Stage(canvas);
         createjs.Ticker.addEventListener("tick", stage);
 
+        var container = new createjs.Container();
+        stage.addChild(container);
 
-        function drawRectangle() {
+        var image = new createjs.Bitmap("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
+        image.scaleX = (canvas.width / image.getBounds().width);
+        image.scaleY = (canvas.height / image.getBounds().height);
+        container.addChild(image);
 
-            var container = new createjs.Container();
-            stage.addChild(container);
+        for(var i = 0; i < events.length; i++) {
+            var c = events[i].Coordinate.split(" ");
+            var x = c[0].substring(6);
+            var y = c[1].substring(0, c[1].length-1);
+            var point = {
+                x : parseFloat(x),
+                y : parseFloat(y)
+            };
+            convertHPCToPixXY(point);
+            addMarker(point);
+            console.log(i);
+        }
 
-            var image = new createjs.Bitmap("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
-            image.scaleX = (canvas.width / image.getBounds().width);
-            image.scaleY = (canvas.height / image.getBounds().height);
-            container.addChild(image);
+
+        function addMarker(coordinate) {
+
+            console.log(coordinate.y);
             var overlay1 = new createjs.Bitmap("http://i.stack.imgur.com/uvFaG.png");
-            overlay1.x = 500;
-            overlay1.y = 500;
+            overlay1.x = coordinate.x;
+            overlay1.y = coordinate.y;
             container.addChild(overlay1);
         }
 

@@ -12,6 +12,7 @@ type Event struct {
 	Id string
 	StartTime  time.Time
 	HpcBBox  string
+	Coordinate  string
 }
 
 func NewEvents() (events []*Event) {
