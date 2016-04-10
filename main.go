@@ -14,6 +14,9 @@ func main() {
 	if err == nil {
 		beego.BConfig.Listen.HTTPPort = port
 	}
+	beego.BConfig.WebConfig.AutoRender = false
+	beego.BConfig.WebConfig.TemplateLeft = "<<<"
+	beego.BConfig.WebConfig.TemplateRight = ">>>"
 
 	dao.OpenDBConnection()
 	beego.Run()
