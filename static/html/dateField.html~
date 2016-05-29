@@ -1,0 +1,8 @@
+<div class="row" >
+
+    Inside Date.html
+    <br/>
+    Enter date: <input type="text" id="s" />
+    {{s}}
+
+</div>

@@ -1,0 +1,9 @@
+<div class="row" id="IDtimePickerApp" ng-app="app" ng-controller="TimepickerDemoCtrl">
+		<b>Time</b><br/> 
+		
+		<!--<p>From timePickerApp n TimepickerDemoCtrl, mstep: {{mstep}}</p> -->
+			
+		<uib-timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></uib-timepicker>
+		<pre class="alert alert-info">Time is: {{mytime | date:'shortTime' }}</pre>
+		</div>
+<script src='/static/js/main.js'></script>
