@@ -1,11 +1,8 @@
 var apiUrl = document.location.origin+"/api/";
-var app = angular.module("app", ["ngResource", "ngRoute", "ngAnimate", "ui.bootstrap"])
+angular.module("app")
     .constant("apiUrl", apiUrl)
     .config(["$routeProvider", function($routeProvider) {
         return $routeProvider.when("/", {
-            templateUrl: "/static/html/draw.html",
-            controller: "AppCtrl"
-        }).when("/draw", {
             templateUrl: "/static/html/draw.html",
             controller: "DrawingCtrl"
         }).otherwise({
@@ -22,107 +19,91 @@ var app = angular.module("app", ["ngResource", "ngRoute", "ngAnimate", "ui.boots
         }
     ]);
 
-app.service("canvas", function() {
-
-    var canvas = document.getElementById("testCanvas");
-    console.log(canvas);
-    var stage = new createjs.Stage(canvas);
-    createjs.Ticker.addEventListener("tick", stage);
-
-    var container = new createjs.Container();
-    stage.addChild(container);
-
-    this.loadCanvasBackground = function(urlImage) {
-
-        var bitmap = new createjs.Bitmap(urlImage);
-        bitmap.image.onload = function() {
-            bitmap.scaleX = (canvas.width / bitmap.getBounds().width);
-            bitmap.scaleY = (canvas.height / bitmap.getBounds().height);
-            container.addChild(bitmap);
-            container.setChildIndex(bitmap, 0);
-            stage.update();
-        };
-
-    };
-
-    this.addMarker = function(coordinate) {
-
-        console.log(coordinate.y);
-        var overlay1 = new createjs.Bitmap("http://i.stack.imgur.com/uvFaG.png");
-        overlay1.x = coordinate.x;
-        overlay1.y = coordinate.y;
-        container.addChild(overlay1);
-        stage.update();
-    };
-
-    this.getWidth = function() {
-        return canvas.width;
-    }
-
-});
-
-
-app.controller("AppCtrl", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
+angular.module("app").controller("AppCtrl", ["$rootScope", "$scope","$resource", "$location", "apiUrl", "dateService", "$timeout", function($rootScope,$scope, $resource, $location, apiUrl, dateService, $timeout) {
 
     //var GetEvents = $resource(apiUrl + "event");
     //GetEvents.get(function(response) {
     //    $scope.events = response.Tasks;
     //});
+    dateService.initDate($scope);
+    dateService.initTime($scope);
 
-    console.log("in app ctrl");
+
+    $scope.eventNames = [
+        {name: "Active Region", code: "AR"},
+        {name: "Coronol Hole", code: "CH"},
+        {name: "Flament", code: "FL"}
+    ];
+
+    $scope.searchEvents = function() {
+        var selectedDateInMillis = dateService.getSelected($scope).getTime();
+        console.log(selectedDateInMillis);
+        var MS_PER_MINUTE = 3155695200; //60000 * 60 * 60 * 60;
+        var startDate = new Date(selectedDateInMillis - 10 * MS_PER_MINUTE);
+        var endDate = new Date(selectedDateInMillis + 10 * MS_PER_MINUTE);
+
+
+        console.log(getDateAsString(startDate));
+
+        var GetEvents = $resource(apiUrl + "eventByRange/StartTime=" + getDateAsString(startDate) + "/EndTime=" + getDateAsString(endDate));
+        GetEvents.get(function(response) {
+            $timeout(function() {
+
+                //canvas.loadCanvasBackground("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
+                console.log("Broadcast");
+                $scope.$broadcast('DrawOnCanvas', response.Events);
+
+            });
+        });
+
+        console.log("start " + startDate);
+        console.log("end " + endDate);
+
+        function getDateAsString(date) {
+            return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+        }
+    };
 
 }]);
 
-app.controller("checkBoxCtrl", ["$scope","$resource", "$location", "apiUrl", function($scope, $resource, $location, apiUrl) {
-    //$scope.val = "cat";
-    //checkbox code here
-
-}]);
-
-app.controller("DrawingCtrl", ["$scope","$resource", "$location", "apiUrl", "$timeout", "canvas", function($scope, $resource, $location, apiUrl, $timeout, canvas) {
+angular.module("app").controller("DrawingCtrl", ["$scope","$resource", "$location", "apiUrl", "$timeout", "canvas", function($scope, $resource, $location, apiUrl, $timeout, canvas) {
 	
     console.log("in draw ctrl");
     var GetEvents = $resource(apiUrl + "event");
     GetEvents.get(function(response) {
-        $timeout(function(){
+        $timeout(function() {
 
             canvas.loadCanvasBackground("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
-            drawOnSun(response.Tasks);
+            canvas.drawOnSun(response.Events);
 
         });
     });
 
- 
+    $scope.$on('DrawOnCanvas', function(event, events) {
+        console.log("Receive");
+        console.log(events);
+        canvas.drawOnSun(events);
+    });
 
-    function drawOnSun(events) {
-
-        function convertHPCToPixXY(pointIn) {
-
-            var CDELT = 0.599733;
-            var HPCCENTER = 4096 / 2.0;
-            pointIn.x = (HPCCENTER + (pointIn.x / CDELT)) * canvas.getWidth() / 4096;
-            pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * canvas.getWidth() / 4096;
-        }
-
-        for(var i = 0; i < events.length; i++) {
-            var c = events[i].Coordinate.split(" ");
-            var x = c[0].substring(6);
-            var y = c[1].substring(0, c[1].length-1);
-            var point = {
-                x : parseFloat(x),
-                y : parseFloat(y)
-            };
-            console.log(point);
-            convertHPCToPixXY(point);
-            canvas.addMarker(point);
-        }
-    }
 }]);
-app.controller("DateCtrl",  function($scope) {
 
+angular.module("app").controller("DateCtrl",  function($scope) {
         $scope.s = $scope.s + "cat";
-
-
 });
+
+angular.module("app").controller("checkBoxCtrl", ["$scope","$resource", "$location", "apiUrl","canvas", function($rootScope, $scope, $resource, $location, apiUrl, canvas) {
+    //$scope.val = "cat";
+    //checkbox code here
+    var GetEvents = $resource(apiUrl + "eventByRange/");
+    GetEvents.get(function(response) {
+        $timeout(function() {
+
+            canvas.loadCanvasBackground("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
+            canvas.drawOnSun(response.Events);
+
+        });
+    });
+
+}]);
 
 

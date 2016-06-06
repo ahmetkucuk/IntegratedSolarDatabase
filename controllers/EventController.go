@@ -13,14 +13,15 @@ type EventController struct {
 }
 
 func (this *EventController) ListEvents() {
-	res := struct{ Tasks []*models.Event }{dao.GetAllEvents()}
+	res := struct{ Events []*models.Event }{dao.GetAllEvents()}
 	this.Data["json"] = res
 	this.ServeJSON()
 }
 
 func (this *EventController) ListEventsByRange() {
 	request, _ := models.CreateEventByTimeRangeRequest(this.Ctx.Input)
-	this.Data["json"] = dao.EventsByTimeRange(request)
+	res := struct{ Events []*models.Event }{dao.EventsByTimeRange(request)}
+	this.Data["json"] = res
 	this.ServeJSON()
 }
 

@@ -7,7 +7,7 @@ import (
 
 func EventsByTimeFilter(r models.TemporalRequest) (*models.EventListResponse) {
 
-	result := &models.EventListResponse{
+	result := &models.EventListResponse {
 		Status: "OK",
 		StatusCode:1,
 		Msg:"Successful",

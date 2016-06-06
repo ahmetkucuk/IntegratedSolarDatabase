@@ -1,0 +1,190 @@
+<html data-ng-app="app" data-ng-controller="AppCtrl">
+	<head>
+	<title>Solar Event Database</title>
+	<link rel='stylesheet' href='/static/third/bootstrap336/css/bootstrap.min.css'>
+    	<link rel='stylesheet' href='/static/third/bootstrap336/css/bootstrap-theme.min.css'>
+    	<link rel='stylesheet' href='/static/css/main.css'>
+	
+	<script src="/static/third/angular150/angular.js"></script>
+	<script src="/static/third/angular150/angular-animate.js">  </script>
+	<script src="/static/third/bootstrap336/js/ui-bootstrap-tpls-1.2.4.min.js">  </script>
+	<script src='/static/js/main.js'></script>
+	<script src="/static/js/dateHandler.js">  </script>
+	<script src="/static/js/timeHandler.js">  </script>
+	
+	</head>
+	<body>
+		<div class="container-fluid">
+		<div class="row">
+		<div class="well">
+		<h1><center><b>Solar Event Database with Interpolation and Trajectory (SEDIT)</b></center></h1>
+		</div>
+		</div>
+		
+
+		<div class="col-sm-3" >
+		<div class="form-group">
+
+		
+		<div class="row" id="IDdatePickerApp" ng-app="datePickerApp" ng-controller="DatepickerDemoCtrl">
+		<b>Date</b><br/> 
+		<p class="input-group">
+		<input type="text" class="form-control" uib-datepicker-popup="{{format}}" ng-model="dt" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" />
+        <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+        </span>
+		</p>
+		 <pre>Selected date is:<br/> <em>{{dt | date:'fullDate' }}</em></pre>
+		</div>
+		
+		
+		<!--
+		<div class="row" id="IDmyApp" ng-app="myApp" ng-controller="myCtrl">
+		<p>From myApp n myCtrl, value of test: {{test}}</p>
+		</div>
+		-->
+		
+		
+		
+		<div class="row" id="IDtimePickerApp" ng-app="timePickerApp" ng-controller="TimepickerDemoCtrl">
+		<b>Time</b><br/> 
+		
+		<!--<p>From timePickerApp n TimepickerDemoCtrl, mstep: {{mstep}}</p> -->
+			
+		<uib-timepicker ng-model="mytime" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></uib-timepicker>
+		<pre class="alert alert-info">Time is: {{mytime | date:'shortTime' }}</pre>
+		</div>
+		
+			
+			
+		
+		<div class="row" id="IDcheckBoxApp">
+		<b>Events</b> 
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Active Region</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Coronal Mass Event</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Coronal Cavity</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Coronal Dimming</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Coronal Hole</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Coronal Jet</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Coronal Rain</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Coronal Wave</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Emerging Flux</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Eruption</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Filament</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Filament Eruption</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Filament Activation</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Flare</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Loop</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Oscillation</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Sigmoid</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Spray Surge</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Sunspot</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Topological Object</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Plage</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Other</label>
+		</div>
+		
+		<div class="checkbox">
+		<label><input type="checkbox" value="">Nothing Reported</label>
+		</div>
+		
+		</div>
+		</div>
+		</div>
+
+		
+		
+		
+		<div class="column-sm-10">
+		
+			<div class="container">
+
+				<div class="row">
+					<div class="span12">
+						<!-- as the route changes, the AngularJS view will be dynamically rendered and populated -->
+
+						<a href="draw">Draw </a>
+						<div data-ng-view></div>
+					</div>
+				</div>
+
+			</div>
+		</div>
+		
+		</div>
+		
+		
+		<script>
+		
+			//angular.bootstrap(document.getElementById("IDmyApp"),['myApp']);
+			//angular.bootstrap(document.getElementById("IDdatePickerApp"), ['datePickerApp']);
+			angular.bootstrap(document.getElementById("IDtimePickerApp"),['timePickerApp']);
+			//angular.bootstrap(document.getElementById("IDcheckBoxApp"),['checkBoxApp']);
+		</script>
+    
+	</body>
+</html>
