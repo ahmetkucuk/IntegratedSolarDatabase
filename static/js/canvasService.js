@@ -45,6 +45,7 @@ angular.module("app").service("canvas", function() {
             overlay1.x = coordinate.x;
             overlay1.y = coordinate.y;
             container.addChild(overlay1);
+            container.setChildIndex(overlay1, 1);
             markers.push(overlay1);
             stage.update();
         };
@@ -57,14 +58,29 @@ angular.module("app").service("canvas", function() {
         }
     };
 
+    var removed = false;
+    var backgroundImage = new Image();
+    var bitmap;
     this.loadCanvasBackground = function(urlImage) {
 
-        var bitmap = new createjs.Bitmap(urlImage);
-        bitmap.image.onload = function() {
+        //backgroundImage = new Image();
+        backgroundImage.src = urlImage;
+        backgroundImage.onload = handleImageLoad;
+
+        function handleImageLoad(event) {
+            console.log("in handle image " + canvas.width);
+            if(!removed) {
+
+                bitmap = new createjs.Bitmap(backgroundImage);
+                bitmap.scaleX = (canvas.width / bitmap.getBounds().width);
+                bitmap.scaleY = (canvas.height / bitmap.getBounds().height);
+                container.addChild(bitmap);
+                container.setChildIndex(bitmap, 0);
+                removed = true;
+            }
+
             bitmap.scaleX = (canvas.width / bitmap.getBounds().width);
             bitmap.scaleY = (canvas.height / bitmap.getBounds().height);
-            container.addChild(bitmap);
-            container.setChildIndex(bitmap, 0);
             stage.update();
         };
 

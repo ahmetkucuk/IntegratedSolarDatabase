@@ -120,6 +120,7 @@ func EventTemporalSearch(r models.TemporalRequest) (utils.JSONString) {
 func GetClosestImage(r models.ImageRequest) (models.ImageUrl) {
 	query := fmt.Sprintf(utils.QUERY_IMAGE_URL, r.Wavelength, r.Size, r.ImageDate, r.ImageDate)
 	result, err := utils.GetResultInBytes(db, query)
+	fmt.Println(query)
 	if err != nil {
 		fmt.Println("error %e", err)
 	}

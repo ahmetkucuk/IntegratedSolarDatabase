@@ -28,6 +28,13 @@ angular.module("app").controller("AppCtrl", ["$rootScope", "$scope","$resource",
     dateService.initDate($scope);
     dateService.initTime($scope);
 
+    $scope.wavelengthInfo = {
+        availableOptions: [
+            {name: "0094", id: 0},
+            {name: "0171", id:1}
+        ],
+        selectedOption: {id: 0, name:'0094'}
+    };
 
     $scope.eventNames = [
         {name: "Active Region", code: "AR"},
@@ -35,34 +42,32 @@ angular.module("app").controller("AppCtrl", ["$rootScope", "$scope","$resource",
         {name: "Flament", code: "FL"}
     ];
 
+    function loadBackground() {
+        var w = $scope.wavelengthInfo.selectedOption.name;
+        var GetImage = $resource(apiUrl + "imageurl/ImageDate=" + dateService.getDateAsString($scope) + "/Size=" + 512 + "/Wavelength=" + w);
+        GetImage.get(function(response) {
+            $scope.$broadcast('ChangeBackground', response.Result.URL);
+        });
+    }
+
+    $scope.wavelengthChanged = function() {
+        loadBackground();
+    };
+
     $scope.searchEvents = function() {
         var selectedDateInMillis = dateService.getSelected($scope).getTime();
-        console.log(selectedDateInMillis);
+
         var MS_PER_MINUTE = 3155695200; //60000 * 60 * 60 * 60;
         var startDate = new Date(selectedDateInMillis - 10 * MS_PER_MINUTE);
         var endDate = new Date(selectedDateInMillis + 10 * MS_PER_MINUTE);
 
 
-        console.log(getDateAsString(startDate));
+        var GetEvents = $resource(apiUrl + "eventByRange/StartTime=" + dateService.dateToString(startDate) + "/EndTime=" + dateService.dateToString(endDate));
+        GetEvents.get(function(response) { $scope.$broadcast('DrawEventsOnCanvas', response.Events);});
 
-        var GetEvents = $resource(apiUrl + "eventByRange/StartTime=" + getDateAsString(startDate) + "/EndTime=" + getDateAsString(endDate));
-        GetEvents.get(function(response) {
-            $timeout(function() {
-
-                //canvas.loadCanvasBackground("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
-                console.log("Broadcast");
-                $scope.$broadcast('DrawOnCanvas', response.Events);
-
-            });
-        });
-
-        console.log("start " + startDate);
-        console.log("end " + endDate);
-
-        function getDateAsString(date) {
-            return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
-        }
+        loadBackground();
     };
+    loadBackground();
 
 }]);
 
@@ -71,18 +76,15 @@ angular.module("app").controller("DrawingCtrl", ["$scope","$resource", "$locatio
     console.log("in draw ctrl");
     var GetEvents = $resource(apiUrl + "event");
     GetEvents.get(function(response) {
-        $timeout(function() {
-
-            canvas.loadCanvasBackground("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
-            canvas.drawOnSun(response.Events);
-
-        });
+        canvas.drawOnSun(response.Events);
     });
 
-    $scope.$on('DrawOnCanvas', function(event, events) {
-        console.log("Receive");
-        console.log(events);
+    $scope.$on('DrawEventsOnCanvas', function(event, events) {
         canvas.drawOnSun(events);
+    });
+
+    $scope.$on('ChangeBackground', function(event, backgroundUrl) {
+        canvas.loadCanvasBackground(backgroundUrl);
     });
 
 }]);

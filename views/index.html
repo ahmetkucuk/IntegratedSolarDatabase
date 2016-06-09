@@ -50,6 +50,12 @@
 				<uib-timepicker ng-model="searchForm.time" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></uib-timepicker>
 			</div>
 
+			<div class="form-group">
+				<select class="form-control"
+						ng-change="wavelengthChanged()"
+						ng-options="option.name for option in wavelengthInfo.availableOptions track by option.id"
+						ng-model="wavelengthInfo.selectedOption"></select>
+			</div>
 
 			<div id="event-group" class="form-group">
 
