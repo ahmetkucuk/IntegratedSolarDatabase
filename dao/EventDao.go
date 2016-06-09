@@ -7,6 +7,7 @@ import (
 	"solardatabase/models"
 	"solardatabase/utils"
 	"time"
+	"encoding/json"
 )
 
 
@@ -114,4 +115,19 @@ func EventTemporalSearch(r models.TemporalRequest) (utils.JSONString) {
 		fmt.Println("error %e", err)
 	}
 	return resultJson
+}
+
+func GetClosestImage(r models.ImageRequest) (models.ImageUrl) {
+	query := fmt.Sprintf(utils.QUERY_IMAGE_URL, r.Wavelength, r.Size, r.ImageDate, r.ImageDate)
+	result, err := utils.GetResultInBytes(db, query)
+	if err != nil {
+		fmt.Println("error %e", err)
+	}
+	var imageUrl []models.ImageUrl
+	er := json.Unmarshal(result, &imageUrl)
+	if er != nil {
+		panic(er)
+	}
+	imageUrl[0].URL = utils.IMAGE_URL_BASE + imageUrl[0].URL
+	return imageUrl[0]
 }

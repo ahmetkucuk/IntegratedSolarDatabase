@@ -15,3 +15,15 @@ func EventsByTimeFilter(r models.TemporalRequest) (*models.EventListResponse) {
 	}
 	return result
 }
+
+func FindClosestImage(r models.ImageRequest) (*models.ImageUrlResponse) {
+
+
+	result := &models.ImageUrlResponse {
+		Status: "OK",
+		StatusCode:1,
+		Msg:"Successful",
+		Result: dao.GetClosestImage(r),
+	}
+	return result
+}

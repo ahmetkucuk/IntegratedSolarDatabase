@@ -30,3 +30,9 @@ func (this *EventController) TemporalQuery() {
 	this.Data["json"] = services.EventsByTimeFilter(request)
 	this.ServeJSON()
 }
+
+func (this *EventController) ImageUrlQuery() {
+	request, _ := models.CreateImageRequest(this.Ctx.Input)
+	this.Data["json"] = services.FindClosestImage(request)
+	this.ServeJSON()
+}

@@ -18,6 +18,12 @@ type TemporalRequest struct {
 	QueryType	string
 }
 
+type ImageRequest struct {
+	ImageDate	string
+	Size	string
+	Wavelength	string
+}
+
 
 func CreateEventByTimeRangeRequest(input *context.BeegoInput)  (request EventByTimeRangeRequest, err error) {
 	r := EventByTimeRangeRequest{}
@@ -52,3 +58,23 @@ func CreateTemporalRequest(input *context.BeegoInput)  (request TemporalRequest,
 
 	return r, nil
 }
+
+
+func CreateImageRequest(input *context.BeegoInput)  (request ImageRequest, err error) {
+	r := ImageRequest{}
+
+	ImageDate := input.Param(":ImageDate")
+	r.ImageDate = strings.Split(ImageDate, "=")[1]
+
+
+	Size := input.Param(":Size")
+	r.Size = strings.Split(Size, "=")[1]
+
+
+	Wavelengths := input.Param(":Wavelength")
+	r.Wavelength = strings.Split(Wavelengths, "=")[1]
+
+
+	return r, nil
+}
+

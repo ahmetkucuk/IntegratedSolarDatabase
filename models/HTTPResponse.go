@@ -14,3 +14,15 @@ type EventListResponse struct {
 	Msg	string
 	Result utils.JSONString
 }
+
+type ImageUrl struct {
+	URL string
+
+}
+
+type ImageUrlResponse struct {
+	Status	string
+	StatusCode	int
+	Msg	string
+	Result ImageUrl
+}

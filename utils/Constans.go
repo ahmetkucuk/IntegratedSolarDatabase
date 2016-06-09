@@ -5,7 +5,11 @@ const (
 	//--Usage example: -- select temporal_filter('ar_spt', 'Equals', 10, 10, 200, 200);
 	QUERY_TEMPORAL string = "select temporal_filter('%s', '%s', '%s', '%s');"
 
-// HTTPMethodPost represents the HTTP Method for POST requests, literally "POST".
+	QUERY_IMAGE_URL string = "SELECT url FROM img_url WHERE wavelength like '%s' AND image_size = %s ORDER BY GREATEST('%s'::timestamp,  image_date) - LEAST('%s'::timestamp,  image_date) LIMIT 1;"
+
+	IMAGE_URL_BASE string = "http://sdo.gsfc.nasa.gov/assets/img/browse/"
+
+	// HTTPMethodPost represents the HTTP Method for POST requests, literally "POST".
 	HTTPMethodPost string = "POST"
 // HTTPMethodPut represents the HTTP Method for PUT requests, literally "PUT".
 	HTTPMethodPut string = "PUT"
