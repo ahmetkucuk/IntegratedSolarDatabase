@@ -47,11 +47,26 @@ func GetAllEvents() ([]*models.Event) {
 		event := &models.Event{
 			Id: id,
 			StartTime:  starttime,
-			HpcBBox:  hpcbbox,
+			HpcBbox:  hpcbbox,
 			Coordinate:  coordinate,
 		}
 		events = append(events, event)
 	}
+	return events
+}
+
+func GetEventsFromQuery(query string) ([]*models.Event) {
+	result, err := utils.GetResultInBytes(db, query)
+	fmt.Println(query)
+	if err != nil {
+		fmt.Println("error %e", err)
+	}
+	var events []*models.Event
+	er := json.Unmarshal(result, &events)
+	if er != nil {
+		panic(er)
+	}
+
 	return events
 }
 
@@ -65,18 +80,19 @@ func GetEventsByQuery(query string) ([]*models.Event) {
 		return events
 	}
 
-	var id, hpcbbox, coordinate string
-	var starttime time.Time
+	var Id, HpcBbox, Coordinate, Type string
+	var StartTime time.Time
 	for rows.Next() {
-		err := rows.Scan(&id, &starttime, &hpcbbox, &coordinate)
+		err := rows.Scan(&Id, &StartTime, &HpcBbox, &Coordinate, &Type)
 		if err != nil {
 			fmt.Println("error", err)
 		}
 		event := &models.Event{
-			Id: id,
-			StartTime:  starttime,
-			HpcBBox:  hpcbbox,
-			Coordinate:  coordinate,
+			Id: Id,
+			StartTime:  StartTime,
+			HpcBbox:  HpcBbox,
+			Coordinate:  Coordinate,
+			Type: Type,
 		}
 		events = append(events, event)
 	}
@@ -88,9 +104,10 @@ func EventsByTimeRange(r models.EventByTimeRangeRequest) ([]*models.Event) {
 
 
 	fmt.Println("r.Startime:" + r.StartTime)
-	fmt.Println("r.Endtime:" + r.EndTime)
-	query := fmt.Sprintf("Select kb_archivid as id, event_starttime as starttime, ST_AsText(hpc_bbox) as hpcbbox, ST_AsText(hpc_coord) as coordinate from ar WHERE event_starttime > '%s' AND event_starttime < '%s' ORDER BY event_starttime LIMIT 20;", r.StartTime, r.EndTime)
-	return GetEventsByQuery(query)
+	query := fmt.Sprintf("Select kb_archivid as Id, event_starttime as StartTime, ST_AsText(hpc_bbox) as HpcBbox, ST_AsText(hpc_coord) as Coordinate, event_type as Type from ar WHERE event_starttime > '%s' AND event_starttime < '%s' ORDER BY event_starttime LIMIT 20;", r.StartTime, r.EndTime)
+	fmt.Println("r.Endtime:" + query)
+	//return GetEventsByQuery(query)
+	return GetEventsFromQuery(query)
 	//fmt.Printf(query)
 	//resultJson, err := utils.GetJSON(db, query)
 	//if err != nil {
@@ -118,7 +135,7 @@ func EventTemporalSearch(r models.TemporalRequest) (utils.JSONString) {
 }
 
 func GetClosestImage(r models.ImageRequest) (models.ImageUrl) {
-	query := fmt.Sprintf(utils.QUERY_IMAGE_URL, r.Wavelength, r.Size, r.ImageDate, r.ImageDate)
+	query := fmt.Sprintf(utils.QUERY_IMAGE_URL, r.Wavelength, r.Size, r.ImageDate, r.ImageDate, r.ImageDate, r.ImageDate)
 	result, err := utils.GetResultInBytes(db, query)
 	fmt.Println(query)
 	if err != nil {
@@ -129,6 +146,13 @@ func GetClosestImage(r models.ImageRequest) (models.ImageUrl) {
 	if er != nil {
 		panic(er)
 	}
-	imageUrl[0].URL = utils.IMAGE_URL_BASE + imageUrl[0].URL
-	return imageUrl[0]
+
+	selectUrl := models.ImageUrl{}
+
+	if len(imageUrl) != 0 {
+		selectUrl.URL = utils.IMAGE_URL_BASE + imageUrl[0].URL
+	} else {
+		selectUrl.URL = utils.IMAGE_URL_BASE + "2013/06/11/20130611_231750_512_0094.jpg"
+	}
+	return selectUrl
 }

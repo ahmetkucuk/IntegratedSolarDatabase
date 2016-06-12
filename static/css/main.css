@@ -7,3 +7,12 @@
 .element {
    .center-block();
 }
+
+.fill {
+    margin-bottom: -9999px;
+    padding-bottom: 9999px;
+}
+
+.container-fluid {
+    overflow: hidden;
+}

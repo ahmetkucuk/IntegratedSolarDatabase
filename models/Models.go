@@ -11,8 +11,9 @@ type Hello struct {
 type Event struct {
 	Id string
 	StartTime  time.Time
-	HpcBBox  string
+	HpcBbox  string
 	Coordinate  string
+	Type string
 }
 
 func NewEvents() (events []*Event) {
