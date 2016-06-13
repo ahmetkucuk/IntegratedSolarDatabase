@@ -17,7 +17,8 @@ func OpenDBConnection() {
 
 	fmt.Println("Connecting to DB")
 	var err error
-	db, err = sql.Open("postgres", "user=ahmetkucuk dbname=dbproject sslmode=disable")
+	//db, err = sql.Open("postgres", "user=ahmetkucuk dbname=dbproject sslmode=disable")
+	db, err = sql.Open("postgres", "user=postgres host=dmlab.cs.gsu.edu dbname=postgres password='r3mot3p8sswo4d' sslmode=disable")
 
 	if err != nil {
 		fmt.Println("error")

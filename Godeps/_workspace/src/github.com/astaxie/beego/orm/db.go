@@ -954,7 +954,7 @@ func (d *dbBase) Count(q dbQuerier, qs *querySet, mi *modelInfo, cond *Condition
 }
 
 // generate sql with replacing operator string placeholders and replaced values.
-func (d *dbBase) GenerateOperatorSql(mi *modelInfo, fi *fieldInfo, operator string, args []interface{}, tz *time.Location) (string, []interface{}) {
+func (d *dbBase) GenerateOperatorSQL(mi *modelInfo, fi *fieldInfo, operator string, args []interface{}, tz *time.Location) (string, []interface{}) {
 	sql := ""
 	params := getFlatParams(fi, args, tz)
 
@@ -979,7 +979,7 @@ func (d *dbBase) GenerateOperatorSql(mi *modelInfo, fi *fieldInfo, operator stri
 		if len(params) > 1 {
 			panic(fmt.Errorf("operator `%s` need 1 args not %d", operator, len(params)))
 		}
-		sql = d.ins.OperatorSql(operator)
+		sql = d.ins.OperatorSQL(operator)
 		switch operator {
 		case "exact":
 			if arg == nil {
@@ -1643,7 +1643,7 @@ func (d *dbBase) GetColumns(db dbQuerier, table string) (map[string][3]string, e
 }
 
 // not implement.
-func (d *dbBase) OperatorSql(operator string) string {
+func (d *dbBase) OperatorSQL(operator string) string {
 	panic(ErrNotImplement)
 }
 

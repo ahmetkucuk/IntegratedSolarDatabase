@@ -114,17 +114,6 @@ angular.module("app").controller("DateCtrl",  function($scope) {
 });
 
 angular.module("app").controller("checkBoxCtrl", ["$scope","$resource", "$location", "apiUrl","canvas", function($rootScope, $scope, $resource, $location, apiUrl, canvas) {
-    //$scope.val = "cat";
-    //checkbox code here
-    var GetEvents = $resource(apiUrl + "eventByRange/");
-    GetEvents.get(function(response) {
-        $timeout(function() {
-
-            canvas.loadCanvasBackground("http://sdo.gsfc.nasa.gov/assets/img/browse/2010/06/07/20100607_000900_4096_0171.jpg");
-            canvas.drawOnSun(response.Events);
-
-        });
-    });
 
 }]);
 

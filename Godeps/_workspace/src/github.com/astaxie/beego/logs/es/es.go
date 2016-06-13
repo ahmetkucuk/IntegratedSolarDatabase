@@ -12,7 +12,7 @@ import (
 	"github.com/belogik/goes"
 )
 
-func NewES() logs.LoggerInterface {
+func NewES() logs.Logger {
 	cw := &esLogger{
 		Level: logs.LevelDebug,
 	}

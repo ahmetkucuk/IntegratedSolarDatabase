@@ -14,6 +14,7 @@ func main() {
 	if err == nil {
 		beego.BConfig.Listen.HTTPPort = port
 	}
+	beego.BConfig.RunMode = "dev"
 	beego.BConfig.WebConfig.AutoRender = false
 	beego.BConfig.WebConfig.TemplateLeft = "<<<"
 	beego.BConfig.WebConfig.TemplateRight = ">>>"
