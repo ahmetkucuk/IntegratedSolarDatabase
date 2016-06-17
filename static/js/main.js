@@ -1,6 +1,6 @@
-var apiUrl = document.location.origin+"/api/";
+var URL = document.location.origin;
 angular.module("app")
-    .constant("apiUrl", apiUrl)
+    .constant("URL", URL)
     .config(["$routeProvider", function($routeProvider) {
         return $routeProvider.when("/", {
             templateUrl: "/static/html/draw.html",
@@ -10,18 +10,18 @@ angular.module("app")
         });
     }
     ]).config([
-        "$locationProvider", function($locationProvider) {
-            return $locationProvider.html5Mode({
-                enabled: true,
-                requireBase: false
-            }).hashPrefix("!"); // enable the new HTML5 routing and history API
-            // return $locationProvider.html5Mode(true).hashPrefix("!"); // enable the new HTML5 routing and history API
-        }
-    ]);
+    "$locationProvider", function($locationProvider) {
+        return $locationProvider.html5Mode({
+            enabled: true,
+            requireBase: false
+        }).hashPrefix("!"); // enable the new HTML5 routing and history API
+        // return $locationProvider.html5Mode(true).hashPrefix("!"); // enable the new HTML5 routing and history API
+    }
+]);
 
-angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", "$location", "apiUrl", "dateService", "RESTService", "ngProgressFactory", function($rootScope,$scope, $resource, $location, apiUrl, dateService, RESTService, ngProgressFactory) {
+angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", "$location", "URL", "dateService", "RESTService", "ngProgressFactory", function($rootScope,$scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory) {
 
-    //var GetEvents = $resource(apiUrl + "event");
+    //var GetEvents = $resource(URL + "event");
     //GetEvents.get(function(response) {
     //    $scope.events = response.Tasks;
     //});
@@ -55,11 +55,11 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
         var w = $scope.wavelengthInfo.selectedOption.name;
 
         RESTService.getClosestImage($scope, dateService.getDateAsString($scope), 1024, w, function(url) {
-            $scope.$broadcast('ChangeBackground', url);
-        },
+                $scope.$broadcast('ChangeBackground', url);
+            },
             function(error) {
 
-        });
+            });
     }
 
     $scope.wavelengthChanged = function() {
@@ -75,7 +75,7 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
         var endDate = new Date(selectedDateInMillis + 10 * MS_PER_MINUTE);
 
         loadBackground();
-        RESTService.getEvents($scope, dateService.dateToString(startDate), dateService.dateToString(endDate),
+        RESTService.temporalQuery($scope, dateService.dateToString(startDate), dateService.dateToString(endDate),
             function(result) {
                 $scope.$broadcast('DrawEventsOnCanvas', result);
                 RESTService.getEventTypes();
@@ -84,7 +84,7 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
 
             }
         );
-        //var GetEvents = $resource(apiUrl + "eventByRange/StartTime=" + dateService.dateToString(startDate) + "/EndTime=" + dateService.dateToString(endDate));
+        //var GetEvents = $resource(URL + "eventByRange/StartTime=" + dateService.dateToString(startDate) + "/EndTime=" + dateService.dateToString(endDate));
         //GetEvents.get(function(response) { $scope.$broadcast('DrawEventsOnCanvas', response.Events);});
 
     };
@@ -92,8 +92,8 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
 
 }]);
 
-angular.module("app").controller("DrawingCtrl", ["$scope","$resource", "$location", "apiUrl", "$timeout", "canvas", function($scope, $resource, $location, apiUrl, $timeout, canvas) {
-	
+angular.module("app").controller("DrawingCtrl", ["$scope","$resource", "$location", "URL", "$timeout", "canvas", function($scope, $resource, $location, URL, $timeout, canvas) {
+
     console.log("in draw ctrl");
 
     $scope.$on('DrawEventsOnCanvas', function(event, events) {
@@ -110,11 +110,9 @@ angular.module("app").controller("DrawingCtrl", ["$scope","$resource", "$locatio
 }]);
 
 angular.module("app").controller("DateCtrl",  function($scope) {
-        $scope.s = $scope.s + "cat";
+    $scope.s = $scope.s + "cat";
 });
 
-angular.module("app").controller("checkBoxCtrl", ["$scope","$resource", "$location", "apiUrl","canvas", function($rootScope, $scope, $resource, $location, apiUrl, canvas) {
+angular.module("app").controller("checkBoxCtrl", ["$scope","$resource", "$location", "URL","canvas", function($rootScope, $scope, $resource, $location, URL, canvas) {
 
 }]);
-
-

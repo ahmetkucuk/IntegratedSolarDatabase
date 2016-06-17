@@ -26,7 +26,8 @@ func (this *EventController) ListEventsByRange() {
 }
 
 func (this *EventController) TemporalQuery() {
-	request, _ := models.CreateTemporalRequest(this.Ctx.Input)
+
+	request, _ := models.CreateTemporalRequest(this.Input())
 	this.Data["json"] = services.EventsByTimeFilter(request)
 	this.ServeJSON()
 }

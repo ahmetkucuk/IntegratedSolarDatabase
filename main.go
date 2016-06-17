@@ -7,6 +7,8 @@ import (
 	"strconv"
 	"os"
 	"solardatabase/dao"
+	"fmt"
+	"solardatabase/models"
 )
 
 func main() {
@@ -18,8 +20,14 @@ func main() {
 	beego.BConfig.WebConfig.AutoRender = false
 	beego.BConfig.WebConfig.TemplateLeft = "<<<"
 	beego.BConfig.WebConfig.TemplateRight = ">>>"
-
-	dao.OpenDBConnection()
+	var dbUser = beego.AppConfig.String("dbuser")
+	var dbHost = beego.AppConfig.String("dbhost")
+	var dbName = beego.AppConfig.String("dbname")
+	var dbPass = beego.AppConfig.String("dbpass")
+	fmt.Printf("before type")
+	fmt.Println(models.Tvalue(models.T_GreaterThan))
+	fmt.Println(models.Svalue(models.S_Contains))
+	dao.OpenDBConnection(dbUser, dbHost, dbName, dbPass)
 	beego.Run()
 }
 

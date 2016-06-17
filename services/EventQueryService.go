@@ -11,7 +11,7 @@ func EventsByTimeFilter(r models.TemporalRequest) (*models.EventListResponse) {
 		Status: "OK",
 		StatusCode:1,
 		Msg:"Successful",
-		Result:dao.EventTemporalSearch(r),
+		Result:dao.TemporalSearch(r),
 	}
 	return result
 }

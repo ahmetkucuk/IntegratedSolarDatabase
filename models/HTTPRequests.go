@@ -3,6 +3,8 @@ import (
 //	"fmt"
 "github.com/astaxie/beego/context"
 "strings"
+	"net/url"
+	"fmt"
 )
 
 
@@ -14,8 +16,10 @@ type EventByTimeRangeRequest struct {
 type TemporalRequest struct {
 	StartTime	string
 	EndTime	string
-	TableName	string
-	QueryType	string
+	TableNames	[]string
+	SortBy string
+	Limit string
+	Offset string
 }
 
 type ImageRequest struct {
@@ -38,23 +42,17 @@ func CreateEventByTimeRangeRequest(input *context.BeegoInput)  (request EventByT
 	return r, nil
 }
 
-func CreateTemporalRequest(input *context.BeegoInput)  (request TemporalRequest, err error) {
+func CreateTemporalRequest(input url.Values)  (request TemporalRequest, err error) {
 	r := TemporalRequest{}
 
-	StartTime := input.Param(":StartTime")
-	r.StartTime = strings.Split(StartTime, "=")[1]
+	r.StartTime = input.Get("starttime")
+	r.EndTime = input.Get("endtime")
+	r.TableNames = strings.Split(input.Get("tablenames"), ",")
+	r.SortBy = input.Get("sortby")
+	r.Limit = input.Get("limit")
+	r.Offset = input.Get("offset")
 
-
-	EndTime := input.Param(":EndTime")
-	r.EndTime = strings.Split(EndTime, "=")[1]
-
-
-	TableName := input.Param(":TableName")
-	r.TableName = strings.Split(TableName, "=")[1]
-
-
-	QueryType := input.Param(":QueryType")
-	r.QueryType = strings.Split(QueryType, "=")[1]
+	fmt.Println("EndTime", r.TableNames)
 
 	return r, nil
 }

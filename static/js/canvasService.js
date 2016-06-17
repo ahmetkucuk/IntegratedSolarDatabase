@@ -37,7 +37,8 @@ angular.module("app").service("canvas", function() {
         }
 
         for(var i = 0; i < events.length; i++) {
-            var c = events[i].Coordinate.split(" ");
+            console.log(events[i].coordinate);
+            var c = events[i].coordinate.split(" ");
             var x = c[0].substring(6);
             var y = c[1].substring(0, c[1].length-1);
             var point = {
@@ -67,6 +68,7 @@ angular.module("app").service("canvas", function() {
                 container.removeChild(markers[i]);
             }
             markers = [];
+            stage.update();
         }
     };
 
@@ -148,8 +150,8 @@ angular.module("app").service("canvas", function() {
     function initButtonZoomListener() {
         var zoomInButtonImage = new Image();
         var zoomOutButtonImage = new Image();
-        zoomInButtonImage.src = "http://127.0.0.1:8080/static/img/zoomin.png";
-        zoomOutButtonImage.src = "http://127.0.0.1:8080/static/img/zoomout.png";
+        zoomInButtonImage.src = URL + "/static/img/zoomin.png";
+        zoomOutButtonImage.src = URL + "/static/img/zoomout.png";
         zoomInButtonImage.onload = handleZoomInButton;
         zoomOutButtonImage.onload = handleZoomOutButton;
 

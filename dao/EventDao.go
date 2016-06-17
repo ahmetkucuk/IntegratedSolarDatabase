@@ -13,19 +13,20 @@ import (
 
 var db *sql.DB
 
-func OpenDBConnection() {
+func OpenDBConnection(userName string, host string, dbName string, password string) {
 
 	fmt.Println("Connecting to DB")
 	var err error
 	//db, err = sql.Open("postgres", "user=ahmetkucuk dbname=dbproject sslmode=disable")
-	db, err = sql.Open("postgres", "user=postgres host=dmlab.cs.gsu.edu dbname=postgres password='r3mot3p8sswo4d' sslmode=disable")
+	var dbUrl = fmt.Sprintf("user=%s host=%s dbname=%s password='%s' sslmode=disable", userName, host, dbName, password)
+	db, err = sql.Open("postgres", dbUrl)
 
 	if err != nil {
 		fmt.Println("error")
 	}
 
 	if err = db.Ping(); err != nil {
-		fmt.Println("error db connection")
+		fmt.Println("error db connection %e", err)
 	}
 }
 
@@ -117,17 +118,12 @@ func EventsByTimeRange(r models.EventByTimeRangeRequest) ([]*models.Event) {
 	//return resultJson;
 }
 
-func GetEventsByTimeFilter(r models.TemporalRequest) (string) {
-	query := fmt.Sprintf(utils.QUERY_TEMPORAL, r.TableName, r.QueryType, r.StartTime, r.EndTime)
-	resultJson, err := utils.GetAsString(db, query)
-	if err != nil {
-		fmt.Println("error %e", err)
-	}
-	return resultJson
-}
-
-func EventTemporalSearch(r models.TemporalRequest) (utils.JSONString) {
-	query := fmt.Sprintf(utils.QUERY_TEMPORAL, r.TableName, r.QueryType, r.StartTime, r.EndTime)
+func TemporalSearch(r models.TemporalRequest) (utils.JSONString) {
+	//tableNames := "ARRAY['ar', 'ch']::TEXT[]"
+	//colNames := "ARRAY['kb_archivid', 'event_starttime', 'hpc_boundcc', 'hpc_coord', 'event_type']::TEXT[]"
+	//select * from temporal_col_filter_page_all( ARRAY['ar_spt', 'ch_spt']::TEXT[], 'GreaterThan', '2014-12-01 21:36:23', '2014-12-02 01:36:23', 'event_starttime', 100, 0, ARRAY['kb_archivid', 'event_starttime', 'hpc_boundcc', 'hpc_coord', 'event_type']::TEXT[]);
+	query := fmt.Sprintf(utils.QUERY_TEMPORAL_COMMON_PAGE, utils.ALL_TABLES_ARRAY, "Overlaps", r.StartTime, r.EndTime, "event_starttime", "20", "0")
+	fmt.Println(query)
 	resultJson, err := utils.GetJSON(db, query)
 	if err != nil {
 		fmt.Println("error %e", err)
