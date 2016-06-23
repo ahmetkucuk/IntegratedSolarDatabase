@@ -68,17 +68,18 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
 
     $scope.searchEvents = function() {
         var selectedDateInMillis = dateService.getSelected($scope).getTime();
+        //selectedDate = dateService.getSelected($scope);
 
         //var MS_PER_MINUTE = 60000; //60000 * 60 * 60 * 60;
         var MS_PER_MINUTE = 1000*60;
-        var startDate = new Date(selectedDateInMillis - 10 * MS_PER_MINUTE);
-        var endDate = new Date(selectedDateInMillis + 10 * MS_PER_MINUTE);
+        var startDate = new Date(selectedDateInMillis - 0.5 * MS_PER_MINUTE);
+        var endDate = new Date(selectedDateInMillis + 0.5 * MS_PER_MINUTE);
 
         loadBackground();
         RESTService.temporalQuery($scope, dateService.dateToString(startDate), dateService.dateToString(endDate),
             function(result) {
-                $scope.$broadcast('DrawEventsOnCanvas', result);
-                RESTService.getEventTypes();
+                $scope.eventNames = RESTService.getEventTypes();
+                $scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
             },
             function(error) {
 
@@ -88,6 +89,12 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
         //GetEvents.get(function(response) { $scope.$broadcast('DrawEventsOnCanvas', response.Events);});
 
     };
+
+    $scope.changeVisibleEventTypes = function(event) {
+        RESTService.toggleVisibleTypes(event.code);
+        $scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
+    };
+
     $scope.searchEvents();
 
 }]);

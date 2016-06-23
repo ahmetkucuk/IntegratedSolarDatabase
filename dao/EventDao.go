@@ -122,7 +122,7 @@ func TemporalSearch(r models.TemporalRequest) (utils.JSONString) {
 	//tableNames := "ARRAY['ar', 'ch']::TEXT[]"
 	//colNames := "ARRAY['kb_archivid', 'event_starttime', 'hpc_boundcc', 'hpc_coord', 'event_type']::TEXT[]"
 	//select * from temporal_col_filter_page_all( ARRAY['ar_spt', 'ch_spt']::TEXT[], 'GreaterThan', '2014-12-01 21:36:23', '2014-12-02 01:36:23', 'event_starttime', 100, 0, ARRAY['kb_archivid', 'event_starttime', 'hpc_boundcc', 'hpc_coord', 'event_type']::TEXT[]);
-	query := fmt.Sprintf(utils.QUERY_TEMPORAL_COMMON_PAGE, utils.ALL_TABLES_ARRAY, "Overlaps", r.StartTime, r.EndTime, "event_starttime", "20", "0")
+	query := fmt.Sprintf(utils.QUERY_TEMPORAL_COMMON_PAGE, utils.ALL_TABLES_ARRAY, "Overlaps", r.StartTime, r.EndTime, "event_starttime", r.Limit, r.Offset)
 	fmt.Println(query)
 	resultJson, err := utils.GetJSON(db, query)
 	if err != nil {
@@ -149,7 +149,7 @@ func GetClosestImage(r models.ImageRequest) (models.ImageUrl) {
 	if len(imageUrl) != 0 {
 		selectUrl.URL = utils.IMAGE_URL_BASE + imageUrl[0].URL
 	} else {
-		selectUrl.URL = utils.IMAGE_URL_BASE + "2013/06/11/20130611_231750_512_0094.jpg"
+		selectUrl.URL = utils.IMAGE_URL_BASE + "2013/06/11/20130611_231750_2048_0094.jpg"
 	}
 	return selectUrl
 }

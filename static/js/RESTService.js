@@ -2,8 +2,12 @@ angular.module("app").service("RESTService", function($resource) {
 
 
     var currentEvents;
-    var loaderCounter = 0;
+    var eventNames;
+    var visibleEventTypes = [];
 
+
+
+    var loaderCounter = 0;
     this.executeGetWithLoader = function(request, $scope, callback) {
         loaderCounter = loaderCounter + 1;
         $scope.progressbar.start();
@@ -20,6 +24,7 @@ angular.module("app").service("RESTService", function($resource) {
         var GetEvents = $resource(URL + "/api/eventByRange/StartTime=" + startTime + "/EndTime=" + endTime);
         this.executeGetWithLoader(GetEvents, $scope, function(response) {
             currentEvents = response.Result;
+            updateEventData();
             onSuccess(response.Events);
         });
     };
@@ -28,6 +33,7 @@ angular.module("app").service("RESTService", function($resource) {
         var GetEvents = $resource(URL + "/api/query/temporal?starttime=" + startTime + "&endtime=" + endTime + "&tablenames=all&sortby=event_starttime&limit=20&offset=0");
         this.executeGetWithLoader(GetEvents, $scope, function(response) {
             currentEvents = response.Result;
+            updateEventData();
             onSuccess(currentEvents);
         });
     };
@@ -39,9 +45,39 @@ angular.module("app").service("RESTService", function($resource) {
         });
     };
 
-    this.getEventTypes = function() {
+    function updateEventData() {
+        eventNames = [];
+        var codes = [];
         for(var i = 0; currentEvents != null && i < currentEvents.length; i++) {
-            //console.log(currentEvents[i]);
+            if(codes.indexOf(currentEvents[i].eventtype) == -1) {
+                codes.push(currentEvents[i].eventtype);
+                eventNames.push({name: currentEvents[i].eventtype, code: currentEvents[i].eventtype});
+            }
+        }
+        visibleEventTypes = codes;
+    };
+
+    this.getEventTypes = function() {
+        return eventNames;
+    };
+
+    this.getVisibleEvents = function() {
+
+        var result = [];
+        for(var i = 0; currentEvents != null && i < currentEvents.length; i++) {
+            if(visibleEventTypes.indexOf(currentEvents[i].eventtype) != -1) {
+                result.push(currentEvents[i]);
+            }
+        }
+        return result;
+    };
+
+    this.toggleVisibleTypes = function(type) {
+        var index = visibleEventTypes.indexOf(type);
+        if(index != -1) {
+            visibleEventTypes.splice(index, 1);
+        } else {
+            visibleEventTypes.push(type);
         }
     }
 });

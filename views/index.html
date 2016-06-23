@@ -26,56 +26,58 @@
 	<script src='/static/js/main.js'></script>
 
 </head>
-<body style="background-color:black;">
+<body>
 <div class="container-fluid">
-	<div class="row">
-		<div class="well" style="text-align:center;">
-			<h3><b>Solar Event Database with Interpolation and Trajectory (SEDIT)</b></h3>
+	<div class="row well well-sm">
+		<div style="text-align:center;">
+			<h5><p class="text-danger">Solar Event Database with Interpolation and Trajectory (SEDIT)</p></h5>
 		</div>
 	</div>
 
 	<div class="row">
 
-		<div class="col-md-3 fill" style="background-color:white;">
+		<div class="col-md-3 panel" style="background-color:white;">
+			<div class="col-md-12">
 
-			<form ng-submit="searchEvents()">
-				<div id="date-group" class="form-group">
-					<b>Date</b><br/>
-					<div class="input-group">
-						<input type="text" class="form-control" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-model="searchForm.date"/>
+				<form ng-submit="searchEvents()">
+					<div id="date-group" class="form-group">
+						<b>Date</b><br/>
+						<div class="input-group">
+							<input type="text" class="form-control" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-model="searchForm.date"/>
 						<span class="input-group-btn">
 							<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
 						</span>
+						</div>
 					</div>
-				</div>
 
-				<div id="time-group" class="form-group">
-					<b>Time</b><br/>
+					<div id="time-group" class="form-group">
+						<b>Time</b><br/>
 
-					<!--<p>From timePickerApp n TimepickerDemoCtrl, mstep: {{mstep}}</p> -->
+						<!--<p>From timePickerApp n TimepickerDemoCtrl, mstep: {{mstep}}</p> -->
 
-					<uib-timepicker ng-model="searchForm.time" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></uib-timepicker>
-				</div>
+						<uib-timepicker ng-model="searchForm.time" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></uib-timepicker>
+					</div>
 
-				<div class="form-group">
-					<select class="form-control"
-							ng-change="wavelengthChanged()"
-							ng-options="option.name for option in wavelengthInfo.availableOptions track by option.id"
-							ng-model="wavelengthInfo.selectedOption"></select>
-				</div>
+					<div class="form-group">
+						<select class="form-control"
+								ng-change="wavelengthChanged()"
+								ng-options="option.name for option in wavelengthInfo.availableOptions track by option.id"
+								ng-model="wavelengthInfo.selectedOption"></select>
+					</div>
 
-				<button type="submit" class="btn btn-success btn-lg">
-					<span class="glyphicon glyphicon-flash"></span> Search!
-				</button>
-			</form>
+					<button type="submit" class="btn btn-success btn-lg">
+						<span class="glyphicon glyphicon-flash"></span> Search!
+					</button>
+				</form>
+			</div>
 		</div>
 
 
-		<div class="col-md-6">
-			<div data-ng-view></div>
+		<div class="col-md-6 fill">
+			<div id="canvasContainer" class="col-md-12 fill" data-ng-view></div>
 		</div>
-		<div class="col-md-3 fill" style="background-color:white;">
-			<div id="event-group" class="form-group">
+		<div class="col-md-3 panel" style="background-color:white;">
+			<div id="col-md-12 event-group" class="form-group">
 
 				<b>Events</b>
 				<div  ng-repeat="event in eventNames">
@@ -84,23 +86,28 @@
 								type="checkbox"
 								name="Events"
 								value="{{event.code}}"
-								ng-checked="selection.indexOf(event) > -1"
-								ng-click="toggleSelection(event)">{{event.name}}
+								ng-checked="true"
+								ng-click="changeVisibleEventTypes(event)">{{event.name}}
 
 					</label>
 				</div>
 			</div>
 		</div>
-
 	</div>
+
+	<a class="tag rotate90">
+		<img src="static/img/alpha.png">
+	</a>
 
 </div>
 
-<footer class="footer">
+</div>
+
+<div id="footer">
 	<div class="container">
-		<p class="text-muted">by DMLAB GSU</p>
+		<p class="text-muted credit">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.</p>
 	</div>
-</footer>
+</div>
 
 
 <script>
