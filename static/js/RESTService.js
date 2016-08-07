@@ -47,14 +47,13 @@ angular.module("app").service("RESTService", function($resource) {
 
     function updateEventData() {
         eventNames = [];
-        var codes = [];
+        visibleEventTypes = [];
         for(var i = 0; currentEvents != null && i < currentEvents.length; i++) {
-            if(codes.indexOf(currentEvents[i].eventtype) == -1) {
-                codes.push(currentEvents[i].eventtype);
+            if(visibleEventTypes.indexOf(currentEvents[i].eventtype) == -1) {
+                visibleEventTypes.push(currentEvents[i].eventtype);
                 eventNames.push({name: currentEvents[i].eventtype, code: currentEvents[i].eventtype});
             }
         }
-        visibleEventTypes = codes;
     };
 
     this.getEventTypes = function() {

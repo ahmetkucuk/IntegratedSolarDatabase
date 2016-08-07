@@ -17,4 +17,4 @@ date +%s >> $VERSION_FILE
 rm $CONFIG_FILE
 mv $SERVER_CONFIG_FILE $CONFIG_FILE
 cd $DEP_DIR
-scp -r solardatabase ahmet@dmlab.cs.gsu.edu:/home/ahmet
+scp -prq solardatabase ahmet@dmlab.cs.gsu.edu:/home/ahmet

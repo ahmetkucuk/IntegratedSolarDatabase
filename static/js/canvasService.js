@@ -4,80 +4,62 @@ angular.module("app").service("canvas", function() {
     var container;
     var overlayContainer;
     var zoomContainer;
-    var markers = [];
+    var markers;
     var WIDTH;
     var HEIGHT;
 
-    angular.element(document).ready(function(event) {
-        canvas = document.getElementById("testCanvas");
+    function loadCanvas() {
 
-        var canvasContainer = document.getElementById("canvasContainer");
-        var min = Math.min(canvasContainer.offsetWidth, canvasContainer.offsetHeight) * 0.95;
-        canvas.width = min;
-        canvas.height = min;
-        stage = new createjs.Stage(canvas);
+        angular.element(document).ready(function(event) {
 
+            markers = [];
 
-        WIDTH = min;
-        HEIGHT = min;
+            //document.onkeydown = keyPressed;
+            //document.onkeyup = keyPressed;
 
+            canvas = document.getElementById("testCanvas");
 
-        //Listen Periodic updates
-        //createjs.Ticker.addEventListener("tick", stage2);
-        //createjs.Ticker.addEventListener("tick", stage);
-
-
-        //Mouse Zoom Listener
-        canvas.addEventListener("mousewheel", MouseWheelHandler, false);
-        canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
-
-        //var ctx = canvas.getContext("2d");
-        //
-        //ctx.mozImageSmoothingEnabled = false;
-        //ctx.webkitImageSmoothingEnabled = false;
-        //ctx.msImageSmoothingEnabled = false;
-        //ctx.imageSmoothingEnabled = false;
+            var canvasContainer = document.getElementById("canvasContainer");
+            var min = Math.min(canvasContainer.offsetWidth, canvasContainer.offsetHeight) * 0.95;
+            canvas.width = min;
+            canvas.height = min;
+            stage = new createjs.Stage(canvas);
 
 
-        container = new createjs.Container();
-        overlayContainer = new createjs.Container();
-        zoomContainer = new createjs.Container();
-        stage.addChild(container);
-        stage.addChild(overlayContainer);
-        stage.addChild(zoomContainer);
+            WIDTH = min;
+            HEIGHT = min;
 
-        stage.addEventListener("stagemousedown", function(e) {
-            var offset={x:container.x-e.stageX,y:container.y-e.stageY};
-            stage.addEventListener("stagemousemove",function(ev) {
-                container.x = ev.stageX+offset.x;
-                container.y = ev.stageY+offset.y;
-                stage.update();
-            });
-            stage.addEventListener("stagemouseup", function(){
-                stage.removeAllEventListeners("stagemousemove");
-            });
+
+
+            //Mouse Zoom Listener
+            canvas.addEventListener("mousewheel", MouseWheelHandler, false);
+            canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+
+
+            container = new createjs.Container();
+            overlayContainer = new createjs.Container();
+            zoomContainer = new createjs.Container();
+            stage.addChild(container);
+            stage.addChild(overlayContainer);
+            stage.addChild(zoomContainer);
+
+
+
+            initButtonZoomListener();
+            setListeners();
         });
+    }
 
-        initButtonZoomListener();
-    });
 
     this.drawOnSun = function(events) {
 
+        if(canvas == null) {
+            loadCanvas();
+        }
 
-        console.log("HHH: " + container.scaleX);
-        console.log("HHH: " + container.scaleY);
         clearMarkers();
         if(!events) return;
 
-
-        function convertHPCToPixXY(pointIn) {
-
-            var CDELT = 0.599733;
-            var HPCCENTER = 4096.0 / 2.0;
-
-            pointIn.x = (HPCCENTER + (pointIn.x / CDELT)) * (WIDTH / 4096);
-            pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * (HEIGHT / 4096);
-        }
 
         for(var i = 0; i < events.length; i++) {
 
@@ -92,21 +74,32 @@ angular.module("app").service("canvas", function() {
             addMarker(events[i], point);
         }
 
+        function convertHPCToPixXY(pointIn) {
+
+            var CDELT = 0.599733;
+            var HPCCENTER = 4096.0 / 2.0;
+
+            pointIn.x = (HPCCENTER + (pointIn.x / CDELT)) * (WIDTH / 4096);
+            pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * (HEIGHT / 4096);
+        }
+
         function addMarker(event, coordinate) {
 
-            //console.log(coordinate.y);
-            var url = "http://helioviewer.org/resources/images/eventMarkers/" + event.eventtype + "@2x.png"
-            console.log(event.id + " " + coordinate.x + " " + coordinate.y)
+            var url = "http://helioviewer.org/resources/images/eventMarkers/" + event.eventtype + "@2x.png";
             var overlay1 = new createjs.Bitmap(url);
-            var scale = overlayScale;
-            overlay1.x = coordinate.x;
-            overlay1.y = coordinate.y;
-            overlay1.scaleX = scale;
-            overlay1.scaleY = scale;
-            container.addChild(overlay1);
-            container.setChildIndex(overlay1, 1);
-            markers.push(overlay1);
-            stage.update();
+            overlay1.image.onload = function() {
+                var scale = overlayScale;
+                var markerWidth = this.width;
+                var markerHeight = this.height;
+                overlay1.x = coordinate.x - markerWidth*scale;
+                overlay1.y = coordinate.y - markerHeight*scale;
+                overlay1.scaleX = scale;
+                overlay1.scaleY = scale;
+                container.addChild(overlay1);
+                container.setChildIndex(overlay1, 1);
+                markers.push(overlay1);
+                stage.update();
+            };
         };
 
         function clearMarkers() {
@@ -122,6 +115,10 @@ angular.module("app").service("canvas", function() {
     var backgroundImage = new Image();
     var bitmap;
     this.loadCanvasBackground = function($scope, urlImage, onFinished) {
+
+        if(canvas == null) {
+            loadCanvas();
+        }
 
         $scope.progressbar.start();
         backgroundImage.src = urlImage;
@@ -152,6 +149,23 @@ angular.module("app").service("canvas", function() {
 
     };
 
+
+
+    //SET LISTENERS
+    function setListeners() {
+        stage.addEventListener("stagemousedown", function(e) {
+            var offset={x:container.x-e.stageX,y:container.y-e.stageY};
+            stage.addEventListener("stagemousemove",function(ev) {
+                container.x = ev.stageX+offset.x;
+                container.y = ev.stageY+offset.y;
+                stage.update();
+            });
+            stage.addEventListener("stagemouseup", function(){
+                stage.removeAllEventListeners("stagemousemove");
+            });
+        });
+        stage.update();
+    }
 
     //ZOOM HANDLING
     var zoom;
@@ -197,8 +211,6 @@ angular.module("app").service("canvas", function() {
             bitmap.scaleY = 1/4;
             bitmap.x = WIDTH - 72 - padding;
             bitmap.y = HEIGHT - 32 - padding;
-            console.log(bitmap.x);
-            console.log(WIDTH - 72 - padding);
 
 
             bitmap.addEventListener("click", function(event) {
@@ -227,5 +239,8 @@ angular.module("app").service("canvas", function() {
             stage.update();
         };
     }
+
+
+    loadCanvas();
 
 });

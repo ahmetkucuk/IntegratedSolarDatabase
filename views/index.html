@@ -1,6 +1,7 @@
 <html data-ng-app="app" data-ng-controller="AppCtrl">
 <head>
 	<title>Solar Event Database</title>
+	<link rel="icon" type="image/png" href="/static/img/favicon.png" />
 	<link rel='stylesheet' href='/static/third/bootstrap336/css/bootstrap.min.css'>
 	<link rel='stylesheet' href='/static/third/bootstrap336/css/bootstrap-theme.min.css'>
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
@@ -39,7 +40,7 @@
 		<div class="col-md-3 panel" style="background-color:white;">
 			<div class="col-md-12">
 
-				<form ng-submit="searchEvents()">
+				<form ng-submit="onDateChanged()">
 					<div id="date-group" class="form-group">
 						<b>Date</b><br/>
 						<div class="input-group">
@@ -74,7 +75,9 @@
 
 
 		<div class="col-md-6 fill">
-			<div id="canvasContainer" class="col-md-12 fill" data-ng-view></div>
+			<div id="canvasContainer" class="col-md-12 fill">
+				<canvas id="testCanvas" width="512" height="512"></canvas>
+			</div>
 		</div>
 		<div class="col-md-3 panel" style="background-color:white;">
 			<div id="col-md-12 event-group" class="form-group">

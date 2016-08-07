@@ -15,7 +15,7 @@ const (
 	QUERY_TEMPORAL string = "select * from temporal_filter_page_all(%s, '%s','%s', '%s','%s', %s, %s);"
 
 
-	QUERY_IMAGE_URL string = "SELECT url FROM img_url WHERE wavelength like '%s' AND image_size = %s AND ('%s'::timestamp - INTERVAL '10 Minutes' < image_date) AND ('%s'::timestamp + INTERVAL '10 Minutes' > image_date) ORDER BY GREATEST('%s'::timestamp,  image_date) - LEAST('%s'::timestamp,  image_date) LIMIT 1;"
+	QUERY_IMAGE_URL string = "SELECT url FROM img_url WHERE wavelength like '%s' AND image_size = %s AND ('%s'::timestamp - INTERVAL '1440 Minutes' < image_date) AND ('%s'::timestamp + INTERVAL '1440 Minutes' > image_date) ORDER BY GREATEST('%s'::timestamp,  image_date) - LEAST('%s'::timestamp,  image_date) LIMIT 1;"
 
 	IMAGE_URL_BASE string = "http://sdo.gsfc.nasa.gov/assets/img/browse/"
 
