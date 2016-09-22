@@ -1,4 +1,38 @@
-angular.module("app").service("canvas", function() {
+(createjs.Graphics.Polygon = function(x, y, points) {
+    this.x = x;
+    this.y = y;
+    this.points = points;
+}).prototype.exec = function(ctx) {
+    // Start at the end to simplify loop
+    var end = this.points[this.points.length - 1];
+    ctx.moveTo(end.x, end.y);
+    this.points.forEach(function(point) {
+        ctx.lineTo(point.x, point.y);
+    });
+};
+createjs.Graphics.prototype.drawPolygon = function(x, y, args) {
+    var points = [];
+    if (Array.isArray(args)) {
+        args.forEach(function(point) {
+            point = Array.isArray(point) ? {x:point[0], y:point[1]} : point;
+            points.push(point);
+        });
+    } else {
+        args = Array.prototype.slice.call(arguments).slice(2);
+        var px = null;
+        args.forEach(function(val) {
+            if (px === null) {
+                px = val;
+            } else {
+                points.push({x: px, y: val});
+                px = null;
+            }
+        });
+    }
+    return this.append(new createjs.Graphics.Polygon(x, y, points));
+};
+
+angular.module("app").service("canvas",["dateService","$ngBootbox", function(dateService,$ngBootbox) {
     var canvas;
     var stage;
     var container;
@@ -7,6 +41,8 @@ angular.module("app").service("canvas", function() {
     var markers;
     var WIDTH;
     var HEIGHT;
+    var DateService;
+
 
     function loadCanvas() {
 
@@ -52,7 +88,7 @@ angular.module("app").service("canvas", function() {
 
 
     this.drawOnSun = function(events) {
-
+        DateService=dateService;
         if(canvas == null) {
             loadCanvas();
         }
@@ -70,8 +106,12 @@ angular.module("app").service("canvas", function() {
                 x : parseFloat(x),
                 y : parseFloat(y)
             };
+            var popUpObj={
+                StartTime:Date(events[i].startTime),
+                EndTime:Date(events[i].endTime),
+            }
             convertHPCToPixXY(point);
-            addMarker(events[i], point);
+            addMarker(events[i], point,popUpObj);
         }
 
         function convertHPCToPixXY(pointIn) {
@@ -83,11 +123,18 @@ angular.module("app").service("canvas", function() {
             pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * (HEIGHT / 4096);
         }
 
-        function addMarker(event, coordinate) {
+        function addMarker(event, coordinate,popUpObj) {
+            var addMakerImg = new Image();
+            addMakerImg.src =  URL + "/static/img/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
+           // addMakerImg.crossOrigin = "Anonymous";
+           // var url = "http://helioviewer.org/resources/images/eventMarkers/" + event.eventtype + "@2x.png";
+           // var overlay1 = new createjs.Bitmap(url);
 
-            var url = "http://helioviewer.org/resources/images/eventMarkers/" + event.eventtype + "@2x.png";
-            var overlay1 = new createjs.Bitmap(url);
-            overlay1.image.onload = function() {
+
+            addMakerImg.onload = makerDetails;
+
+            function makerDetails() {
+                var overlay1 = new createjs.Bitmap(addMakerImg);
                 var scale = overlayScale;
                 var markerWidth = this.width;
                 var markerHeight = this.height;
@@ -95,11 +142,35 @@ angular.module("app").service("canvas", function() {
                 overlay1.y = coordinate.y - markerHeight*scale;
                 overlay1.scaleX = scale;
                 overlay1.scaleY = scale;
+                overlay1.addEventListener("click", function(event) {
+                    var msg='<div style="padding-left:5px">'+
+                        '<span><b>Strat Time: </b>'+ popUpObj.StartTime +'</span> <br/>'+
+                        '<span><b>End Time: </b> '+ popUpObj.EndTime +'</span> <br/>'+
+                        '</div>'
+                    $ngBootbox.setDefaults({
+                        animate: false,
+                        backdrop: false,
+                        closeButton: true,
+                        cassName: 'my-modal',
+                        size:'small',
+                        buttons: {}
+                    });
+                    $ngBootbox.alert(msg);
+                });
+
+                poly = new createjs.Shape();
+                poly.graphics.beginStroke("Black").drawPolygon(0,0,10,10,10,30,30,20,50,3,10,10);
+                poly.x= overlay1.x-10;
+                poly.y=overlay1.y+20;
+                container.addChild(poly);
+
                 container.addChild(overlay1);
-                container.setChildIndex(overlay1, 1);
+                //   container.setChildIndex(overlay1, 1);
+
                 markers.push(overlay1);
                 stage.update();
             };
+
         };
 
         function clearMarkers() {
@@ -109,6 +180,8 @@ angular.module("app").service("canvas", function() {
             markers = [];
             stage.update();
         }
+
+
     };
 
     var removed = false;
@@ -243,4 +316,4 @@ angular.module("app").service("canvas", function() {
 
     loadCanvas();
 
-});
+}]);

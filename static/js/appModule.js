@@ -1,1 +1,1 @@
-angular.module('app', ["ngResource", "ngRoute", "ngAnimate", "ui.bootstrap", "ngProgress"]);
+angular.module('app', ["ngResource", "ngRoute", "ngAnimate", "ui.bootstrap", "ngProgress","ngBootbox"]);

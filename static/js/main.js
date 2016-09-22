@@ -1,4 +1,5 @@
 var URL = document.location.origin;
+
 angular.module("app")
     .constant("URL", URL).config([
     "$locationProvider", function($locationProvider) {
