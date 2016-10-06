@@ -60,3 +60,135 @@ body {
     -ms-transform: rotate(70deg);
     transform: rotate(70deg);
 }
+
+
+/*rassel*/
+.event-marker {
+    background-repeat: no-repeat;
+    background-size: 23px 39px;
+    height: 39px;
+    position: absolute;
+    width: 23px;
+}
+
+.event-label, .event-label-hover {
+    border-radius: 3px;
+    color: white;
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    left: 23px;
+    overflow: hidden;
+    padding: 2px;
+    position: absolute;
+    text-overflow: ellipsis;
+    text-shadow: 1px 0 1px black, 0 1px 1px black, -1px 0 1px black, 0 -1px 1px black;
+    top: 4px;
+    white-space: nowrap;
+}
+.event-label-hover {
+    background-color: rgba(24, 24, 24, 0.95);
+    z-index: 1000;
+}
+.event-region {
+    background-repeat: no-repeat;
+    position: absolute;
+}
+.event-popup {
+    background-color: rgba(24, 24, 24, 0.9);
+    border: 2px solid black;
+    border-radius: 6px;
+    box-shadow: 0 0 12px black;
+    color: white;
+    font-size: 11px;
+    overflow: hidden;
+    padding: 5px 5px 0;
+    position: absolute;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 330px;
+}
+.event-popup h1 {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: bold;
+    margin: -3px 0 6px;
+}
+.event-popup .hr {
+    background-color: #444;
+    color: #666;
+    height: 1px;
+    margin: 3px 0 6px;
+    padding: 0;
+}
+.event-popup .close-button {
+    position: absolute;
+    right: 2px;
+    top: 0;
+}
+.event-popup .container {
+    color: #ddd;
+    font-family: Arial,Helvetica,sans-serif;
+    position: relative;
+}
+.event-popup .param-container {
+    overflow: hidden;
+    position: relative;
+    text-align: right;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    width: 120px;
+}
+.event-popup .param-label {
+    float: right;
+    font-weight: bold;
+    text-align: right;
+}
+.event-popup .value-container {
+    left: 126px;
+    overflow: hidden;
+    position: absolute;
+    text-overflow: ellipsis;
+    top: 0;
+    white-space: nowrap;
+    width: 260px;
+}
+.value-container .ui-icon {
+    float: left;
+    margin-left: 4px;
+}
+.event-popup .param-value {
+    float: left;
+    font-family: monospace;
+    text-align: left;
+}
+.event-popup .btn-container {
+    color: #ddd;
+    margin: 7px 0 3px -3px;
+    position: relative;
+}
+.event-popup .btn-label {
+    font-family: Arial,Helvetica,sans-serif;
+    font-size: 10px;
+    font-weight: bold;
+    line-height: 17px;
+    margin: 0 6px 0 1px;
+    text-align: left;
+}
+.btn-container .btn {
+    float: left;
+}
+.event-header-tag {
+    font-weight: bold;
+}
+.event-header-tag[title] {
+    cursor: help;
+}
+.event-header-value {
+    font-family: monospace;
+}
+.ui-icon {
+    height: 16px;
+    width: 16px;
+}
+/*rassel*/

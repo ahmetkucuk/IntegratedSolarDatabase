@@ -11,7 +11,7 @@ angular.module("app")
     }
 ]);
 
-angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", "$location", "URL", "dateService", "RESTService", "ngProgressFactory", "canvas", function($rootScope,$scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvas) {
+angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", "$location", "URL", "dateService", "RESTService", "ngProgressFactory", "canvas","$compile", function($rootScope,$scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvas,$compile) {
 
     //var GetEvents = $resource(URL + "event");
     //GetEvents.get(function(response) {
@@ -95,7 +95,11 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
             }
         );
     };
-
+//rassel..
+    $scope.activateView = function(ele) {
+        $compile(ele.contents())($scope);
+        $scope.$apply();
+    };
 
     $scope.changeVisibleEventTypes = function(event) {
         RESTService.toggleVisibleTypes(event.code);
@@ -106,9 +110,10 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
     };
 
     $scope.onDateChanged();
+
 }]);
 
-//angular.module("app").controller("DrawingCtrl", ["$scope","$resource", "$location", "URL", "$timeout", "canvas", function($scope, $resource, $location, URL, $timeout, canvas) {
+angular.module("app").controller("MarkerCtrl", ["$scope","$resource", "$location", "URL", "$timeout", "canvas", function($scope, $resource, $location, URL, $timeout, canvas) {
 //
 //    console.log("in draw ctrl");
 //
@@ -123,4 +128,10 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
 //        });
 //    });
 //
-//}]);
+    $scope.test=function(test){
+        if(typeof $scope.showDetails=="undefined") //
+            $scope.showDetails=false;
+        else
+       $scope.showDetails=!$scope.showDetails;
+    }
+}]);
