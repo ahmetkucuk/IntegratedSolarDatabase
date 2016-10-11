@@ -66,11 +66,14 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
             var MS_PER_MINUTE = 1000*60;
             var startDate = new Date(selectedDateInMillis - 0.5 * MS_PER_MINUTE);
             var endDate = new Date(selectedDateInMillis + 0.5 * MS_PER_MINUTE);
-
+            $scope.modelList=[];
             RESTService.temporalQuery($scope, dateService.dateToString(startDate), dateService.dateToString(endDate),
                 function(result) {
                     $scope.eventNames = RESTService.getEventTypes();
-                    canvas.drawOnSun(RESTService.getVisibleEvents());
+
+                    //rassel...
+                    $scope.modelList=canvas.drawOnSun(RESTService.getVisibleEvents());
+                   //canvas.setMarker();
                     //$scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
                 },
                 function(error) {
@@ -98,14 +101,14 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
 //rassel..
     $scope.activateView = function(ele) {
         $compile(ele.contents())($scope);
-        $scope.$apply();
+       // $scope.$apply();
     };
 
     $scope.changeVisibleEventTypes = function(event) {
         RESTService.toggleVisibleTypes(event.code);
         console.log(event.code);
         console.log(RESTService.getVisibleEvents());
-        canvas.drawOnSun(RESTService.getVisibleEvents());
+        $scope.modelList=canvas.drawOnSun(RESTService.getVisibleEvents());
         //$scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
     };
 

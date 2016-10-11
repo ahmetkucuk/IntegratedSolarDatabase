@@ -46,6 +46,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
     var polys;
     var el;//
     var mController;//
+    var canvasContainer;
 
     function loadCanvas() {
 
@@ -58,7 +59,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
             canvas = document.getElementById("testCanvas");
 
-            var canvasContainer = document.getElementById("canvasContainer");
+            canvasContainer = document.getElementById("canvasContainer");
             var min = Math.min(canvasContainer.offsetWidth, canvasContainer.offsetHeight) * 0.95;
             canvas.width = min;
             canvas.height = min;
@@ -68,9 +69,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             WIDTH = min;
             HEIGHT = min;
 
-             e1 = angular.element(canvasContainer); ///
-             mController = angular.element(canvasContainer);//
-            //Mouse Zoom Listener
+
             canvas.addEventListener("mousewheel", MouseWheelHandler, false);
             canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
 
@@ -82,11 +81,43 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             stage.addChild(overlayContainer);
             stage.addChild(zoomContainer);
 
+            e1 = angular.element(canvasContainer); ///
+            mController = angular.element(canvasContainer);
+            var strVar="";
+            strVar += "<div ng-controller=\"MarkerCtrl\">";
+            strVar += "    <div ng-repeat=\"event in modelList\">";
+            strVar += "            <div class=\"event-marker\" rel=\"{{event.objId}}\" id=\"marker_{{event.objId}}\" style=\"left: {{event.x}}px; top: {{event.y}}; z-index: 4; background-image: url(&quot;{{event.url}}&quot;);\" ng-click=\"show=!show\">";
+            strVar += "                <div style=\"\" class=\"event-label\">";
+            strVar += "                    SPoCA 19991<br>";
+            strVar += "                <\/div>";
+            strVar += "            <\/div>";
+            strVar += "            <div ng-draggable='dragOptions' style=\"{{event.x+20}}px; top: {{event.y-10}}; z-index: 1000;\" class=\"event-popup ui-draggable ui-draggable-handle\" ng-show=\"show\">";
+            strVar += "                <div class=\"close-button ui-icon ui-icon-closethick\" title=\"Close PopUp Window\"><\/div>";
+            strVar += "                <h1 class=\"user-selectable\">AR: SPoCA 19977<\/h1>";
+            strVar += "                <div class=\"container\">";
+            strVar += "                    <div class=\"param-container\"><div class=\"param-label user-selectable\">Start Time:  <\/div><\/div>";
+            strVar += "                    <div class=\"value-container\"><div class=\"param-value user-selectable\">{{event.startTime}}<\/div><div class=\"ui-icon ui-icon-arrowstop-1-w\" title=\"Jump to Event Start Time\"><\/div><\/div>";
+            strVar += "                <\/div>";
+            strVar += "                <div class=\"container\">";
+            strVar += "                    <div class=\"param-container\"><div class=\"param-label user-selectable\">End Time:  <\/div><\/div>";
+            strVar += "                    <div class=\"value-container\">";
+            strVar += "                        <div class=\"param-value user-selectable\">{{event.endTime}}<\/div><div class=\"ui-icon ui-icon-arrowstop-1-e\" title=\"Jump to Event End Time\"><\/div>";
+            strVar += "                    <\/div>";
+            strVar += "";
+            strVar += "                <\/div>";
+            strVar += "            <\/div>";
+            strVar += "        <\/div>";
+            strVar += "    <\/div>";
+
+
+            e1.append(strVar);
+            mController.scope().activateView(e1)
 
 
             initButtonZoomListener();
             setListeners();
         });
+
     }
 
 
@@ -99,7 +130,21 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
         clearMarkers();
         if(!events) return;
 
+      /*  var strVar="";
+        strVar += "<div ng-controller=\"MarkerCtrl\">";
+        strVar += "    <div ng-repeat=\"event in modelList\">";
+        strVar += "        <div class=\"event-layer\" id=\"'event_'+{{$index}}\" style=\"position: absolute; opacity: 1;\">";
+        strVar += "";
+        strVar += "            <div class=\"event-marker\" rel=\"AR_SPoCA_20161001_125643_20161001T123611_2\" id=\"marker_AR_SPoCA_20161001_125643_20161001T123611_2\" style=\"left: {{event.x}}+'px'; top: {{event.y}}+'px'; z-index: 4; background-image: url(&quot;{{event.url}}&quot;);\">";
+        strVar += "                <div style=\"\" class=\"event-label\">";
+        strVar += "                    SPoCA 19991<br>";
+        strVar += "                <\/div>";
+        strVar += "            <\/div><\/div><\/div><\/div>";
 
+        e1.append(strVar);
+        mController.scope().activateView(e1)*/
+
+        //console.log(events);
         for(var i = 0; i < events.length; i++) {
 
             var c = events[i].coordinate.split(" ");
@@ -109,12 +154,11 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
                 x : parseFloat(x),
                 y : parseFloat(y)
             };
-            var popUpObj={
-                StartTime:Date(events[i].startTime),
-                EndTime:Date(events[i].endTime),
-            }
+
             convertHPCToPixXY(point);
-            addMarker(events[i], point,popUpObj);
+            addMarker(events[i], point);
+
+
         }
           // converting HPC helioveier to pixel values
         function convertHPCToPixXY(pointIn) {
@@ -126,11 +170,15 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * (HEIGHT / 4096);
         }
 
-        function addMarker(event, coordinate,popUpObj) {
+        function addMarker(event, coordinate) {
             //change start...
             var addMakerImg = new Image();
             addMakerImg.src =  URL + "/static/img/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
-           // addMakerImg.crossOrigin = "Anonymous";
+
+            var StartTime=new Date(Date.parse(event.starttime));
+            var EndTime=new Date(Date.parse(event.endtime));
+
+            // addMakerImg.crossOrigin = "Anonymous";
            // var url = "http://helioviewer.org/resources/images/eventMarkers/" + event.eventtype + "@2x.png";
            // var overlay1 = new createjs.Bitmap(url);
              var objId=event.id.split('/')[3]
@@ -138,6 +186,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             addMakerImg.onload = makerDetails;
 
             function makerDetails() {
+
                 var overlay1 = new createjs.Bitmap(addMakerImg);
                 var scale = overlayScale;
                 var markerWidth = this.width;
@@ -146,6 +195,15 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
                 overlay1.y = coordinate.y - markerHeight*scale;
                 overlay1.scaleX = scale;
                 overlay1.scaleY = scale;
+
+              var marker= {
+                      objId: objId,
+                        x : overlay1.x,
+                        y :overlay1.y,
+                      url : addMakerImg.src,
+                  startTime:StartTime,
+                  endTime:EndTime
+                }
 
                // style="padding-left:5px;position:absolute;  top:'+ overlay1.x+'px;left:'+overlay1.y+'px;background-color:black;"
                 overlay1.addEventListener("click", function(event) {
@@ -180,16 +238,16 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
                 poly = new createjs.Shape();
                 poly.graphics.beginStroke("Black").drawPolygon(0,0,10,10,10,30,30,20,50,3,10,10);
-                poly.x= overlay1.x+20;
-                poly.y=overlay1.y-10;
-                /* container.addChild(poly);
+                poly.x= overlay1.x;
+                poly.y=overlay1.y;
+                container.addChild(poly);
                 polys.push(poly);
-*/
-
+                markers.push(marker);
+/*
                 var strVar="";
                 strVar += "<div  class=\"event-marker\" ng-click=\"test()\" rel=\""+objId+"\" id=\"marker_"+objId+"\" style=\"left: "+overlay1.x+"px; top: "+overlay1.y+"px; z-index: 6; background-image: url("+addMakerImg.src+");\">";
                 strVar += "    <div style=\"\" class=\"event-label\">";
-                strVar += "        SPoCA 19977<br>";
+                strVar += "        {{testModel}}<br>";
                 strVar += "    <\/div>";
                 strVar += "<\/div>";
 
@@ -218,7 +276,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
 
                 e1.append('<div ng-controller="MarkerCtrl">'+strVar +strVar2 +'</div>' );
-                mController.scope().activateView(e1);
+                mController.scope().activateView(e1);*/
                 //container.addChild(overlay1);
                 //   container.setChildIndex(overlay1, 1);
 
@@ -230,10 +288,6 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
         };
 
         function clearMarkers() {
-            if((typeof el !="undefined")){
-                if(typeof el.html !="undefined")
-                el.html(' ');
-            }
 
             for(var i = 0; i < markers.length; i++) {
                 container.removeChild(markers[i]);
@@ -243,8 +297,8 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             polys=[];
             stage.update();
         }
-
-
+return markers;
+       // setMarker() ;
     };
 
     var removed = false;
@@ -282,7 +336,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             $scope.progressbar.complete();
         };
         stage.update();
-
+        return{HEIGHT:HEIGHT,WIDTH:WIDTH}
     };
 
 
