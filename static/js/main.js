@@ -98,9 +98,9 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
             }
         );
     };
-//rassel..
-    $scope.activateView = function(ele) {
-        $compile(ele.contents())($scope);
+//r..
+    $scope.activateView = function(ele) {   ///
+        $compile(ele.contents())($scope);   ///
        // $scope.$apply();
     };
 
@@ -131,10 +131,10 @@ angular.module("app").controller("MarkerCtrl", ["$scope","$resource", "$location
 //        });
 //    });
 //
-    $scope.test=function(test){
-        if(typeof $scope.showDetails=="undefined") //
-            $scope.showDetails=false;
-        else
-       $scope.showDetails=!$scope.showDetails;
+    $scope.test=function(test){  ///
+        if(typeof $scope.showDetails=="undefined")  ///
+            $scope.showDetails=false;   ///
+        else   ///
+       $scope.showDetails=!$scope.showDetails;   ///
     }
 }]);

@@ -1,17 +1,18 @@
-//.. change start
+///.. change start
 (createjs.Graphics.Polygon = function(x, y, points) {
     this.x = x;
     this.y = y;
     this.points = points;
 }).prototype.exec = function(ctx) {
     // Start at the end to simplify loop
-    var end = this.points[this.points.length - 1];
-    ctx.moveTo(end.x, end.y);
+    //var end = this.points[this.points.length - 1];
+    //ctx.moveTo(end.x, end.y);
     this.points.forEach(function(point) {
         ctx.lineTo(point.x, point.y);
     });
 };
 createjs.Graphics.prototype.drawPolygon = function(x, y, args) {
+    console.log(args);
     var points = [];
     if (Array.isArray(args)) {
         args.forEach(function(point) {
@@ -32,8 +33,9 @@ createjs.Graphics.prototype.drawPolygon = function(x, y, args) {
     }
     return this.append(new createjs.Graphics.Polygon(x, y, points));
 };
-//...end
-angular.module("app").service("canvas",["dateService","$ngBootbox", function(dateService,$ngBootbox) {
+
+///...end
+angular.module("app").service("canvas",["dateService","$ngBootbox", function(dateService,$ngBootbox) { ///
     var canvas;
     var stage;
     var container;
@@ -42,11 +44,11 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
     var markers;
     var WIDTH;
     var HEIGHT;
-    var DateService;
-    var polys;
-    var el;//
-    var mController;//
-    var canvasContainer;
+    var DateService;  ///
+    var polys;   ///
+    var el;  ///
+    var mController;  ///
+    var canvasContainer;   ///
 
     function loadCanvas() {
 
@@ -59,7 +61,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
             canvas = document.getElementById("testCanvas");
 
-            canvasContainer = document.getElementById("canvasContainer");
+            canvasContainer = document.getElementById("canvasContainer"); ///
             var min = Math.min(canvasContainer.offsetWidth, canvasContainer.offsetHeight) * 0.95;
             canvas.width = min;
             canvas.height = min;
@@ -81,6 +83,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             stage.addChild(overlayContainer);
             stage.addChild(zoomContainer);
 
+            /// Change start
             e1 = angular.element(canvasContainer); ///
             mController = angular.element(canvasContainer);
             var strVar="";
@@ -104,14 +107,61 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             strVar += "                        <div class=\"param-value user-selectable\">{{event.endTime}}<\/div><div class=\"ui-icon ui-icon-arrowstop-1-e\" title=\"Jump to Event End Time\"><\/div>";
             strVar += "                    <\/div>";
             strVar += "";
+            strVar += "                <div class=\"container\">";
+            strVar += "                    <div class=\"param-container\"><div class=\"param-label user-selectable\"><a href=''>HEK Video:  </a><\/div><\/div>";
+            strVar += "                    <div class=\"value-container\">";
+            strVar += "                        <div class=\"param-value user-selectable\"><\/div>  <div class=\"ui-icon ui-icon-arrowstop-1-e\" title=\"Jump to Event End Time\"><\/div>";
+            strVar += "                    <\/div>";
+            strVar += "";
             strVar += "                <\/div>";
             strVar += "            <\/div>";
             strVar += "        <\/div>";
             strVar += "    <\/div>";
 
+           // <div id="video_container"></div>
+            e1.append(strVar); //
+            mController.scope().activateView(e1)  //
+            /// change end
+            /*
+             <li ng-repeat="video in
+             [{id:'a42',videosrc:'//amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest'},
+             {id:'a43',videosrc:'//amssamples.streaming.mediaservices.windows.net/91492735-c523-432b-ba01-faba6c2206a2/AzureMediaServicesPromo.ism/manifest'}]
+             ">
+             <video id="{{video.id}}" class="azuremediaplayer amp-default-skin amp-big-play-centered" tabindex="0"> </video>
+             <ampscript id="{{video.id}}" videosrc="{{video.videosrc}}"></ampscript>
+             </li>
+             */
 
-            e1.append(strVar);
-            mController.scope().activateView(e1)
+           // $('a').click(function(e) {
+             // e.preventDefault();
+               // $('#video_container').html('<iframe src="http://player.vimeo.com/video/12345?title=1&amp;byline=1&amp;portrait=1&amp;autoplay=true" width="643" height="360" frameborder="0"></iframe>');
+
+           // });
+           /* angular.module('directives', []).directive('ampscript',
+                function ($timeout) {
+                    return {
+                        model: {
+                            id: '@',
+                            videosrc: '@'
+                        },
+                        link: function ($scope, element, attrs, controller) {
+                            var myOptions = {
+                                autoplay: false,
+                                controls: true,
+                               // width: "640",
+                                height: "400",
+                                poster: ""
+                            };
+
+                            $timeout(function () {
+
+                                var myPlayer = amp(attrs.id, myOptions);
+                                myPlayer.src([{ src: "" + attrs.videosrc, type: "application/vnd.ms-sstr+xml" },]);
+                            });
+                        }
+                    };
+                }
+            ); */
 
 
             initButtonZoomListener();
@@ -122,7 +172,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
 
     this.drawOnSun = function(events) {
-        DateService=dateService;
+        DateService=dateService;  ///
         if(canvas == null) {
             loadCanvas();
         }
@@ -160,6 +210,30 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
 
         }
+
+        //POLYGON((0 0, 1 0, 0 0))
+        /// change start TODO check if polygon string is empty
+        function parsePolygonAndConvertPixels(polygonString) {
+            polygonString = polygonString.substring(polygonString.indexOf('((') + 2);
+            polygonString = polygonString.substring(0, polygonString.length - 2);
+
+            var points = polygonString.split(',');
+                            var pixelCoordinates = [];
+            for(var i = 0; i < points.length; i++) {
+               //p = 0 0
+                var p = points[i];
+                var c = p.split(' ');
+                var x = c[0];
+                var y = c[1];
+                var point = {
+                    x : parseFloat(x),
+                    y : parseFloat(y)
+                };
+
+                pixelCoordinates.push(convertHPCToPixXY(point));
+            }
+            return pixelCoordinates;
+        } /// change end
           // converting HPC helioveier to pixel values
         function convertHPCToPixXY(pointIn) {
 
@@ -168,48 +242,63 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
             pointIn.x = (HPCCENTER + (pointIn.x / CDELT)) * (WIDTH / 4096);
             pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * (HEIGHT / 4096);
+            return pointIn;
         }
 
         function addMarker(event, coordinate) {
             //change start...
-            var addMakerImg = new Image();
-            addMakerImg.src =  URL + "/static/img/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
+            var addMakerImg = new Image();  ///
+           addMakerImg.src =  URL + "/static/img/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
+            //addMakerImg.src =  "http://helioviewer.org/resources/images/eventMarkers/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
 
-            var StartTime=new Date(Date.parse(event.starttime));
-            var EndTime=new Date(Date.parse(event.endtime));
+            var StartTime=new Date(Date.parse(event.starttime));  ///
+            var EndTime=new Date(Date.parse(event.endtime));      ///
+           // var EndTime=new Date(Date.parse(event.endtime));      ///
+
 
             // addMakerImg.crossOrigin = "Anonymous";
            // var url = "http://helioviewer.org/resources/images/eventMarkers/" + event.eventtype + "@2x.png";
            // var overlay1 = new createjs.Bitmap(url);
-             var objId=event.id.split('/')[3]
+             var objId=event.id.split('/')[3]   ///
 
             addMakerImg.onload = makerDetails;
 
-            function makerDetails() {
+            function makerDetails() { ///
 
-                var overlay1 = new createjs.Bitmap(addMakerImg);
+                var overlay1 = new createjs.Bitmap(addMakerImg); ///
                 var scale = overlayScale;
                 var markerWidth = this.width;
                 var markerHeight = this.height;
-                overlay1.x = coordinate.x - markerWidth*scale;
+
+
+                overlay1.x = coordinate.x + markerWidth*scale;
+                //overlay1.x = coordinate.x;
                 overlay1.y = coordinate.y - markerHeight*scale;
+
+
                 overlay1.scaleX = scale;
                 overlay1.scaleY = scale;
+                // marker.x = coordinate.x - scaleX*width;
 
-              var marker= {
-                      objId: objId,
-                        x : overlay1.x,
-                        y :overlay1.y,
-                      url : addMakerImg.src,
-                  startTime:StartTime,
-                  endTime:EndTime
-                }
+              var marker= { ///
+                      objId: objId,   ///
+                        x : overlay1.x,   ///
+                        y :overlay1.y,    ///
+                      url : addMakerImg.src,   ///
+                  startTime:StartTime,         ///
+                  endTime:EndTime,              ///
+                  //hekVideo:HekVideo              ///
 
-               // style="padding-left:5px;position:absolute;  top:'+ overlay1.x+'px;left:'+overlay1.y+'px;background-color:black;"
+               } ///
+                //marker.x = coordinate.x - scaleX*width;
+                //marker.y = coordinate.x - height;
+
+               /// style="padding-left:5px;position:absolute;  top:'+ overlay1.x+'px;left:'+overlay1.y+'px;background-color:black;"
                 overlay1.addEventListener("click", function(event) {
                     var msg='<div style="padding-left:5px;position:absolute;  top:'+ overlay1.x+'px;left:'+overlay1.y+'px;background-color:black;">'+
                         '<span><b>Strat Time: </b>'+ popUpObj.StartTime +'</span> <br/>'+
                         '<span><b>End Time: </b> '+ popUpObj.EndTime +'</span> <br/>'+
+                       // '<span><b>HEK Video: </b> '+ popUpObj.HekVideo +'</span> <br/>'+
                         '</div>'
                    /* $ngBootbox.setDefaults({
                         animate: false,
@@ -220,7 +309,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
                         keyboard : false,
                         buttons: {}
                     });*/
-                    //$ngBootbox.alert(msg).find('.modal-content').css({'background-color': '#f99'});
+                    /// $ngBootbox.alert(msg).find('.modal-content').css({'background-color': '#f99'});
                     var options ={
                         animate: false,
                         backdrop: false,
@@ -233,16 +322,67 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
                         buttons: {}
                     };
-                 $ngBootbox.customDialog(options);
-                }); //
+                 $ngBootbox.customDialog(options); ///
+                }); ///
 
-                poly = new createjs.Shape();
-                poly.graphics.beginStroke("Black").drawPolygon(0,0,10,10,10,30,30,20,50,3,10,10);
-                poly.x= overlay1.x;
-                poly.y=overlay1.y;
-                container.addChild(poly);
-                polys.push(poly);
-                markers.push(marker);
+                function addPolygon(cc) {
+
+                    poly = new createjs.Shape();  ///
+
+
+                    var pixelCoordinates = parsePolygonAndConvertPixels(cc); ///
+                    console.log(pixelCoordinates); ///
+                    var arrayOfNumbers = []; ///
+                   // var arrayOfNumbers2 = [[10,10],[10,30],[30,20],[50,3],[10,10]]; ///
+
+                    var maxX = 0;
+                    var minX = 100000;
+                    var maxY = 0;
+                    var minY = 100000;
+
+                    pixelCoordinates.forEach(function (p) { ///
+                        maxX = Math.max(p.x, maxX);
+                        minX = Math.min(p.x, minX);
+                        maxY = Math.max(p.y, maxY);
+                        minY = Math.min(p.y, minY);
+                        arrayOfNumbers.push([p.x, p.y]);
+                    });
+                    var width = maxX - minX;
+                    var height = maxY - minY;
+                    console.log("width " + (maxX - minX));
+                    console.log("height " + (maxY - minY));
+                    poly.graphics.beginStroke("Yellow").drawPolygon(0, 0, arrayOfNumbers); ///
+                    //poly.graphics.beginStroke("Black").drawPolygon(0,0,10,10,10,30,30,20,50,3,10,10);
+                    //poly.graphics.beginStroke("Black").drawPolygon(-663.3 -379.5,-662.7 -378.9,-624.3 -357.9,-636.9 -290.7,-606.3 -264.9,-555.3 -259.5,-501.3 -196.5,-476.1 -117.3,-501.9 -81.9,-481.5 -59.7,-426.3 -135.3,-432.9 -162.9,-404.7 -223.5,-374.1 -243.3,-296.7 -221.7,-277.5 -199.5,-168.3 -179.7,-97.5 -124.5,-14.1 -130.5,5.1 -107.7,-9.3 -72.3,3.9 -33.3,50.7 -30.3,92.1 -75.3,68.1 -131.7,-2.1 -199.5,-69.3 -217.5,-157.5 -306.9,-275.1 -287.7,-351.9 -343.5,-395.1 -356.7,-455.1 -338.1,-518.7 -383.7,-584.1 -358.5,-620.7 -400.5,-649.5 -409.5,-663.3 -379.5);
+
+                    //poly.x= coordinate.x - (width);
+                    //poly.y= coordinate.y - (height);
+
+                    //poly.x= overlay1.x;
+                    //poly.y= overlay1.y;
+
+                    //marker.x = coordinate.x - scaleX*width;
+                    //marker.y = coordinate.x - height;
+
+                   //poly.scaleX = scale;
+                   //poly.scaleY = scale;
+                    container.addChild(poly);   ///
+                    polys.push(poly);    ///
+                    var circle = new createjs.Shape();  ///
+                    circle.graphics.beginStroke("red").beginFill("blue").drawCircle(0, 0, 3);
+                    circle.x = coordinate.x;
+                    circle.y = coordinate.y;
+                    container.addChild(circle);   ///
+                    polys.add(circle);
+
+
+                }
+
+                if (!(event.cc === null)) {
+                    addPolygon(event.cc);
+                }
+
+                markers.push(marker); ///
 /*
                 var strVar="";
                 strVar += "<div  class=\"event-marker\" ng-click=\"test()\" rel=\""+objId+"\" id=\"marker_"+objId+"\" style=\"left: "+overlay1.x+"px; top: "+overlay1.y+"px; z-index: 6; background-image: url("+addMakerImg.src+");\">";
@@ -282,7 +422,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
                 //markers.push(overlay1);//
                 //chagne end..
-                stage.update();//
+                stage.update();
             };
 
         };
@@ -291,14 +431,14 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
 
             for(var i = 0; i < markers.length; i++) {
                 container.removeChild(markers[i]);
-                container.removeChild(polys[i]);
+                container.removeChild(polys[i]);      ///
             }
             markers = [];
             polys=[];
             stage.update();
         }
 return markers;
-       // setMarker() ;
+       /// setMarker() ;
     };
 
     var removed = false;

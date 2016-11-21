@@ -8,8 +8,8 @@ angular.module("app").service("dateService", function() {
   this.setToday = function($scope) {
 
     $scope.searchForm.date = new Date();
-  };
 
+  };
   this.getSelected = function($scope) {
     var selectedDate = $scope.searchForm.date;
     selectedDate.setHours($scope.searchForm.time.getHours());
@@ -29,7 +29,7 @@ angular.module("app").service("dateService", function() {
 
     $scope.searchForm = {};
     var yesterday = new Date(); //Today
-    yesterday.setDate(yesterday.getDate()- 1);
+    yesterday.setDate(yesterday.getDate()- 110);
     $scope.searchForm.date = yesterday;
 
     $scope.inlineOptions = {

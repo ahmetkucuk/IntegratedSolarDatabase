@@ -65,7 +65,10 @@
 
 						<!--<p>From timePickerApp n TimepickerDemoCtrl, mstep: {{mstep}}</p> -->
 
+						<div uib-timepicker ng-model="searchForm.time" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
+						<!--<pre class="alert alert-info">Time is: {{mytime | date:'shortTime' }}</pre>
 						<uib-timepicker ng-model="searchForm.time" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></uib-timepicker>
+						<!--<pre class="alert alert-info">Time is: {{mytime | date:'shortTime' }}</pre> -->
 					</div>
 
 					<div class="form-group">
