@@ -5,6 +5,12 @@
 
 
 #testCanvas {
+    padding-left:0;
+    padding-right:0;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+
 }
 
 .fill {
@@ -125,6 +131,11 @@ body {
     position: absolute;
     right: 2px;
     top: 0;
+    transition: all 200ms;
+    font-size: 30px;
+    font-weight: bold;
+    text-decoration: none;
+    color: orange;
 }
 .event-popup .container {
     color: #ddd;

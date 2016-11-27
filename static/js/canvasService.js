@@ -206,9 +206,8 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             };
 
             convertHPCToPixXY(point);
-            addMarker(events[i], point);
-
-
+            putMarker(events[i], point);
+            drawGeometry(events[i], point);
         }
 
         //POLYGON((0 0, 1 0, 0 0))
@@ -245,7 +244,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             return pointIn;
         }
 
-        function addMarker(event, coordinate) {
+        function putMarker(event, coordinate) {
             //change start...
             var addMakerImg = new Image();  ///
            addMakerImg.src =  URL + "/static/img/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
@@ -261,9 +260,9 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
            // var overlay1 = new createjs.Bitmap(url);
              var objId=event.id.split('/')[3]   ///
 
-            addMakerImg.onload = makerDetails;
+            addMakerImg.onload = markerDetails;
 
-            function makerDetails() { ///
+            function markerDetails() { ///
 
                 var overlay1 = new createjs.Bitmap(addMakerImg); ///
                 var scale = overlayScale;
@@ -271,7 +270,7 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
                 var markerHeight = this.height;
 
 
-                overlay1.x = coordinate.x + markerWidth*scale;
+                overlay1.x = coordinate.x + (markerWidth*scale/2);
                 //overlay1.x = coordinate.x;
                 overlay1.y = coordinate.y - markerHeight*scale;
 
@@ -325,63 +324,6 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
                  $ngBootbox.customDialog(options); ///
                 }); ///
 
-                function addPolygon(cc) {
-
-                    poly = new createjs.Shape();  ///
-
-
-                    var pixelCoordinates = parsePolygonAndConvertPixels(cc); ///
-                    console.log(pixelCoordinates); ///
-                    var arrayOfNumbers = []; ///
-                   // var arrayOfNumbers2 = [[10,10],[10,30],[30,20],[50,3],[10,10]]; ///
-
-                    var maxX = 0;
-                    var minX = 100000;
-                    var maxY = 0;
-                    var minY = 100000;
-
-                    pixelCoordinates.forEach(function (p) { ///
-                        maxX = Math.max(p.x, maxX);
-                        minX = Math.min(p.x, minX);
-                        maxY = Math.max(p.y, maxY);
-                        minY = Math.min(p.y, minY);
-                        arrayOfNumbers.push([p.x, p.y]);
-                    });
-                    var width = maxX - minX;
-                    var height = maxY - minY;
-                    console.log("width " + (maxX - minX));
-                    console.log("height " + (maxY - minY));
-                    poly.graphics.beginStroke("Yellow").drawPolygon(0, 0, arrayOfNumbers); ///
-                    //poly.graphics.beginStroke("Black").drawPolygon(0,0,10,10,10,30,30,20,50,3,10,10);
-                    //poly.graphics.beginStroke("Black").drawPolygon(-663.3 -379.5,-662.7 -378.9,-624.3 -357.9,-636.9 -290.7,-606.3 -264.9,-555.3 -259.5,-501.3 -196.5,-476.1 -117.3,-501.9 -81.9,-481.5 -59.7,-426.3 -135.3,-432.9 -162.9,-404.7 -223.5,-374.1 -243.3,-296.7 -221.7,-277.5 -199.5,-168.3 -179.7,-97.5 -124.5,-14.1 -130.5,5.1 -107.7,-9.3 -72.3,3.9 -33.3,50.7 -30.3,92.1 -75.3,68.1 -131.7,-2.1 -199.5,-69.3 -217.5,-157.5 -306.9,-275.1 -287.7,-351.9 -343.5,-395.1 -356.7,-455.1 -338.1,-518.7 -383.7,-584.1 -358.5,-620.7 -400.5,-649.5 -409.5,-663.3 -379.5);
-
-                    //poly.x= coordinate.x - (width);
-                    //poly.y= coordinate.y - (height);
-
-                    //poly.x= overlay1.x;
-                    //poly.y= overlay1.y;
-
-                    //marker.x = coordinate.x - scaleX*width;
-                    //marker.y = coordinate.x - height;
-
-                   //poly.scaleX = scale;
-                   //poly.scaleY = scale;
-                    container.addChild(poly);   ///
-                    polys.push(poly);    ///
-                    var circle = new createjs.Shape();  ///
-                    circle.graphics.beginStroke("red").beginFill("blue").drawCircle(0, 0, 3);
-                    circle.x = coordinate.x;
-                    circle.y = coordinate.y;
-                    container.addChild(circle);   ///
-                    polys.add(circle);
-
-
-                }
-
-                if (!(event.cc === null)) {
-                    addPolygon(event.cc);
-                }
-
                 markers.push(marker); ///
 /*
                 var strVar="";
@@ -426,6 +368,55 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
             };
 
         };
+
+
+        function drawGeometry(event, coordinate) {
+
+            if (!(event.cc === null)) {
+                addPolygon(event.cc);
+            }
+
+            function addPolygon(cc) {
+
+                poly = new createjs.Shape();  ///
+
+
+                var pixelCoordinates = parsePolygonAndConvertPixels(cc); ///
+                console.log(pixelCoordinates); ///
+                var arrayOfNumbers = []; ///
+                // var arrayOfNumbers2 = [[10,10],[10,30],[30,20],[50,3],[10,10]]; ///
+
+                var maxX = 0;
+                var minX = 100000;
+                var maxY = 0;
+                var minY = 100000;
+
+                pixelCoordinates.forEach(function (p) { ///
+                    maxX = Math.max(p.x, maxX);
+                    minX = Math.min(p.x, minX);
+                    maxY = Math.max(p.y, maxY);
+                    minY = Math.min(p.y, minY);
+                    arrayOfNumbers.push([p.x, p.y]);
+                });
+                var width = maxX - minX;
+                var height = maxY - minY;
+                console.log("width " + (maxX - minX));
+                console.log("height " + (maxY - minY));
+                poly.graphics.beginStroke("Yellow").drawPolygon(0, 0, arrayOfNumbers); ///
+
+
+                container.addChild(poly);   ///
+                polys.push(poly);    ///
+                var circle = new createjs.Shape();  ///
+                circle.graphics.beginStroke("red").beginFill("blue").drawCircle(0, 0, 3);
+                circle.x = coordinate.x;
+                circle.y = coordinate.y;
+                container.addChild(circle);   ///
+
+            }
+
+        }
+
 
         function clearMarkers() {
 

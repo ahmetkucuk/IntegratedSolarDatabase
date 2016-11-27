@@ -82,18 +82,36 @@
 						<span class="glyphicon glyphicon-flash"></span> Search!
 					</button>
 				</form>
+				<br><br><br>
+				<form>
+				<div id="event-group" class="form-group">
+
+					<b>Events</b>
+					<div  ng-repeat="event in eventNames">
+						<label class="checkbox-inline">
+							<input
+									type="checkbox"
+									name="Events"
+									value="{{event.code}}"
+									ng-checked="true"
+									ng-click="changeVisibleEventTypes(event)">{{event.name}}
+
+						</label>
+					</div>
+				</div>
+				</form>
 			</div>
 		</div>
 
 
-		<div class="col-md-6 fill">
-			<div id="canvasContainer" class="col-md-12 fill">
-				<canvas id="testCanvas" width="512" height="512">
+		<div class="col-md-9 fill">
+			<div id="canvasContainer" class="fill">
+				<canvas id="testCanvas" style="padding-left:0;padding-right:0;margin-left: auto; margin-right: auto; display: block; width:95%; height:95%;">
 
 				</canvas>
 			</div>
 		</div>
-		<div class="col-md-3 panel" style="background-color:white;">
+		<!--<div class="col-md-3 panel" style="background-color:white;">
 			<div id="col-md-12 event-group" class="form-group">
 
 				<b>Events</b>
@@ -105,11 +123,12 @@
 								value="{{event.code}}"
 								ng-checked="true"
 								ng-click="changeVisibleEventTypes(event)">{{event.name}}
-
+ui-icon ui-icon-arrowstop-1-w
+close-button ui-icon ui-icon-closethick
 					</label>
 				</div>
 			</div>
-		</div>
+		</div> -->
 	</div>
 
 	<a class="tag rotate90">
