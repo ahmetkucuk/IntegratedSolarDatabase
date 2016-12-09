@@ -28,6 +28,12 @@ type ImageRequest struct {
 	Wavelength	string
 }
 
+type GenerateVideoRequest struct {
+	EventID	string
+	Email	string
+	Institute string
+}
+
 
 func CreateEventByTimeRangeRequest(input *context.BeegoInput)  (request EventByTimeRangeRequest, err error) {
 	r := EventByTimeRangeRequest{}
@@ -53,6 +59,16 @@ func CreateTemporalRequest(input url.Values)  (request TemporalRequest, err erro
 	r.Offset = input.Get("offset")
 
 	fmt.Println("EndTime", r.TableNames)
+
+	return r, nil
+}
+
+func CreateGenerateVideoRequest(input url.Values)  (request GenerateVideoRequest, err error) {
+	r := GenerateVideoRequest{}
+
+	r.EventID = input.Get("eventid")
+	r.Email = input.Get("email")
+	r.Institute = input.Get("institude")
 
 	return r, nil
 }

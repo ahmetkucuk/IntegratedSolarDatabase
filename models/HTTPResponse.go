@@ -3,9 +3,9 @@ import "solardatabase/utils"
 
 
 type Response struct {
-	status	string
-	statusCode	int
-	msg	string
+	Status	string
+	StatusCode	int
+	Msg	string
 }
 
 type EventListResponse struct {
