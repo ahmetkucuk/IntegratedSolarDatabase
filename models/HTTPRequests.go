@@ -22,6 +22,12 @@ type TemporalRequest struct {
 	Offset string
 }
 
+
+type SearchByIdRequest struct {
+	Id	string
+	TableName	string
+}
+
 type ImageRequest struct {
 	ImageDate	string
 	Size	string
@@ -76,3 +82,11 @@ func CreateImageRequest(input *context.BeegoInput)  (request ImageRequest, err e
 	return r, nil
 }
 
+func CreateSearchByIdRequest(input url.Values)  (SearchByIdRequest, error) {
+	r := SearchByIdRequest{}
+
+	r.Id = input.Get("id")
+	r.TableName = input.Get("tablename")
+
+	return r, nil
+}

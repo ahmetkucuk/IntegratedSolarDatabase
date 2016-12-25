@@ -26,3 +26,10 @@ type ImageUrlResponse struct {
 	Msg	string
 	Result ImageUrl
 }
+
+type SearchByIdResponse struct {
+	Status	string
+	StatusCode	int
+	Msg	string
+	Result utils.JSONString
+}
