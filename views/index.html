@@ -10,6 +10,10 @@
 	<link rel="stylesheet" href="https://rawgit.com/MarkoCen/ngPopup/master/dist/ngPopup.min.css">
 
     <script   src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+	<!--<script-->
+			<!--src="https://code.jquery.com/jquery-1.11.4.js"-->
+			<!--integrity="sha256-Qw82+bXyGq6MydymqBxNPYTaUXXq7c8v3CwiYwLLNXU="-->
+			<!--crossorigin="anonymous"></script>-->
     <script src="../static/third/bootstrap336/js/bootstrap.min.js"></script>
     <script src="/static/third/easel08/easeljs-0.8.2.min.js"></script>
 	<script src="/static/third/angular150/angular.js"></script>
@@ -34,16 +38,16 @@
 	<script src='/static/js/main.js'></script>
 	<script src="../static/js/dragableDirective.js"></script>
 
-
 </head>
 <body>
+
+
 <div class="container-fluid">
 	<div class="row well well-sm">
 		<div style="text-align:center;">
 			<h5><p class="text-danger">Solar Event Database with Interpolation and Trajectory (SEDIT)</p></h5>
 		</div>
 	</div>
-
 	<div class="row">
 
 		<div class="col-md-3 panel" style="background-color:white;">
@@ -104,12 +108,14 @@
 		</div>
 
 
-		<div class="col-md-9 fill">
+		<div class="col-md-9">
 			<div id="canvasContainer" class="fill">
-				<canvas id="testCanvas" style="padding-left:0;padding-right:0;margin-left: auto; margin-right: auto; display: block; width:95%; height:95%;">
+				<canvas id="testCanvas" style="padding-left:0;padding-right:0;margin-left: auto; margin-right: auto; display: block;">
 
 				</canvas>
 			</div>
+
+			<marker-window id="markerWindow" data="popupEvent"></marker-window>
 		</div>
 		<!--<div class="col-md-3 panel" style="background-color:white;">
 			<div id="col-md-12 event-group" class="form-group">
@@ -156,3 +162,96 @@ close-button ui-icon ui-icon-closethick
 
 </body>
 </html>
+
+<!--<script src='/static/js/test.js'></script>
+
+		<script>
+
+			$(document).on("click", ".open-Modal", function () {
+				var myobjid = $(this).data('id');
+				$(".modal-body #objid").val( myobjid );
+				// As pointed out in comments,
+				// it is superfluous to have to manually call the modal.
+				// $('#addBookDialog').modal('show');
+			});
+
+
+			$(document).on("click", "#modalFormSubmit", function () {
+
+				var email_id = $("#email_id").val();
+				var institute = $("#institute").val();
+				var objid = $("#objid").val();
+				//alert(objid);
+
+				$.ajax({
+					r
+					aurl:URL + "/api/query/solev/generateVideo?event_id=" + objid + "&email=" + email_id + "&institute=" + institute, //the script to call to get data
+					dataType: 'json',               //data format
+					//data:
+					success: function(response)          //on recieve of reply
+					{
+						if(response.ERROR)
+						{
+                          exit();
+
+						} else
+						{
+							alert('Status: "OK", StatusCode: 1, Msg: "Successful"');
+						}
+
+					}
+				});
+
+				$('#myModal').modal('hide');
+				//alert('Status: "OK", StatusCode: 1, Msg: "Successful"');
+			});
+
+
+//		jQuery.noConflict();
+//		// Use jQuery via jQuery() instead of via $()
+//		jQuery(document).ready(function(){
+//			jQuery('.bs-example-modal-sm').modal({
+//				backdrop: 'static',   // This disable for click outside event
+//				keyboard: false        // This for keyboard event
+//			});
+//		});
+		//(function($) {
+//			$(".modal-dialog").draggable({
+//				handle: ".modal-header"
+//			});
+
+//			$('.modal').modal({ keyboard: false,
+//				show: true
+//			});
+//			// Jquery draggable
+//			$('.modal-dialog').draggable({
+//				handle: ".modal-header"
+//			});
+
+	//	})(jQuery);
+
+	</script>
+
+
+
+
+
+	<!--<script type="text/javascript">-->
+
+<!--$(document).ready(function(){-->
+
+<!--$(".show-modal").click(function(){-->
+
+<!--$(".bs-example-modal-sm").modal({-->
+
+<!--backdrop: 'static',-->
+
+<!--keyboard: false-->
+
+<!--});-->
+
+<!--});-->
+
+<!--});-->
+
+<!--</script>-->

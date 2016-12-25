@@ -11,6 +11,32 @@ angular.module("app")
     }
 ]);
 
+// var app = angular.module("app", [])
+//     .controller("AppCtrl", function ($scope) {
+//         $scope.username = "SheoNarayan";
+//         $scope.address = "Hyderabad, India";
+//     });
+
+angular.module("app").directive('markerWindow', function() {
+    return {
+        restrict: "E",
+        templateUrl: '/static/html/my-test.html'
+    };
+});
+
+angular.module("app").controller("testCtrl", function($scope) {
+  //  return function(scope, element) {
+    //    element.bind('change', function() {
+      //      alert('change on ' + element);
+       // });
+  //  };
+    $scope.popupEvent = {};
+    $scope.popupEvent.startTime = "popopopopopopopop";
+
+});
+
+
+
 angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", "$location", "URL", "dateService", "RESTService", "ngProgressFactory", "canvas","$compile", function($rootScope,$scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvas,$compile) {
 
     //var GetEvents = $resource(URL + "event");
@@ -67,14 +93,20 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
             var startDate = new Date(selectedDateInMillis - 0.5 * MS_PER_MINUTE);
             var endDate = new Date(selectedDateInMillis + 0.5 * MS_PER_MINUTE);
             $scope.modelList=[];
+            //kashem
+            //$scope.videoTrack=[];
             RESTService.temporalQuery($scope, dateService.dateToString(startDate), dateService.dateToString(endDate),
                 function(result) {
                     $scope.eventNames = RESTService.getEventTypes();
 
-                    //rassel...
-                    $scope.modelList=canvas.drawOnSun(RESTService.getVisibleEvents());
+                    //russel...
+                    $scope.modelList=canvas.drawOnSun($scope, RESTService.getVisibleEvents());
+                    $scope.popupEvent = RESTService.getVisibleEvents()[0];
                    //canvas.setMarker();
                     //$scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
+                    //kashem
+                    //$scope.videoTrack=canvas.drawOnSun(RESTService.getVisibleEvents());
+                   // $scope.videoTrack=canvas.drawOnSun(RESTService.generateVideo());
                 },
                 function(error) {
 
@@ -104,6 +136,13 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
        // $scope.$apply();
     };
 
+
+    $scope.generateVideo = function(formInput) {   ///
+        console.log(formInput)
+        //RESTService.generateVideo()
+        // $scope.$apply();
+    };
+
     $scope.changeVisibleEventTypes = function(event) {
         RESTService.toggleVisibleTypes(event.code);
         console.log(event.code);
@@ -111,6 +150,10 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
         $scope.modelList=canvas.drawOnSun(RESTService.getVisibleEvents());
         //$scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
     };
+
+    $scope.onPopupEventChange = function(selectedEvent) {
+        $scope.popupEvent = selectedEvent;
+    }
 
     $scope.onDateChanged();
 

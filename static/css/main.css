@@ -15,14 +15,9 @@
 
 .fill {
     height: 100%;
+    margin-left: auto;
+    margin-right: auto;
 }
-
-
-
-
-
-
-
 
 html,
 body {
@@ -68,7 +63,7 @@ body {
 }
 
 
-/*rassel*/
+/*russel*/
 .event-marker {
     background-repeat: no-repeat;
     background-size: 23px 39px;
@@ -113,6 +108,7 @@ body {
     text-overflow: ellipsis;
     white-space: nowrap;
     width: 330px;
+
 }
 .event-popup h1 {
     display: inline-block;
@@ -132,10 +128,13 @@ body {
     right: 2px;
     top: 0;
     transition: all 200ms;
-    font-size: 30px;
+    font-size: 300px;
     font-weight: bold;
     text-decoration: none;
-    color: orange;
+    margin-top:-30px;
+    margin-right:-30px;
+    cursor:pointer;
+    color: white;
 }
 .event-popup .container {
     color: #ddd;
@@ -202,4 +201,29 @@ body {
     height: 16px;
     width: 16px;
 }
-/*rassel*/
+/*russel*/
+
+
+/*kashem*/
+.close-link {
+    /*float: right;*/
+    text-align: right;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-backdrop {
+    background: none;
+}
+
+/*Popup windows relative location*/
+#canvasContainer {
+    position: relative;
+}
+
+#markerWindow {
+    position: absolute;
+    right: 400px;
+    top: 100px;
+}
