@@ -11,15 +11,10 @@ angular.module("app")
     }
 ]);
 
-// var app = angular.module("app", [])
-//     .controller("AppCtrl", function ($scope) {
-//         $scope.username = "SheoNarayan";
-//         $scope.address = "Hyderabad, India";
-//     });
-
 angular.module("app").directive('markerWindow', function() {
     return {
         restrict: "EA",
+        scope: false,
         templateUrl: '/static/html/popup-window.html'
     };
 });
@@ -58,6 +53,9 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
 
     $scope.eventNames = [
     ];
+
+    $scope.popupEvent = {};
+    $scope.popupEvent.id = "ahmet";
 
     $scope.onDateChanged = function() {
         var w = $scope.wavelengthInfo.selectedOption.name;
@@ -131,18 +129,23 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
         //RESTService.generateVideo()
         // $scope.$apply();
     };
-
+/*
+    $scope.$watch('popupEvent', function (newValue, oldValue, scope) {
+        $scope.popupEvent = newValue;
+        $scope.popupEvent = RESTService.getVisibleEvents()[0];
+    });
+*/
     $scope.changeVisibleEventTypes = function(event) {
         RESTService.toggleVisibleTypes(event.code);
-        console.log(event.code);
-        console.log(RESTService.getVisibleEvents());
         $scope.modelList=canvas.drawOnSun(RESTService.getVisibleEvents());
         //$scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
     };
 
     $scope.onPopupEventChange = function(selectedEvent) {
-        $scope.popupEvent = selectedEvent;
-    }
+        //$scope.popupEvent = selectedEvent;
+    };
+    var i = 0;
+    setInterval(function() {$scope.popupEvent = RESTService.getVisibleEvents()[i]; i++; console.log("timer + " + i + " " + $scope.popupEvent.id);}, 2000);
 
     $scope.onDateChanged();
 

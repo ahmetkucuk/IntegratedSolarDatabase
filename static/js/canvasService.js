@@ -176,8 +176,8 @@ angular.module("app").service("canvas",["dateService","$ngBootbox", function(dat
                 container.addChild(overlay1);
                 container.setChildIndex(overlay1, 1);
                 overlay1.addEventListener("click", function(clickEvent) {
-                    $scope.onPopupEventChange(event);
-                    // $scope.popupEvent.id = event.target;
+                    // $scope.onPopupEventChange(event);
+                    $scope.popupEvent = event;
                     // $scope.popupEvent.startTime = event.target;
                     // $scope.popupEvent.startTime = event.target;
 
