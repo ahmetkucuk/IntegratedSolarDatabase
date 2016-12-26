@@ -11,17 +11,7 @@ angular.module("app")
     }
 ]);
 
-angular.module("app").directive('markerWindow', function() {
-    return {
-        restrict: "EA",
-        scope: false,
-        templateUrl: '/static/html/popup-window.html'
-    };
-});
-
-
-
-angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", "$location", "URL", "dateService", "RESTService", "ngProgressFactory", "canvas","$compile", function($rootScope,$scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvas,$compile) {
+angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", "$location", "URL", "dateService", "RESTService", "ngProgressFactory", "canvas","$compile", "$interval", function($rootScope,$scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvas, $compile, $interval) {
 
     //var GetEvents = $resource(URL + "event");
     //GetEvents.get(function(response) {
@@ -51,11 +41,7 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
         selectedOption: {id: 0, name:'0094'}
     };
 
-    $scope.eventNames = [
-    ];
-
-    $scope.popupEvent = {};
-    $scope.popupEvent.id = "ahmet";
+    $scope.eventNames = [];
 
     $scope.onDateChanged = function() {
         var w = $scope.wavelengthInfo.selectedOption.name;
@@ -86,22 +72,13 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
                 function(result) {
                     $scope.eventNames = RESTService.getEventTypes();
 
-                    //russel...
                     $scope.modelList=canvas.drawOnSun($scope, RESTService.getVisibleEvents());
                     $scope.popupEvent = RESTService.getVisibleEvents()[0];
-                   //canvas.setMarker();
-                    //$scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
-                    //kashem
-                    //$scope.videoTrack=canvas.drawOnSun(RESTService.getVisibleEvents());
-                   // $scope.videoTrack=canvas.drawOnSun(RESTService.generateVideo());
                 },
                 function(error) {
 
                 }
             );
-            //var GetEvents = $resource(URL + "eventByRange/StartTime=" + dateService.dateToString(startDate) + "/EndTime=" + dateService.dateToString(endDate));
-            //GetEvents.get(function(response) { $scope.$broadcast('DrawEventsOnCanvas', response.Events);});
-
         };
 
     };
@@ -117,11 +94,6 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
             }
         );
     };
-//r..
-    $scope.activateView = function(ele) {   ///
-        $compile(ele.contents())($scope);   ///
-       // $scope.$apply();
-    };
 
 
     $scope.generateVideo = function(formInput) {   ///
@@ -129,12 +101,14 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
         //RESTService.generateVideo()
         // $scope.$apply();
     };
-/*
+
+    var event = {}
+
     $scope.$watch('popupEvent', function (newValue, oldValue, scope) {
         $scope.popupEvent = newValue;
-        $scope.popupEvent = RESTService.getVisibleEvents()[0];
+        event = newValue;
     });
-*/
+
     $scope.changeVisibleEventTypes = function(event) {
         RESTService.toggleVisibleTypes(event.code);
         $scope.modelList=canvas.drawOnSun(RESTService.getVisibleEvents());
@@ -142,16 +116,26 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
     };
 
     $scope.onPopupEventChange = function(selectedEvent) {
-        //$scope.popupEvent = selectedEvent;
+        $scope.popupEvent = selectedEvent;
+        console.log("in popup event change");
     };
     var i = 0;
-    setInterval(function() {$scope.popupEvent = RESTService.getVisibleEvents()[i]; i++; console.log("timer + " + i + " " + $scope.popupEvent.id);}, 2000);
+    $interval(function() {$scope.popupEvent.event;}, 200);
 
     $scope.onDateChanged();
 
 }]);
 
-angular.module("app").controller("MarkerCtrl", ["$scope","$resource", "$location", "URL", "$timeout", "canvas", function($scope, $resource, $location, URL, $timeout, canvas) {
+
+angular.module("app").directive('markerWindow', function() {
+    return {
+        restrict: "EA",
+        scope: false,
+        templateUrl: '/static/html/popup-window.html'
+    };
+});
+
+//angular.module("app").controller("MarkerCtrl", ["$scope","$resource", "$location", "URL", "$timeout", "canvas", function($scope, $resource, $location, URL, $timeout, canvas) {
 //
 //    console.log("in draw ctrl");
 //
@@ -166,10 +150,10 @@ angular.module("app").controller("MarkerCtrl", ["$scope","$resource", "$location
 //        });
 //    });
 //
-    $scope.test=function(test){  ///
-        if(typeof $scope.showDetails=="undefined")  ///
-            $scope.showDetails=false;   ///
-        else   ///
-       $scope.showDetails=!$scope.showDetails;   ///
-    }
-}]);
+//     $scope.test=function(test){  ///
+//         if(typeof $scope.showDetails=="undefined")  ///
+//             $scope.showDetails=false;   ///
+//         else   ///
+//        $scope.showDetails=!$scope.showDetails;   ///
+//     }
+// }]);
