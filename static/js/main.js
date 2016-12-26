@@ -19,20 +19,9 @@ angular.module("app")
 
 angular.module("app").directive('markerWindow', function() {
     return {
-        restrict: "E",
-        templateUrl: '/static/html/my-test.html'
+        restrict: "EA",
+        templateUrl: '/static/html/popup-window.html'
     };
-});
-
-angular.module("app").controller("testCtrl", function($scope) {
-  //  return function(scope, element) {
-    //    element.bind('change', function() {
-      //      alert('change on ' + element);
-       // });
-  //  };
-    $scope.popupEvent = {};
-    $scope.popupEvent.startTime = "popopopopopopopop";
-
 });
 
 

@@ -44,14 +44,7 @@ angular.module("app").service("RESTService", function($resource) {
             onSuccess(response.Result.URL);
         });
     };
-//russel
-    this.generateVideo = function($scope, id, email, onSuccess, onError) {
-        var GetEvents = $resource(URL + "/api/query/solev/generateVideo?event_id=" + id + "&email=" + email + "&institute=" + institute);
-        this.executeGetWithLoader(GetEvents, $scope, function(response) {
-            onSuccess(response);
-        });
-    };
-// russel
+
     function updateEventData() {
         eventNames = [];
         visibleEventTypes = [];
