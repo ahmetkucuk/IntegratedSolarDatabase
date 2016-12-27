@@ -25,5 +25,7 @@ _testmain.go
 *.prof
 solardatabase
 static/video
-.idea/
+.idea/*
+.idea/misc.xml
+.idea/workspace.xml
 *~

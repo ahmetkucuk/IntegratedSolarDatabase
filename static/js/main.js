@@ -117,6 +117,11 @@ angular.module("app").controller("AppCtrl", ["$scope","$resource", "$location", 
         $uibModal.open({
             templateUrl: 'static/html/video-form.html',
             controller: 'VideoFormCtrl',
+            resolve: {
+                event: function () {
+                    return $scope.popupEvent;
+                }
+            }
         }).result.then(
             function () {
                 alert("OK");
@@ -144,7 +149,8 @@ angular.module("app").directive('markerWindow', function() {
     };
 });
 
-angular.module("app").controller("VideoFormCtrl", ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
+angular.module("app").controller("VideoFormCtrl", ["$scope", "$uibModalInstance", "event", function ($scope, $uibModalInstance, event) {
+    $scope.event = event;
     $scope.generateVideo = function () {
         $uibModalInstance.close();
     };
