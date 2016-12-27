@@ -11,12 +11,8 @@ angular.module("app")
     }
 ]);
 
-angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", "$location", "URL", "dateService", "RESTService", "ngProgressFactory", "canvas","$compile", "$interval", function($rootScope,$scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvas, $compile, $interval) {
+angular.module("app").controller("AppCtrl", ["$scope","$resource", "$location", "URL", "dateService", "RESTService", "ngProgressFactory", "canvas", "$interval", "$uibModal", function($scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvas, $interval, $uibModal) {
 
-    //var GetEvents = $resource(URL + "event");
-    //GetEvents.get(function(response) {
-    //    $scope.events = response.Tasks;
-    //});
     dateService.initDate($scope);
     dateService.initTime($scope);
 
@@ -95,19 +91,12 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
         );
     };
 
+    var event = {};
 
-    $scope.generateVideo = function(formInput) {   ///
-        console.log(formInput)
-        //RESTService.generateVideo()
-        // $scope.$apply();
-    };
-
-    var event = {}
-
-    $scope.$watch('popupEvent', function (newValue, oldValue, scope) {
-        $scope.popupEvent = newValue;
-        event = newValue;
-    });
+    // $scope.$watch('popupEvent', function (newValue, oldValue, sc) {
+    //     //$scope.popupEvent = newValue;
+    //     event = newValue;
+    // });
 
     $scope.changeVisibleEventTypes = function(event) {
         RESTService.toggleVisibleTypes(event.code);
@@ -116,13 +105,33 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
     };
 
     $scope.onPopupEventChange = function(selectedEvent) {
+        $scope.shouldHidePopupWindow = false;
         $scope.popupEvent = selectedEvent;
-        console.log("in popup event change");
+        //event = selectedEvent;
+        // $scope.popupEvent.event;
     };
-    var i = 0;
-    $interval(function() {$scope.popupEvent.event;}, 200);
 
     $scope.onDateChanged();
+
+    $scope.onGenerateVideoClicked = function(){
+        $uibModal.open({
+            templateUrl: 'static/html/video-form.html',
+            controller: 'VideoFormCtrl',
+        }).result.then(
+            function () {
+                alert("OK");
+            },
+            function () {
+                alert("Cancel");
+            }
+        );
+    };
+
+    $scope.onClosePopupWindow = function () {
+        $scope.shouldHidePopupWindow = true;
+    };
+
+    $interval(function() {$scope.popupEvent.event;}, 100);
 
 }]);
 
@@ -130,11 +139,20 @@ angular.module("app").controller("AppCtrl", ["$rootScope","$scope","$resource", 
 angular.module("app").directive('markerWindow', function() {
     return {
         restrict: "EA",
-        scope: false,
+        scope: true,
         templateUrl: '/static/html/popup-window.html'
     };
 });
 
+angular.module("app").controller("VideoFormCtrl", ["$scope", "$uibModalInstance", function ($scope, $uibModalInstance) {
+    $scope.generateVideo = function () {
+        $uibModalInstance.close();
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+}]);
 //angular.module("app").controller("MarkerCtrl", ["$scope","$resource", "$location", "URL", "$timeout", "canvas", function($scope, $resource, $location, URL, $timeout, canvas) {
 //
 //    console.log("in draw ctrl");

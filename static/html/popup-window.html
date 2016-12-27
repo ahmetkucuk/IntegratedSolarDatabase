@@ -1,9 +1,6 @@
-<div class="event-marker" rel="{{popupEvent.id}}">
-    <div class="event-label">{{popupEvent.id}}<br></div>
-</div>
-<div class="event-popup" >
+<div class="event-popup" ng-hide="shouldHidePopupWindow" ng-model="popupEvent">
     <div class="close-button ui-icon ui-icon-closethick" title="Close PopUp Window"></div>
-    <div class="close-link" title="Close PopUp Window" onclick="this.parentElement.style.display='none';" >&times;</div>
+    <div class="close-link" title="Close PopUp Window" ng-click="onClosePopupWindow()" >&times;</div>
 
     <h1>{{popupEvent.id}}</h1>
     <br>
@@ -12,7 +9,6 @@
     <span class="label-default">End Time: {{popupEvent.endtime}} </span>
     <br>
 
-    <button class="btn btn-primary open-Modal" type="button">
-        Generate Video
-    </button>
+    <button type="button" class="btn btn-default" ng-click="onGenerateVideoClicked()">Trajectory Video</button>
+
 </div>

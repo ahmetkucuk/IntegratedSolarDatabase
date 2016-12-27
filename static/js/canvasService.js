@@ -33,7 +33,7 @@ createjs.Graphics.prototype.drawPolygon = function(x, y, args) {
     return this.append(new createjs.Graphics.Polygon(x, y, points));
 };
 
-angular.module("app").service("canvas",["dateService","$ngBootbox", function(dateService, $ngBootbox) { ///
+angular.module("app").service("canvas",["dateService", function(dateService) { ///
     var canvas;
     var stage;
     var container;
