@@ -1,39 +1,4 @@
-///.. change start
-(createjs.Graphics.Polygon = function(x, y, points) {
-    this.x = x;
-    this.y = y;
-    this.points = points;
-}).prototype.exec = function(ctx) {
-    // Start at the end to simplify loop
-    //var end = this.points[this.points.length - 1];
-    //ctx.moveTo(end.x, end.y);
-    this.points.forEach(function(point) {
-        ctx.lineTo(point.x, point.y);
-    });
-};
-createjs.Graphics.prototype.drawPolygon = function(x, y, args) {
-    var points = [];
-    if (Array.isArray(args)) {
-        args.forEach(function(point) {
-            point = Array.isArray(point) ? {x:point[0], y:point[1]} : point;
-            points.push(point);
-        });
-    } else {
-        args = Array.prototype.slice.call(arguments).slice(2);
-        var px = null;
-        args.forEach(function(val) {
-            if (px === null) {
-                px = val;
-            } else {
-                points.push({x: px, y: val});
-                px = null;
-            }
-        });
-    }
-    return this.append(new createjs.Graphics.Polygon(x, y, points));
-};
-
-angular.module("app").service("canvas",["dateService", function(dateService) { ///
+angular.module("canvas", []).service("canvasService", function(canvasZoomHandler, geomUtils) { ///
     var canvas;
     var stage;
     var container;
@@ -42,10 +7,7 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
     var markers;
     var WIDTH;
     var HEIGHT;
-    var DateService;  ///
     var polys;   ///
-    var el;  ///
-    var mController;  ///
     var canvasContainer;   ///
 
     function loadCanvas() {
@@ -70,8 +32,8 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
             HEIGHT = min;
 
 
-            canvas.addEventListener("mousewheel", MouseWheelHandler, false);
-            canvas.addEventListener("DOMMouseScroll", MouseWheelHandler, false);
+            canvas.addEventListener("mousewheel", canvasZoomHandler.MouseWheelHandler, false);
+            canvas.addEventListener("DOMMouseScroll", canvasZoomHandler.MouseWheelHandler, false);
 
 
             container = new createjs.Container();
@@ -80,15 +42,15 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
             stage.addChild(container);
             stage.addChild(overlayContainer);
             stage.addChild(zoomContainer);
-
-            initButtonZoomListener();
-            setListeners();
+            canvasZoomHandler.initZoomHandler(container, zoomContainer, stage, WIDTH, HEIGHT, markers);
+            canvasZoomHandler.initButtonZoomListener();
+            canvasZoomHandler.setListeners();
         });
 
     }
 
     this.drawOnSun = function($scope, events) {
-        DateService=dateService;  ///
+
         if(canvas == null) {
             loadCanvas();
         }
@@ -97,8 +59,14 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
         if(!events) return;
 
         for(var i = 0; i < events.length; i++) {
+            var centerCoordinate = findCenterCoordinate(events[i]);
+            putMarker(events[i], centerCoordinate);
+            drawGeometry(events[i], centerCoordinate);
+        }
 
-            var c = events[i].coordinate.split(" ");
+        function findCenterCoordinate(event) {
+
+            var c = event.coordinate.split(" ");
             var x = c[0].substring(6);
             var y = c[1].substring(0, c[1].length-1);
             var point = {
@@ -106,69 +74,27 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
                 y : parseFloat(y)
             };
 
-            convertHPCToPixXY(point);
-            putMarker(events[i], point);
-            drawGeometry(events[i], point);
-        }
-
-        //POLYGON((0 0, 1 0, 0 0))
-        /// change start TODO check if polygon string is empty
-        function parsePolygonAndConvertPixels(polygonString) {
-            polygonString = polygonString.substring(polygonString.indexOf('((') + 2);
-            polygonString = polygonString.substring(0, polygonString.length - 2);
-
-            var points = polygonString.split(',');
-                            var pixelCoordinates = [];
-            for(var i = 0; i < points.length; i++) {
-               //p = 0 0
-                var p = points[i];
-                var c = p.split(' ');
-                var x = c[0];
-                var y = c[1];
-                var point = {
-                    x : parseFloat(x),
-                    y : parseFloat(y)
-                };
-
-                pixelCoordinates.push(convertHPCToPixXY(point));
-            }
-            return pixelCoordinates;
-        } /// change end
-          // converting HPC helioveier to pixel values
-        function convertHPCToPixXY(pointIn) {
-
-            var CDELT = 0.599733;
-            var HPCCENTER = 4096.0 / 2.0;
-
-            pointIn.x = (HPCCENTER + (pointIn.x / CDELT)) * (WIDTH / 4096);
-            pointIn.y = (HPCCENTER - (pointIn.y / CDELT)) * (HEIGHT / 4096);
-            return pointIn;
+            return geomUtils.convertHPCToPixXY(point, WIDTH, HEIGHT);
         }
 
         function putMarker(event, coordinate) {
-            //change start...
+
             var addMakerImg = new Image();  ///
            addMakerImg.src =  URL + "/static/img/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
             //addMakerImg.src =  "http://helioviewer.org/resources/images/eventMarkers/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
 
-            var StartTime=new Date(Date.parse(event.starttime));  ///
-            var EndTime=new Date(Date.parse(event.endtime));      ///
-           // var EndTime=new Date(Date.parse(event.endtime));      ///
-
-           // var url = "http://helioviewer.org/resources/images/eventMarkers/" + event.eventtype + "@2x.png";
 
             addMakerImg.onload = markerDetails;
 
             function markerDetails() { ///
 
                 var overlay1 = new createjs.Bitmap(addMakerImg); ///
-                var scale = overlayScale;
+                var scale = canvasZoomHandler.getOverlayScale();
                 var markerWidth = this.width;
                 var markerHeight = this.height;
 
 
                 overlay1.x = coordinate.x + (markerWidth*scale/2);
-                //overlay1.x = coordinate.x;
                 overlay1.y = coordinate.y - markerHeight*scale;
 
                 overlay1.scaleX = scale;
@@ -177,12 +103,12 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
                 container.setChildIndex(overlay1, 1);
                 overlay1.addEventListener("click", function(clickEvent) {
                     $scope.onPopupEventChange(event);
-                    //$scope.popupEvent = event;
                 });
 
 
                 markers.push(overlay1); ///
                 stage.update();
+                canvasZoomHandler.updateMarkers(markers);
             };
 
         };
@@ -198,7 +124,7 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
 
                 poly = new createjs.Shape();  ///
 
-                var pixelCoordinates = parsePolygonAndConvertPixels(cc); ///
+                var pixelCoordinates = geomUtils.parsePolygonAndConvertPixels(cc, WIDTH, HEIGHT); ///
                 var arrayOfNumbers = []; ///
                 // var arrayOfNumbers2 = [[10,10],[10,30],[30,20],[50,3],[10,10]]; ///
 
@@ -214,8 +140,7 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
                     minY = Math.min(p.y, minY);
                     arrayOfNumbers.push([p.x, p.y]);
                 });
-                var width = maxX - minX;
-                var height = maxY - minY;
+
                 poly.graphics.beginStroke("Yellow").drawPolygon(0, 0, arrayOfNumbers); ///
 
 
@@ -240,9 +165,9 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
             markers = [];
             polys=[];
             stage.update();
+            canvasZoomHandler.updateMarkers(markers);
         }
         return markers;
-       /// setMarker() ;
     };
 
     var removed = false;
@@ -265,8 +190,6 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
                 bitmap.scaleX = (WIDTH / bitmap.image.width);
                 bitmap.scaleY = (HEIGHT / bitmap.image.height);
 
-                //bitmap.image.width = WIDTH;
-                //bitmap.image.height = HEIGHT;
                 container.addChild(bitmap);
                 container.setChildIndex(bitmap, 0);
                 removed = true;
@@ -283,100 +206,8 @@ angular.module("app").service("canvas",["dateService", function(dateService) { /
         return{HEIGHT:HEIGHT,WIDTH:WIDTH}
     };
 
-
-
-    //SET LISTENERS
-    function setListeners() {
-        stage.addEventListener("stagemousedown", function(e) {
-            var offset={x:container.x-e.stageX,y:container.y-e.stageY};
-            stage.addEventListener("stagemousemove",function(ev) {
-                container.x = ev.stageX+offset.x;
-                container.y = ev.stageY+offset.y;
-                stage.update();
-            });
-            stage.addEventListener("stagemouseup", function(){
-                stage.removeAllEventListeners("stagemousemove");
-            });
-        });
-        stage.update();
-    }
-
-    //ZOOM HANDLING
-    var zoom;
-    var overlayScale = 0.5;
-    var padding = 10;
-    var zoomIn = 1.1;
-    var zoomOut = 1/1.1;
-
-    function MouseWheelHandler(e) {
-        if(Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail)))>0)
-            zoom=zoomIn;
-        else
-            zoom=zoomOut;
-        var local = container.globalToLocal(stage.mouseX, stage.mouseY);
-        container.regX=local.x;
-        container.regY=local.y;
-        container.x=stage.mouseX;
-        container.y=stage.mouseY;
-        updateZoom();
-
-    }
-
-    function updateZoom() {
-        container.scaleX=container.scaleY*=zoom;
-        overlayScale *= 1/zoom;
-        for(var i = 0; i < markers.length; i++) {
-            markers[i].scaleX=markers[i].scaleY*=1/zoom;
-        }
-        stage.update();
-    }
-
-    function initButtonZoomListener() {
-        var zoomInButtonImage = new Image();
-        var zoomOutButtonImage = new Image();
-        zoomInButtonImage.src = URL + "/static/img/zoomin.png";
-        zoomOutButtonImage.src = URL + "/static/img/zoomout.png";
-        zoomInButtonImage.onload = handleZoomInButton;
-        zoomOutButtonImage.onload = handleZoomOutButton;
-
-        function handleZoomInButton() {
-            var bitmap = new createjs.Bitmap(zoomInButtonImage);
-            bitmap.scaleX = 1/4;
-            bitmap.scaleY = 1/4;
-            bitmap.x = WIDTH - 72 - padding;
-            bitmap.y = HEIGHT - 32 - padding;
-
-
-            bitmap.addEventListener("click", function(event) {
-                zoom=zoomIn;
-                updateZoom();
-            });
-            zoomContainer.addChild(bitmap);
-            //container.setChildIndex(bitmap, 10);
-
-            stage.update();
-        };
-
-        function handleZoomOutButton() {
-            var bitmap = new createjs.Bitmap(zoomOutButtonImage);
-            bitmap.scaleX = 1/4;
-            bitmap.scaleY = 1/4;
-            bitmap.x = WIDTH - 32 - padding;
-            bitmap.y = HEIGHT - 32 - padding;
-
-            bitmap.addEventListener("click", function(event) {
-                zoom=zoomOut;
-                updateZoom();
-            });
-            zoomContainer.addChild(bitmap);
-            //container.setChildIndex(bitmap, 10);
-            stage.update();
-        };
-    }
-
-
     loadCanvas();
 
-}]);
+});
 
 

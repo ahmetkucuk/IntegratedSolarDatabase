@@ -11,7 +11,7 @@ angular.module("app")
     }
 ]);
 
-angular.module("app").controller("AppCtrl", ["$scope","$resource", "$location", "URL", "dateService", "RESTService", "ngProgressFactory", "canvas", "$interval", "$uibModal", function($scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvas, $interval, $uibModal) {
+angular.module("app").controller("AppCtrl", function($scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvasService, $interval, $uibModal) {
 
     dateService.initDate($scope);
     dateService.initTime($scope);
@@ -43,7 +43,7 @@ angular.module("app").controller("AppCtrl", ["$scope","$resource", "$location", 
         var w = $scope.wavelengthInfo.selectedOption.name;
         //Load background image
         RESTService.getClosestImage($scope, dateService.getDateAsString($scope), 1024, w, function(url) {
-                canvas.loadCanvasBackground($scope, url, function() {
+                canvasService.loadCanvasBackground($scope, url, function() {
                     console.log("Background Loaded");
                 });
                 loadEvents();
@@ -68,7 +68,7 @@ angular.module("app").controller("AppCtrl", ["$scope","$resource", "$location", 
                 function(result) {
                     $scope.eventNames = RESTService.getEventTypes();
 
-                    $scope.modelList=canvas.drawOnSun($scope, RESTService.getVisibleEvents());
+                    $scope.modelList=canvasService.drawOnSun($scope, RESTService.getVisibleEvents());
                     $scope.popupEvent = RESTService.getVisibleEvents()[0];
                 },
                 function(error) {
@@ -81,7 +81,7 @@ angular.module("app").controller("AppCtrl", ["$scope","$resource", "$location", 
 
     $scope.wavelengthChanged = function() {
         RESTService.getClosestImage($scope, dateService.getDateAsString($scope), 1024, $scope.wavelengthInfo.selectedOption.name, function(url) {
-                canvas.loadCanvasBackground($scope, url, function() {
+                canvasService.loadCanvasBackground($scope, url, function() {
                     console.log("Background Loaded");
                 });
             },
@@ -91,8 +91,6 @@ angular.module("app").controller("AppCtrl", ["$scope","$resource", "$location", 
         );
     };
 
-    var event = {};
-
     // $scope.$watch('popupEvent', function (newValue, oldValue, sc) {
     //     //$scope.popupEvent = newValue;
     //     event = newValue;
@@ -100,7 +98,7 @@ angular.module("app").controller("AppCtrl", ["$scope","$resource", "$location", 
 
     $scope.changeVisibleEventTypes = function(event) {
         RESTService.toggleVisibleTypes(event.code);
-        $scope.modelList=canvas.drawOnSun(RESTService.getVisibleEvents());
+        $scope.modelList=canvasService.drawOnSun(RESTService.getVisibleEvents());
         //$scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
     };
 
@@ -136,9 +134,9 @@ angular.module("app").controller("AppCtrl", ["$scope","$resource", "$location", 
         $scope.shouldHidePopupWindow = true;
     };
 
-    $interval(function() {$scope.popupEvent.event;}, 100);
+    $interval(function() {$scope.popupEvent;}, 100);
 
-}]);
+});
 
 
 angular.module("app").directive('markerWindow', function() {
@@ -149,7 +147,7 @@ angular.module("app").directive('markerWindow', function() {
     };
 });
 
-angular.module("app").controller("VideoFormCtrl", ["$scope", "$uibModalInstance", "event", function ($scope, $uibModalInstance, event) {
+angular.module("app").controller("VideoFormCtrl", function ($scope, $uibModalInstance, event) {
     $scope.event = event;
     $scope.generateVideo = function () {
         $uibModalInstance.close();
@@ -158,7 +156,7 @@ angular.module("app").controller("VideoFormCtrl", ["$scope", "$uibModalInstance"
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
-}]);
+});
 //angular.module("app").controller("MarkerCtrl", ["$scope","$resource", "$location", "URL", "$timeout", "canvas", function($scope, $resource, $location, URL, $timeout, canvas) {
 //
 //    console.log("in draw ctrl");
