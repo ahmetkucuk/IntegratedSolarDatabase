@@ -33,3 +33,10 @@ type SearchByIdResponse struct {
 	Msg	string
 	Result utils.JSONString
 }
+
+type PreviewVideoResponse struct {
+	Status	string
+	StatusCode	int
+	Msg	string
+	Link string
+}

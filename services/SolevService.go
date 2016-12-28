@@ -16,3 +16,15 @@ func GenerateVideo(r models.GenerateVideoRequest) (*models.Response) {
 	}
 	return result
 }
+
+func PreviewVideo(r models.PreviewVideoRequest) (*models.PreviewVideoResponse) {
+
+	fmt.Println("coming request: ", r.EventID, r.EventType )
+	result := &models.PreviewVideoResponse {
+		Status: "OK",
+		StatusCode:1,
+		Msg: "Successful",
+		Link: "static/video/AR131movie.mp4",
+	}
+	return result
+}

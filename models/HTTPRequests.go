@@ -25,7 +25,7 @@ type TemporalRequest struct {
 
 type SearchByIdRequest struct {
 	Id	string
-	TableName	string
+	EventType	string
 }
 
 type ImageRequest struct {
@@ -38,6 +38,11 @@ type GenerateVideoRequest struct {
 	EventID	string
 	Email	string
 	Institute string
+}
+
+type PreviewVideoRequest struct {
+	EventID	string
+	EventType string
 }
 
 
@@ -79,6 +84,14 @@ func CreateGenerateVideoRequest(input url.Values)  (request GenerateVideoRequest
 	return r, nil
 }
 
+func CreatePreviewVideoRequest(input url.Values)  (request PreviewVideoRequest, err error) {
+	r := PreviewVideoRequest{}
+
+	r.EventID = input.Get("eventid")
+	r.EventType = input.Get("eventtype")
+
+	return r, nil
+}
 
 func CreateImageRequest(input *context.BeegoInput)  (request ImageRequest, err error) {
 	r := ImageRequest{}
@@ -102,7 +115,7 @@ func CreateSearchByIdRequest(input url.Values)  (SearchByIdRequest, error) {
 	r := SearchByIdRequest{}
 
 	r.Id = input.Get("id")
-	r.TableName = input.Get("tablename")
+	r.EventType = input.Get("eventtype")
 
 	return r, nil
 }

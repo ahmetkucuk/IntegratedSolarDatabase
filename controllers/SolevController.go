@@ -10,9 +10,17 @@ type SolevController struct {
 	beego.Controller
 }
 
-func (this *SolevController) GenerateVideo() {
+func (ctrl *SolevController) GenerateVideo() {
 
-	request, _ := models.CreateGenerateVideoRequest(this.Input())
-	this.Data["json"] = services.GenerateVideo(request)
-	this.ServeJSON()
+	request, _ := models.CreateGenerateVideoRequest(ctrl.Input())
+	ctrl.Data["json"] = services.GenerateVideo(request)
+	ctrl.ServeJSON()
+}
+
+
+func (ctrl *SolevController) PreviewVideo() {
+
+	request, _ := models.CreatePreviewVideoRequest(ctrl.Input())
+	ctrl.Data["json"] = services.PreviewVideo(request)
+	ctrl.ServeJSON()
 }
