@@ -63,6 +63,13 @@ angular.module("canvas").service("canvasZoomHandler", function() {
         overlayScale *= 1/zoom;
         for(var i = 0; i < markers.length; i++) {
             markers[i].scaleX=markers[i].scaleY*=1/zoom;
+            var markerWidth = markers[i].originW;
+            var markerHeight = markers[i].originH;
+
+            console.log(markers[i].originX);
+            console.log(markers[i].originY);
+            markers[i].x = markers[i].originX - (markerWidth*markers[i].scaleX);
+            markers[i].y = markers[i].originY - markerHeight*markers[i].scaleY*2;
         }
         stage.update();
     }

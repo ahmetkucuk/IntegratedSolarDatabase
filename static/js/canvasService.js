@@ -94,8 +94,13 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
                 var markerHeight = this.height;
 
 
-                overlay1.x = coordinate.x + (markerWidth*scale/2);
+                overlay1.x = coordinate.x - (markerWidth*scale/2);
                 overlay1.y = coordinate.y - markerHeight*scale;
+
+                overlay1.originX = coordinate.x;
+                overlay1.originY = coordinate.y;
+                overlay1.originW = markerWidth*scale;
+                overlay1.originH = markerHeight*scale;
 
                 overlay1.scaleX = scale;
                 overlay1.scaleY = scale;
