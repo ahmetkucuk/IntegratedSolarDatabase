@@ -27,3 +27,15 @@ func FindClosestImage(r models.ImageRequest) (*models.ImageUrlResponse) {
 	}
 	return result
 }
+
+func SearchById(r models.SearchByIdRequest) (*models.SearchByIdResponse) {
+
+
+	result := &models.SearchByIdResponse {
+		Status: "OK",
+		StatusCode:1,
+		Msg:"Successful",
+		Result: dao.GetEventByIdAndTableName(r),
+	}
+	return result
+}

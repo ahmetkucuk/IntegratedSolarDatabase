@@ -153,3 +153,13 @@ func GetClosestImage(r models.ImageRequest) (models.ImageUrl) {
 	}
 	return selectUrl
 }
+
+func GetEventByIdAndTableName(r models.SearchByIdRequest) (utils.JSONString) {
+	query := fmt.Sprintf(utils.EVENT_BY_TABLNAME_AND_ID,  r.TableName, r.Id)
+	resultJson, err := utils.GetJSON(db, query)
+	fmt.Println(query)
+	if err != nil {
+		fmt.Println("error %e", err)
+	}
+	return resultJson
+}

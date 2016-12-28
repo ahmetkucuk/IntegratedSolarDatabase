@@ -37,3 +37,10 @@ func (this *EventController) ImageUrlQuery() {
 	this.Data["json"] = services.FindClosestImage(request)
 	this.ServeJSON()
 }
+
+func (this *EventController) SearchByID() {
+	request, _ := models.CreateSearchByIdRequest(this.Input())
+	this.Data["json"] = services.SearchById(request)
+	this.ServeJSON()
+}
+
