@@ -1,17 +1,20 @@
 var URL = document.location.origin;
 
 angular.module("app")
-    .constant("URL", URL).config([
-    "$locationProvider", function($locationProvider) {
+    .constant("URL", URL)
+    .config(function($locationProvider) {
         return $locationProvider.html5Mode({
             enabled: true,
             requireBase: false
-        }).hashPrefix("!"); // enable the new HTML5 routing and history API
-        // return $locationProvider.html5Mode(true).hashPrefix("!"); // enable the new HTML5 routing and history API
-    }
-]);
+        }).hashPrefix("!");
+    })
+    .config(function(ngToastProvider) {
+        ngToastProvider.configure({
+            horizontalPosition: 'center'
+        });
+    });
 
-angular.module("app").controller("AppCtrl", function($scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvasService, $interval, $uibModal) {
+angular.module("app").controller("AppCtrl", function($scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvasService, $interval, $uibModal, ngToast) {
 
     dateService.initDate($scope);
     dateService.initTime($scope);
@@ -19,6 +22,16 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
     $scope.progressbar = ngProgressFactory.createInstance();
     $scope.progressbar.setHeight('4px');
     $scope.progressbar.setColor('#34B7E3');
+
+
+    ngToast.create({
+        content: 'Welcome to SEDIT. You are using Alpha Version!',
+        timeout: 3000
+    });
+
+    $scope.closeAlert = function(index) {
+        $scope.alerts.splice(index, 1);
+    };
 
 
     $scope.wavelengthInfo = {
@@ -122,10 +135,13 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
             }
         }).result.then(
             function () {
-                alert("OK");
+
+                ngToast.create({
+                    content: 'We got your request. It is being processed.',
+                    timeout: 3000
+                });
             },
             function () {
-                alert("Cancel");
             }
         );
     };
@@ -149,6 +165,21 @@ angular.module("app").directive('markerWindow', function() {
 
 angular.module("app").controller("VideoFormCtrl", function ($scope, $uibModalInstance, event) {
     $scope.event = event;
+    $scope.wavelengthInfo = {
+        availableOptions: [
+            {name: "0094", id: 0},
+            {name: "0131", id:1},
+            {name: "0171", id:2},
+            {name: "0193", id:3},
+            {name: "0211", id:4},
+            {name: "0304", id:5},
+            {name: "0335", id:6},
+            {name: "1600", id:7},
+            {name: "1700", id:8},
+            {name: "4500", id:9}
+        ],
+        selectedOption: {id: 0, name:'0094'}
+    };
     $scope.generateVideo = function () {
         $uibModalInstance.close();
     };

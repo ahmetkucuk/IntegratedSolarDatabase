@@ -7,10 +7,10 @@
 	<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css'>
 	<link rel='stylesheet' href='/static/third/ngProgress/ngProgress.css'>
 	<link rel='stylesheet' href='/static/css/main.css'>
+	<link rel='stylesheet' href='/static/third/ngToast/ngToast.min.css'>
 
-    <script   src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
-
-    <script src="../static/third/bootstrap336/js/bootstrap.min.js"></script>
+    <script src="/static/third/jquery-2.2.4.min.js"></script>
+    <script src="/static/third/bootstrap336/js/bootstrap.min.js"></script>
     <script src="/static/third/easel08/easeljs-0.8.2.min.js"></script>
 	<script src="/static/third/angular161/angular.js"></script>
 	<script src="/static/third/uibootstrap/ui-bootstrap-tpls-2.3.1.min.js"></script>
@@ -19,17 +19,16 @@
 	<script src="/static/third/angular161/angular-resource.min.js"></script>
 	<script src="/static/third/angular161/angular-animate.js">  </script>
 
-	<script src="../static/third/angular161/angular-sanitize.min.js"></script>
-
+	<script src="/static/third/angular161/angular-sanitize.min.js"></script>
 	<script src="/static/third/ngProgress/ngProgress.min.js"></script>
-
+	<script src="/static/third/ngToast/ngToast.min.js"></script>
 
 	<script src="/static/js/canvasService.js">  </script>
 	<script src="/static/js/geomUtils.js">  </script>
 	<script src="/static/js/canvasZoomHandler.js">  </script>
 	<script src='/static/js/appModule.js'></script>
-	<script src="/static/js/RESTService.js">  </script>
-	<script src='/static/js/polygonDrawer.js'></script>
+	<script src="/static/js/RESTService.js"> </script>
+	<script src='/static/js/polygonDrawer.js'> </script>
 	<script src="/static/js/dateService.js">  </script>
 	<script src='/static/js/main.js'></script>
 
@@ -41,6 +40,7 @@
 		<div style="text-align:center;">
 			<h5><p class="text-danger">Solar Event Database with Interpolation and Trajectory (SEDIT)</p></h5>
 		</div>
+		<toast></toast>
 	</div>
 	<div class="row">
 
@@ -112,11 +112,6 @@
 			<div marker-window id="markerWindow"></div>
 		</div>
 	</div>
-
-	<a class="tag rotate90">
-		<img src="static/img/alpha.png">
-	</a>
-
 </div>
 
 </div>
