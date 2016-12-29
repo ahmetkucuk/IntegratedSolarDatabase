@@ -23,14 +23,25 @@
 	<script src="/static/third/ngProgress/ngProgress.min.js"></script>
 	<script src="/static/third/ngToast/ngToast.min.js"></script>
 
-	<script src="/static/js/canvasService.js">  </script>
-	<script src="/static/js/geomUtils.js">  </script>
-	<script src="/static/js/canvasZoomHandler.js">  </script>
-	<script src='/static/js/appModule.js'></script>
-	<script src="/static/js/RESTService.js"> </script>
 	<script src='/static/js/polygonDrawer.js'> </script>
-	<script src="/static/js/dateService.js">  </script>
+
+
+	<script src='/static/js/appModule.js'></script>
+	<!--Angular Controllers-->
 	<script src='/static/js/main.js'></script>
+
+	<!--Angular Services-->
+	<script src="/static/js/canvasService.js">  </script>
+	<script src="/static/js/canvasZoomHandler.js">  </script>
+	<script src="/static/js/RESTService.js"> </script>
+	<script src="/static/js/dateService.js">  </script>
+
+	<!--Angular Factories-->
+	<script src="/static/js/geomUtils.js">  </script>
+	<!--Angular Directives-->
+	<script src='/static/js/markerWindowDirective.js'> </script>
+
+
 
 </head>
 <body>
@@ -109,7 +120,7 @@
 				</canvas>
 			</div>
 
-			<div marker-window id="markerWindow"></div>
+				<div marker-window on-generate-video-clicked="onGenerateVideoClicked()" selected-event="popupEvent" id="markerWindow"></div>
 		</div>
 	</div>
 </div>

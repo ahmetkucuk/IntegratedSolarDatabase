@@ -154,15 +154,6 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
 
 });
 
-
-angular.module("app").directive('markerWindow', function() {
-    return {
-        restrict: "EA",
-        scope: true,
-        templateUrl: '/static/html/popup-window.html'
-    };
-});
-
 angular.module("app").controller("VideoFormCtrl", function ($scope, $uibModalInstance, event) {
     $scope.event = event;
     $scope.wavelengthInfo = {
