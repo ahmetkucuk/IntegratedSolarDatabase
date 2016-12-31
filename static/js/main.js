@@ -55,28 +55,30 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
     $scope.onDateChanged = function() {
         var w = $scope.wavelengthInfo.selectedOption.name;
         //Load background image
-        RESTService.getClosestImage($scope, dateService.getDateAsString($scope), 1024, w, function(url) {
-                canvasService.loadCanvasBackground($scope, url, function() {
-                    console.log("Background Loaded");
-                });
-                loadEvents();
-            },
-            function(error) {
 
-            }
-        );
+        function loadBackgroundImage() {
+            RESTService.getClosestImage($scope, dateService.getDateAsString($scope), 1024, w, function(url) {
+                    canvasService.loadCanvasBackground($scope, url, function() {
+                        console.log("Background Loaded");
+                    });
+                },
+                function(error) {
+
+                }
+            );
+        }
 
         function loadEvents() {
             var selectedDateInMillis = dateService.getSelected($scope).getTime();
-            //selectedDate = dateService.getSelected($scope);
-
             //var MS_PER_MINUTE = 60000; //60000 * 60 * 60 * 60;
             var MS_PER_MINUTE = 1000*60;
             var startDate = new Date(selectedDateInMillis - 0.5 * MS_PER_MINUTE);
+
             var endDate = new Date(selectedDateInMillis + 0.5 * MS_PER_MINUTE);
             $scope.modelList=[];
             //kashem
             //$scope.videoTrack=[];
+            //selectedDate = dateService.getSelected($scope);
             RESTService.temporalQuery($scope, dateService.dateToString(startDate), dateService.dateToString(endDate),
                 function(result) {
                     $scope.eventNames = RESTService.getEventTypes();
@@ -89,6 +91,9 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
                 }
             );
         };
+
+        loadBackgroundImage();
+        loadEvents();
 
     };
 
@@ -179,25 +184,3 @@ angular.module("app").controller("VideoFormCtrl", function ($scope, $uibModalIns
         $uibModalInstance.dismiss('cancel');
     };
 });
-//angular.module("app").controller("MarkerCtrl", ["$scope","$resource", "$location", "URL", "$timeout", "canvas", function($scope, $resource, $location, URL, $timeout, canvas) {
-//
-//    console.log("in draw ctrl");
-//
-//    $scope.$on('DrawEventsOnCanvas', function(event, events) {
-//
-//    });
-//
-//    $scope.$on('ChangeBackground', function(event, backgroundUrl) {
-//        console.log("On Change Background: " + backgroundUrl);
-//        canvas.loadCanvasBackground($scope, backgroundUrl, function() {
-//            console.log("Background Loaded");
-//        });
-//    });
-//
-//     $scope.test=function(test){  ///
-//         if(typeof $scope.showDetails=="undefined")  ///
-//             $scope.showDetails=false;   ///
-//         else   ///
-//        $scope.showDetails=!$scope.showDetails;   ///
-//     }
-// }]);

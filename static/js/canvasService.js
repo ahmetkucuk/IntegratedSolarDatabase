@@ -60,8 +60,8 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
 
         for(var i = 0; i < events.length; i++) {
             var centerCoordinate = findCenterCoordinate(events[i]);
-            putMarker(events[i], centerCoordinate);
             drawGeometry(events[i], centerCoordinate);
+            putMarker(events[i], centerCoordinate);
         }
 
         function findCenterCoordinate(event) {
@@ -105,7 +105,7 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
                 overlay1.scaleX = scale;
                 overlay1.scaleY = scale;
                 container.addChild(overlay1);
-                container.setChildIndex(overlay1, 1);
+                //container.setChildIndex(overlay1, 1);
                 overlay1.addEventListener("click", function(clickEvent) {
                     $scope.onPopupEventChange(event);
                 });

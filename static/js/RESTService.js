@@ -10,7 +10,9 @@ angular.module("app").service("RESTService", function($resource) {
     var loaderCounter = 0;
     this.executeGetWithLoader = function(request, $scope, callback) {
         loaderCounter = loaderCounter + 1;
-        $scope.progressbar.start();
+        if(loaderCounter <= 0) {
+            $scope.progressbar.start();
+        }
         request.get(function(response) {
             loaderCounter = loaderCounter - 1;
             if(loaderCounter <= 0) {
