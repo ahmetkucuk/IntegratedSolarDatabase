@@ -49,7 +49,7 @@
 <div class="container-fluid">
 	<div class="row well well-sm">
 		<div style="text-align:center;">
-			<h5><p class="text-danger">Solar Event Database with Interpolation and Trajectory (SEDIT)</p></h5>
+
 		</div>
 		<toast></toast>
 	</div>
@@ -58,6 +58,15 @@
 		<div class="col-md-3 panel" style="background-color:white;">
 			<div class="col-md-12">
 
+				<div style="text-align:center;">
+<!--	<img src="/static/img/DM_lab.png" alt="Data Mining Lab GSU" style="width:80px;height:40px;">-->
+					<h4><b>
+
+						<span><a class="fa fa-cog" aria-hidden="true" href="" data-hasqtip="2" oldtitle="Solar Event Database with Interpolation and Trajectory" title=""></a>
+							<a class="logo-text" href="" data-hasqtip="3" oldtitle="Solar Event Database with Interpolation and Trajectory" title="" aria-describedby="qtip-3">SEDIT</a></span></b>
+		</h4>
+				</div>
+				<br>
 				<form ng-submit="onDateChanged()">
 					<div id="date-group" class="form-group">
 						<b>Date</b><br/>
@@ -122,16 +131,21 @@
 
 				<div marker-window on-generate-video-clicked="onGenerateVideoClicked()" selected-event="popupEvent" id="markerWindow"></div>
 		</div>
+		<br>
+		<br>
+		<p class="text-muted credit text-center">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.</p>
+
 	</div>
 </div>
 
 </div>
+<!--<div id="footer">-->
+	<!--<div class="container">-->
+		<!--<p class="text-muted credit">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.</p>-->
+	<!--</div>-->
 
-<div id="footer">
-	<div class="container">
-		<p class="text-muted credit">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.</p>
-	</div>
-</div>
+<!--</div>-->
+
 
 </body>
 </html>

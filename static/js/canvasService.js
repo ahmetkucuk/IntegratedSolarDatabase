@@ -152,7 +152,7 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
                 container.addChild(poly);   ///
                 polys.push(poly);    ///
                 var circle = new createjs.Shape();  ///
-                circle.graphics.beginStroke("red").beginFill("blue").drawCircle(0, 0, 3);
+                //circle.graphics.beginStroke("red").beginFill("blue").drawCircle(0, 0, 3);
                 circle.x = coordinate.x;
                 circle.y = coordinate.y;
                 container.addChild(circle);   ///
@@ -162,10 +162,12 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
         }
 
         function clearMarkers() {
+           // console.log(markers.length);
 
             for(var i = 0; i < markers.length; i++) {
                 container.removeChild(markers[i]);
                 container.removeChild(polys[i]);      ///
+
             }
             markers = [];
             polys=[];
