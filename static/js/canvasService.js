@@ -107,7 +107,10 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
                 container.addChild(overlay1);
                 //container.setChildIndex(overlay1, 1);
                 overlay1.addEventListener("click", function(clickEvent) {
+                    resetMarkerAlpha();
+                    overlay1.shadow = new createjs.Shadow("#FFF", 0, -4, 8);;
                     $scope.onPopupEventChange(event);
+                    stage.update();
                 });
 
 
@@ -173,6 +176,14 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
             polys=[];
             stage.update();
             canvasZoomHandler.updateMarkers(markers);
+        }
+
+        function resetMarkerAlpha() {
+
+            for(var i = 0; i < markers.length; i++) {
+                markers[i].shadow = null;
+            }
+            stage.update();
         }
         return markers;
     };

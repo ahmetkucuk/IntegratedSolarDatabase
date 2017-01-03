@@ -116,11 +116,9 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
 
     $scope.changeVisibleEventTypes = function(event) {
         RESTService.toggleVisibleTypes(event.code);
-        //console.log(event.code);
         //console.log(RESTService.getVisibleEvents());
-        //canvas.drawOnSun(RESTService.getVisibleEvents());
 
-        $scope.modelList=canvasService.drawOnSun(RESTService.getVisibleEvents());
+        $scope.modelList=canvasService.drawOnSun($scope, RESTService.getVisibleEvents());
         //$scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
     };
 

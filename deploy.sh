@@ -1,4 +1,4 @@
-APP_DIR="/Users/ahmetkucuk/Documents/Developer/go/solardb/src/solardatabase/"
+APP_DIR="/Users/ahmetkucuk/Documents/Developer/go/src/solardatabase/"
 DEP_DIR="/Users/ahmetkucuk/Documents/Deployment/SolarDB/"
 VERSION_FILE="conf/version.txt"
 CONFIG_FILE="conf/app.conf"
@@ -17,4 +17,4 @@ date +%s >> $VERSION_FILE
 rm $CONFIG_FILE
 mv $SERVER_CONFIG_FILE $CONFIG_FILE
 cd $DEP_DIR
-scp -prq solardatabase ahmet@dmlab.cs.gsu.edu:/home/ahmet
+rsync -rav solardatabase ahmet@dmlab.cs.gsu.edu:/home/ahmet/solardatabase/

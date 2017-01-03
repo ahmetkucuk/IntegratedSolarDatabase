@@ -66,6 +66,7 @@ angular.module("app").service("RESTService", function($resource) {
 
         var result = [];
         for(var i = 0; currentEvents != null && i < currentEvents.length; i++) {
+
             if(visibleEventTypes.indexOf(currentEvents[i].eventtype) != -1) {
                 result.push(currentEvents[i]);
             }
@@ -82,6 +83,3 @@ angular.module("app").service("RESTService", function($resource) {
         }
     }
 });
-/**
- * Created by ahmetkucuk on 09/06/16.
- */

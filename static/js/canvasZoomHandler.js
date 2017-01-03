@@ -28,7 +28,7 @@ angular.module("canvas").service("canvasZoomHandler", function() {
 
     this.updateMarkers = function (m) {
         markers = m;
-    }
+    };
 
     this.setListeners = function() {
         stage.addEventListener("stagemousedown", function(e) {
@@ -43,7 +43,7 @@ angular.module("canvas").service("canvasZoomHandler", function() {
             });
         });
         stage.update();
-    }
+    };
 
     this.MouseWheelHandler = function(e) {
             if (Math.max(-1, Math.min(1, (e.wheelDelta || -e.detail))) > 0)
@@ -60,14 +60,13 @@ angular.module("canvas").service("canvasZoomHandler", function() {
 
     function updateZoom() {
         container.scaleX=container.scaleY*=zoom;
+        console.log(container.x);
         overlayScale *= 1/zoom;
         for(var i = 0; i < markers.length; i++) {
             markers[i].scaleX=markers[i].scaleY*=1/zoom;
             var markerWidth = markers[i].originW;
             var markerHeight = markers[i].originH;
 
-            console.log(markers[i].originX);
-            console.log(markers[i].originY);
             markers[i].x = markers[i].originX - (markerWidth*markers[i].scaleX);
             markers[i].y = markers[i].originY - markerHeight*markers[i].scaleY*2;
         }
@@ -92,6 +91,8 @@ angular.module("canvas").service("canvasZoomHandler", function() {
 
             bitmap.addEventListener("click", function(event) {
                 zoom=zoomIn;
+                container.x = container.x - (WIDTH*zoomIn - WIDTH)*0.5;
+                container.y = container.y - (HEIGHT*zoomIn - HEIGHT)*0.5;
                 updateZoom();
             });
             zoomContainer.addChild(bitmap);
@@ -109,6 +110,8 @@ angular.module("canvas").service("canvasZoomHandler", function() {
 
             bitmap.addEventListener("click", function(event) {
                 zoom=zoomOut;
+                container.x = container.x + (WIDTH*zoomIn - WIDTH)*0.5;
+                container.y = container.y + (HEIGHT*zoomIn - HEIGHT)*0.5;
                 updateZoom();
             });
             zoomContainer.addChild(bitmap);

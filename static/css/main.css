@@ -10,6 +10,8 @@ body {
 .panel {
     min-height:90%;
     height: 90%;
+    background-color:white;
+    margin-top:2%;
 }
 
 
@@ -97,6 +99,10 @@ body {
     top: 10px;
 }
 
+#footer {
+    position: absolute;
+}
+
 .event-popup {
     position: absolute;
     left:130px;
@@ -104,5 +110,10 @@ body {
 }
 
 .canvas-area {
-    height:550px;
+    height:95%;
+}
+
+.col-centered{
+    float: none;
+    margin: 0 auto;
 }
