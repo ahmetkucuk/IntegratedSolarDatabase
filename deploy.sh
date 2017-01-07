@@ -17,4 +17,4 @@ date +%s >> $VERSION_FILE
 rm $CONFIG_FILE
 mv $SERVER_CONFIG_FILE $CONFIG_FILE
 cd $DEP_DIR
-rsync -rav solardatabase ahmet@dmlab.cs.gsu.edu:/home/ahmet/solardatabase/
+rsync -rav solardatabase ahmet@dmlab.cs.gsu.edu:/home/ahmet/

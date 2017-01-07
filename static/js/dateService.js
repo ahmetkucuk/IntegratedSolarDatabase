@@ -29,7 +29,7 @@ angular.module("app").service("dateService", function() {
 
     $scope.searchForm = {};
     var yesterday = new Date(); //Today
-    yesterday.setDate(yesterday.getDate()- 110);
+    yesterday.setDate(yesterday.getDate()- 1);
     $scope.searchForm.date = yesterday;
 
     $scope.inlineOptions = {

@@ -1,16 +1,18 @@
-    <div class="event-popup container" ng-hide="shouldHidePopupWindow">
+    <div class="event-popup container">
+            <div class="close-link" title="Close PopUp Window" ng-click="onClosePopupWindow()">&times;</div>
+            <div>
 
-        <div class="close-link" title="Close PopUp Window" ng-click="onClosePopupWindow()">&times;</div>
-        <h4>
-            <a title="Click to go HEK" href="http://www.lmsal.com/hek/her?cmd=view-voevent&ivorn={{selectedEvent.id}}" target="_blank">{{selectedEvent.eventtype}}</a>
-        </h4>
-        <span class="label-default">Start Time: {{selectedEvent.starttime}}  </span>
-        <br>
-        <span class="label-default">End Time: {{selectedEvent.endtime}} </span>
-        <br>
+                                <h5><a title="Click to go HEK" href="http://www.lmsal.com/hek/her?cmd=view-voevent&ivorn={{selectedEvent.id}}" target="_blank">HEK Url: {{selectedEvent.eventtype}}</a></h5>
+            </div>
+            <div>
+                    Start Time: "{{selectedEvent.starttime}}"
+            </div>
 
-        <br>
+            <div>
+                    End Time:  "{{selectedEvent.endtime}}"
+            </div>
 
-        <button type="button" class="btn btn-default btn-xs" ng-click="onGenerateVideoClicked()">Trajectory Video</button>
-
+            <div>
+                <button type="button" class="popup-element btn btn-default btn-sm" ng-click="onGenerateVideoClicked()">Trajectory Video</button>
+            </div>
     </div>

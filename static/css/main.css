@@ -10,8 +10,10 @@ body {
 .panel {
     min-height:90%;
     height: 90%;
-    background-color:white;
+    /*background-color:rgba(187, 194, 196, 0.8);*/
+    background-color:rgba(110, 119, 122, 0.6);
     margin-top:2%;
+    color: #ffffff;
 }
 
 
@@ -51,18 +53,18 @@ body {
 }
 
 .event-popup {
-    background-color: rgba(24, 24, 24, 0.9);
+    background-color: rgba(110, 119, 122, 0.6);
     border: 2px solid black;
     border-radius: 6px;
     box-shadow: 0 0 12px black;
     color: white;
-    font-size: 11px;
     overflow: hidden;
     padding: 10px;
     position: absolute;
     text-overflow: ellipsis;
     white-space: nowrap;
-    width: 330px;
+    left:2%;
+    width:300px;
 
 }
 
@@ -95,18 +97,12 @@ body {
 
 #markerWindow {
     position: absolute;
-    right: 400px;
-    top: 10px;
+    right: 25%;
+    top: 2%;
 }
 
 #footer {
     position: absolute;
-}
-
-.event-popup {
-    position: absolute;
-    left:130px;
-    width:250px;
 }
 
 .canvas-area {
@@ -116,4 +112,8 @@ body {
 .col-centered{
     float: none;
     margin: 0 auto;
+}
+
+.popup-element {
+    margin-top: 10px;
 }

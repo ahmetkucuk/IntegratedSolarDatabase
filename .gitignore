@@ -3,6 +3,7 @@ ompiled Object files, Static and Dynamic libs (Shared Objects)
 *.a
 *.so
 conf/app.conf
+conf/app-server.conf
 
 # Folders
 _obj

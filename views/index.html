@@ -120,19 +120,18 @@
 		</div>
 
 
-		<div class="col-md-9 canvas-area">
-			<div id="canvasContainer" class="fill">
-				<canvas id="testCanvas" style="padding-left:0;padding-right:0;margin-left: auto; margin-right: auto; display: block;">
+			<div class="col-md-7 canvas-area">
+				<div id="canvasContainer" class="fill">
+					<canvas id="testCanvas" style="padding-left:0;padding-right:0;margin-left: auto; margin-right: auto; display: block;">
 
-				</canvas>
+					</canvas>
+				</div>
+
+				<div>
+					<p class="text-muted credit text-center">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.</p>
+				</div>
 			</div>
-
-				<div marker-window on-generate-video-clicked="onGenerateVideoClicked()" selected-event="popupEvent" id="markerWindow"></div>
-
-			<div>
-				<p class="text-muted credit text-center">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.</p>
-			</div>
-		</div>
+			<div marker-window on-generate-video-clicked="onGenerateVideoClicked()" on-close-popup-window="onClosePopupWindow()" selected-event="popupEvent" ng-hide="shouldHidePopupWindow" id="markerWindow"></div>
 		</div>
 	</div>
 </body>

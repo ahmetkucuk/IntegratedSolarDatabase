@@ -3,7 +3,8 @@ angular.module("app").directive('markerWindow', function() {
         restrict: "EA",
         scope: {
             selectedEvent: '=',
-            onGenerateVideoClicked : '&'
+            onGenerateVideoClicked : '&',
+            onClosePopupWindow : '&'
         },
         templateUrl: '/static/html/popup-window.html'
     };
