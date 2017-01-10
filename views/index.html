@@ -47,82 +47,11 @@
 <body>
 
 <div class="container-fluid">
-	<div class="row">
-
+	<div class="row canvas-area" id="canvasContainer">
 		<toast></toast>
-
-		<div class="col-md-3 panel">
 			<div class="col-md-12">
-
-				<div class="row" style="text-align:center;">
-<!--	<img src="/static/img/DM_lab.png" alt="Data Mining Lab GSU" style="width:80px;height:40px;">-->
-					<h4>
-						<span>
-							<a class="logo-text" href="" data-hasqtip="3" aria-describedby="qtip-3"><b>SEDIT</b></a>
-						</span>
-					</h4>
-				</div>
-				<div class="row">
-					<form ng-submit="onDateChanged()">
-						<div id="date-group" class="form-group">
-							<b>Date</b><br/>
-							<div class="input-group">
-								<input type="text" class="form-control" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-model="searchForm.date"/>
-							<span class="input-group-btn">
-								<button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
-							</span>
-							</div>
-						</div>
-
-						<div id="time-group" class="form-group">
-							<b>Time</b><br/>
-
-							<!--<p>From timePickerApp n TimepickerDemoCtrl, mstep: {{mstep}}</p> -->
-
-							<div uib-timepicker ng-model="searchForm.time" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
-							<!--<pre class="alert alert-info">Time is: {{mytime | date:'shortTime' }}</pre>
-							<uib-timepicker ng-model="searchForm.time" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></uib-timepicker>
-							<!--<pre class="alert alert-info">Time is: {{mytime | date:'shortTime' }}</pre> -->
-						</div>
-
-						<div class="form-group">
-							<select class="form-control"
-									ng-change="wavelengthChanged()"
-									ng-options="option.name for option in wavelengthInfo.availableOptions track by option.id"
-									ng-model="wavelengthInfo.selectedOption"></select>
-						</div>
-
-						<button type="submit" class="btn btn-success btn-lg">
-							<span class="glyphicon glyphicon-flash"></span> Search!
-						</button>
-					</form>
-				</div>
-				<div class="row">
-					<form>
-						<div id="event-group" class="form-group">
-
-							<h3><b>Events</b></h3>
-							<div  ng-repeat="event in eventNames">
-								<label class="checkbox-inline">
-									<input
-											type="checkbox"
-											name="Events"
-											value="{{event.code}}"
-											ng-checked="true"
-											ng-click="changeVisibleEventTypes(event)">{{event.name}}
-
-								</label>
-							</div>
-						</div>
-					</form>
-				</div>
-			</div>
-		</div>
-
-
-			<div class="col-md-7 canvas-area">
-				<div id="canvasContainer" class="fill">
-					<canvas id="testCanvas" style="padding-left:0;padding-right:0;margin-left: auto; margin-right: auto; display: block;">
+				<div class="fill">
+					<canvas id="mainCanvas">
 
 					</canvas>
 				</div>
@@ -131,8 +60,70 @@
 					<p class="text-muted credit text-center">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.</p>
 				</div>
 			</div>
-			<div marker-window on-generate-video-clicked="onGenerateVideoClicked()" on-close-popup-window="onClosePopupWindow()" selected-event="popupEvent" ng-hide="shouldHidePopupWindow" id="markerWindow"></div>
-		</div>
 	</div>
+
+	<div class="right-panel">
+			<div style="text-align:center;">
+				<!--	<img src="/static/img/DM_lab.png" alt="Data Mining Lab GSU" style="width:80px;height:40px;">-->
+				<h4>
+						<span>
+							<a class="logo-text" href="" data-hasqtip="3" aria-describedby="qtip-3"><b>SEDIT</b></a>
+						</span>
+				</h4>
+			</div>
+			<div>
+                    <form ng-submit="onDateChanged()">
+                        <div id="date-group" class="form-group">
+                            <div class="input-group">
+                                <input id="dateInput" type="text" class="form-control" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-model="searchForm.date"/>
+                                <span class="input-group-btn">
+                                    <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div id="time-group" class="form-group">
+
+                            <!--<p>From timePickerApp n TimepickerDemoCtrl, mstep: {{mstep}}</p> -->
+
+                            <div uib-timepicker ng-model="searchForm.time" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></div>
+                            <!--<pre class="alert alert-info">Time is: {{mytime | date:'shortTime' }}</pre>
+                            <uib-timepicker ng-model="searchForm.time" ng-change="changed()" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></uib-timepicker>
+                            <!--<pre class="alert alert-info">Time is: {{mytime | date:'shortTime' }}</pre> -->
+                        </div>
+
+                        <div class="form-group">
+                            <select class="form-control"
+                                    ng-change="wavelengthChanged()"
+                                    ng-options="option.name for option in wavelengthInfo.availableOptions track by option.id"
+                                    ng-model="wavelengthInfo.selectedOption"></select>
+                        </div>
+                        <button type="submit" class="btn btn-success btn-lg">
+                            <span class="glyphicon glyphicon-flash"></span> Search!
+                        </button>
+                    </form>
+			</div>
+			<div>
+                    <form>
+                        <div id="event-group" class="form-group">
+
+                            <h3><b>Events</b></h3>
+                            <div  ng-repeat="event in eventNames">
+                                <label class="checkbox-inline">
+                                    <input
+                                            type="checkbox"
+                                            name="Events"
+                                            value="{{event.code}}"
+                                            ng-checked="true"
+                                            ng-click="changeVisibleEventTypes(event)">{{event.name}}
+
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+			</div>
+	</div>
+	<div marker-window on-generate-video-clicked="onGenerateVideoClicked()" on-close-popup-window="onClosePopupWindow()" selected-event="popupEvent" ng-hide="shouldHidePopupWindow" id="markerWindow"></div>
+</div>
 </body>
 </html>

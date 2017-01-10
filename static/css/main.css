@@ -7,23 +7,27 @@ body {
     /* The html and body elements cannot have any padding or margin. */
 }
 
-.panel {
-    min-height:90%;
-    height: 90%;
+.right-panel {
     /*background-color:rgba(187, 194, 196, 0.8);*/
     background-color:rgba(110, 119, 122, 0.6);
-    margin-top:2%;
+    margin-top:auto;
     color: #ffffff;
+    position: absolute;
+    left: 2%;
+    top: 2%;
+    padding: 10px;
+    width: 25%;
 }
 
 
-#testCanvas {
+#mainCanvas {
     padding-left:0;
     padding-right:0;
     margin-left: auto;
     margin-right: auto;
     display: block;
-
+    height: 100%;
+    width: 100%;
 }
 
 .fill {

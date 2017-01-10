@@ -57,7 +57,7 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         //Load background image
 
         function loadBackgroundImage() {
-            RESTService.getClosestImage($scope, dateService.getDateAsString($scope), 1024, w, function(url) {
+            RESTService.getClosestImage($scope, dateService.getDateAsString($scope), 2048, w, function(url) {
                     canvasService.loadCanvasBackground($scope, url, function() {
                         console.log("Background Loaded");
                     });
