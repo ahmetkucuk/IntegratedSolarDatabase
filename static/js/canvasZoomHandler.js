@@ -78,8 +78,8 @@ angular.module("canvas").service("canvasZoomHandler", function() {
         var zoomOutButtonImage = new Image();
         zoomInButtonImage.src = URL + "/static/img/zoomin.png";
         zoomOutButtonImage.src = URL + "/static/img/zoomout.png";
-        //zoomInButtonImage.onload = handleZoomInButton;
-        //zoomOutButtonImage.onload = handleZoomOutButton;
+        zoomInButtonImage.onload = handleZoomInButton;
+        zoomOutButtonImage.onload = handleZoomOutButton;
 
         function handleZoomInButton() {
             var bitmap = new createjs.Bitmap(zoomInButtonImage);

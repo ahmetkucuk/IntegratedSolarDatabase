@@ -10,10 +10,6 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
     var polys;   ///
     var canvasContainer;   ///
 
-    var removed = false;
-    var backgroundImage = new Image();
-    var bitmap;
-
     function loadCanvas() {
 
         angular.element(document).ready(function(event) {
@@ -26,16 +22,15 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
             canvas = document.getElementById("mainCanvas");
 
             canvasContainer = document.getElementById("canvasContainer"); ///
-            var min = Math.min(canvas.width, canvas.height);
-            //canvas.width = min;
-            //canvas.height = min;
+            var min = Math.min(canvasContainer.offsetWidth, canvasContainer.offsetHeight) * 0.95;
+            console.log(min)
+            canvas.width = min;
+            canvas.height = min;
             stage = new createjs.Stage(canvas);
 
 
             WIDTH = min;
             HEIGHT = min;
-            //WIDTH = canvasContainer.offsetWidth;
-            //HEIGHT = canvasContainer.offsetHeight;
 
 
             canvas.addEventListener("mousewheel", canvasZoomHandler.MouseWheelHandler, false);
@@ -43,8 +38,6 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
 
 
             container = new createjs.Container();
-            container.width = min;
-            container.height = min;
             overlayContainer = new createjs.Container();
             zoomContainer = new createjs.Container();
             stage.addChild(container);
@@ -102,7 +95,7 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
                 var markerHeight = this.height;
 
 
-                overlay1.x = bitmap.x + coordinate.x - (markerWidth*scale/2);
+                overlay1.x = coordinate.x - (markerWidth*scale/2);
                 overlay1.y = coordinate.y - markerHeight*scale;
 
                 overlay1.originX = coordinate.x;
@@ -154,7 +147,7 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
                     minX = Math.min(p.x, minX);
                     maxY = Math.max(p.y, maxY);
                     minY = Math.min(p.y, minY);
-                    arrayOfNumbers.push([bitmap.x + p.x, p.y]);
+                    arrayOfNumbers.push([p.x, p.y]);
                 });
 
                 poly.graphics.beginStroke("Yellow").drawPolygon(0, 0, arrayOfNumbers); ///
@@ -195,6 +188,10 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
         }
         return markers;
     };
+
+    var removed = false;
+    var backgroundImage = new Image();
+    var bitmap;
     this.loadCanvasBackground = function($scope, urlImage, onFinished) {
 
         if(canvas == null) {
@@ -211,7 +208,6 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
                 bitmap = new createjs.Bitmap(backgroundImage);
                 bitmap.scaleX = (WIDTH / bitmap.image.width);
                 bitmap.scaleY = (HEIGHT / bitmap.image.height);
-                bitmap.x = (canvas.width - ((bitmap.image.width) * bitmap.scaleX))/2;
 
                 container.addChild(bitmap);
                 container.setChildIndex(bitmap, 0);
@@ -226,6 +222,7 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
             $scope.progressbar.complete();
         };
         stage.update();
+        return{HEIGHT:HEIGHT,WIDTH:WIDTH}
     };
 
     loadCanvas();
