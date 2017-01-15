@@ -4,8 +4,8 @@ angular.module("canvas").service("canvasZoomHandler", function() {
     var zoom;
     var overlayScale = 0.5;
     var padding = 10;
-    var zoomIn = 1.1;
-    var zoomOut = 1/1.1;
+    var zoomIn = 1.01;
+    var zoomOut = 1/1.01;
     var container = {};
     var stage = {};
     var zoomContainer = {};

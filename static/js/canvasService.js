@@ -22,8 +22,7 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
             canvas = document.getElementById("mainCanvas");
 
             canvasContainer = document.getElementById("canvasContainer"); ///
-            var min = Math.min(canvasContainer.offsetWidth, canvasContainer.offsetHeight) * 0.95;
-            console.log(min)
+            var min = Math.min(canvasContainer.offsetWidth, canvasContainer.offsetHeight);
             canvas.width = min;
             canvas.height = min;
             stage = new createjs.Stage(canvas);

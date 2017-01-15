@@ -49,16 +49,10 @@
 <div class="container-fluid">
 	<div class="row canvas-area" id="canvasContainer">
 		<toast></toast>
-			<div class="col-md-12">
-				<div class="fill">
+			<div class="col-md-12 fill">
 					<canvas id="mainCanvas">
 
 					</canvas>
-				</div>
-
-				<div>
-					<p class="text-muted credit text-center">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.</p>
-				</div>
 			</div>
 	</div>
 
@@ -121,6 +115,10 @@
                             </div>
                         </div>
                     </form>
+			</div>
+
+			<div>
+				<p class="text-muted credit text-center">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.</p>
 			</div>
 	</div>
 	<div marker-window on-generate-video-clicked="onGenerateVideoClicked()" on-close-popup-window="onClosePopupWindow()" selected-event="popupEvent" ng-hide="shouldHidePopupWindow" id="markerWindow"></div>
