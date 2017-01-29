@@ -9,6 +9,7 @@ import (
 	"solardatabase/dao"
 	"fmt"
 	"solardatabase/models"
+	"github.com/astaxie/beego/plugins/cors"
 )
 
 func main() {
@@ -16,6 +17,13 @@ func main() {
 	if err == nil {
 		beego.BConfig.Listen.HTTPPort = port
 	}
+	beego.InsertFilter("*", beego.BeforeRouter, cors.Allow(&cors.Options{
+		AllowOrigins:     []string{"*"},
+		AllowMethods:     []string{"GET", "DELETE", "PUT", "PATCH", "POST"},
+		AllowHeaders:     []string{"Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+	}))
 	beego.BConfig.RunMode = "dev"
 	beego.BConfig.WebConfig.AutoRender = false
 	beego.BConfig.WebConfig.TemplateLeft = "<<<"

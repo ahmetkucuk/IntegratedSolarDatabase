@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 APP_DIR="/Users/ahmetkucuk/Documents/Developer/go/src/solardatabase/"
 DEP_DIR="/Users/ahmetkucuk/Documents/Deployment/SolarDB/"
 VERSION_FILE="conf/version.txt"
@@ -8,6 +9,7 @@ mkdir $DEP_DIR
 cd $APP_DIR
 env GOOS=linux GOARCH=amd64 bee pack
 cp $APP_DIR"solardatabase.tar.gz" $DEP_DIR
+rm $APP_DIR"solardatabase.tar.gz"
 cd $DEP_DIR
 mkdir solardatabase
 tar -zvxf "solardatabase.tar.gz" -C "./solardatabase"

@@ -1,4 +1,4 @@
-var URL = document.location.origin;
+var URL = "http://sedit.dmlab.cs.gsu.edu/";
 
 angular.module("app")
     .constant("URL", URL)

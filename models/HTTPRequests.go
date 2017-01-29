@@ -1,17 +1,10 @@
 package models
 import (
-//	"fmt"
-"github.com/astaxie/beego/context"
-"strings"
+	"github.com/astaxie/beego/context"
+	"strings"
 	"net/url"
-	"fmt"
 )
 
-
-type EventByTimeRangeRequest struct {
-	StartTime	string
-	EndTime	string
-}
 
 type TemporalRequest struct {
 	StartTime	string
@@ -20,6 +13,7 @@ type TemporalRequest struct {
 	SortBy string
 	Limit string
 	Offset string
+	Interpolated bool
 }
 
 
@@ -45,20 +39,6 @@ type PreviewVideoRequest struct {
 	EventType string
 }
 
-
-func CreateEventByTimeRangeRequest(input *context.BeegoInput)  (request EventByTimeRangeRequest, err error) {
-	r := EventByTimeRangeRequest{}
-
-	StartTime := input.Param(":StartTime")
-	r.StartTime = strings.Split(StartTime, "=")[1]
-
-
-	EndTime := input.Param(":EndTime")
-	r.EndTime = strings.Split(EndTime, "=")[1]
-
-	return r, nil
-}
-
 func CreateTemporalRequest(input url.Values)  (request TemporalRequest, err error) {
 	r := TemporalRequest{}
 
@@ -68,8 +48,14 @@ func CreateTemporalRequest(input url.Values)  (request TemporalRequest, err erro
 	r.SortBy = input.Get("sortby")
 	r.Limit = input.Get("limit")
 	r.Offset = input.Get("offset")
+	interpolated := input.Get("interpolated")
 
-	fmt.Println("EndTime", r.TableNames)
+	if interpolated == "True" {
+		r.Interpolated = true
+	} else {
+		r.Interpolated = false
+	}
+
 
 	return r, nil
 }

@@ -3,6 +3,8 @@ import (
 	"database/sql"
 	"encoding/json"
 //	"fmt"
+	"bytes"
+	"strings"
 )
 
 
@@ -63,3 +65,12 @@ func GetResultInBytes(db *sql.DB, sqlString string) ([]byte, error) {
 	return jsonData, nil
 }
 
+
+func CreateTableNameString(tnames []string) string {
+
+	var buffer bytes.Buffer
+	buffer.WriteString("ARRAY['")
+	buffer.WriteString(strings.Join(tnames, "','"))
+	buffer.WriteString("']::TEXT[]")
+	return buffer.String()
+}

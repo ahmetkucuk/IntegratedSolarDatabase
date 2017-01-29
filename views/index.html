@@ -3,8 +3,6 @@
 	<title>Solar Event Database</title>
 	<link rel="icon" type="image/png" href="/static/img/favicon.png" />
 	<link rel='stylesheet' href='/static/third/bootstrap336/css/bootstrap.min.css'>
-	<link rel='stylesheet' href='/static/third/bootstrap336/css/bootstrap-theme.min.css'>
-	<link rel='stylesheet' href='/static/third/fontAwesome/font-awesome.min.css'>
 	<link rel='stylesheet' href='/static/third/ngProgress/ngProgress.css'>
 	<link rel='stylesheet' href='/static/css/main.css'>
 	<link rel='stylesheet' href='/static/third/ngToast/ngToast.min.css'>
@@ -50,6 +48,7 @@
 	<div class="row canvas-area" id="canvasContainer">
 		<toast></toast>
 			<div class="col-md-12 fill">
+
 					<canvas id="mainCanvas">
 
 					</canvas>
@@ -71,7 +70,9 @@
                             <div class="input-group">
                                 <input id="dateInput" type="text" class="form-control" uib-datepicker-popup="{{format}}" is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true" close-text="Close" alt-input-formats="altInputFormats" ng-model="searchForm.date"/>
                                 <span class="input-group-btn">
-                                    <button type="button" class="btn btn-default" ng-click="open1()"><i class="glyphicon glyphicon-calendar"></i></button>
+                                    <button type="button" class="btn btn-default" ng-click="open1()">
+										<i class="glyphicon glyphicon-calendar"></i>
+									</button>
                                 </span>
                             </div>
                         </div>
