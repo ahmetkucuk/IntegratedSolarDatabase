@@ -39,6 +39,13 @@ type PreviewVideoRequest struct {
 	EventType string
 }
 
+
+type EventCountByMonthRequest struct {
+	StartTime	string
+	EndTime	string
+	EventType string
+}
+
 func CreateTemporalRequest(input url.Values)  (request TemporalRequest, err error) {
 	r := TemporalRequest{}
 
@@ -101,6 +108,17 @@ func CreateSearchByIdRequest(input url.Values)  (SearchByIdRequest, error) {
 	r := SearchByIdRequest{}
 
 	r.Id = input.Get("id")
+	r.EventType = input.Get("eventtype")
+
+	return r, nil
+}
+
+
+func CreateEventCountByMonthRequest(input url.Values)  (EventCountByMonthRequest, error) {
+	r := EventCountByMonthRequest{}
+
+	r.StartTime = input.Get("starttime")
+	r.EndTime = input.Get("endtime")
 	r.EventType = input.Get("eventtype")
 
 	return r, nil

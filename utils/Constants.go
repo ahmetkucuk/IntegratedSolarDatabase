@@ -4,6 +4,7 @@ const (
 	//--Usage example: -- select temporal_filter('ar_spt', 'Equals', 10, 10, 200, 200);
 	//ARRAY['ar_spt', 'ch_spt']::TEXT[]
 	QUERY_SPATIO_TEMPORAL string = "select * from spatiotemporal_filter_page_all(ARRAY['ar_spt', 'ch_spt', 'sg_spt', 'fl_spt']::TEXT[], 'GreaterThan', 'Intersects','%s', '%s', %s, %s, %s, %s,'event_starttime', 20, 0);"
+	QUERY_EVENT_COUNT_BY_MONTH string = "select to_char(event_starttime,'Mon') as month, extract(year from event_starttime) as year, count(event_starttime)  from %s where to_char(event_starttime,'YYYY:MM:DD') like '201_%' GROUP BY 2,1 Order by year, month asc;"
 
 	//select * from temporal_col_filter_page_all( ARRAY['ar_spt', 'ch_spt']::TEXT[], 'GreaterThan', '2014-12-01 21:36:23', '2014-12-02 01:36:23', 'event_starttime', 100, 0, ARRAY['kb_archivid', 'event_starttime', 'hpc_boundcc', 'hpc_coord', 'event_type']::TEXT[]);
 	QUERY_TEMPORAL_COMMON_PAGE string = "select * from temporal_filter_common_page( %s, '%s', '%s', '%s', '%s', %s, %s);"
