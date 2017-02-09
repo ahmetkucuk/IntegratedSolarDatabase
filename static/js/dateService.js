@@ -18,7 +18,7 @@ angular.module("app").service("dateService", function() {
   };
 
   this.dateToString = function(date) {
-      return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
+      return date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + "T" + date.getHours() + ":" + date.getMinutes() + ":" + date.getSeconds();
   };
 
   this.getDateAsString = function($scope) {

@@ -33,7 +33,6 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         $scope.alerts.splice(index, 1);
     };
 
-
     $scope.wavelengthInfo = {
         availableOptions: [
             {name: "0094", id: 0},
@@ -50,16 +49,39 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         selectedOption: {id: 0, name:'0094'}
     };
 
+    $scope.parameterInfo = {
+        availableOptions: [
+            {name: "Entropy", id: 1},
+            {name: "Mean", id:2},
+            {name: "Std. Deviation", id:3},
+            {name: "Fractal Dim.", id:4},
+            {name: "Skewness", id:5},
+            {name: "Kurtosis", id:6},
+            {name: "Uniformity", id:7},
+            {name: "Rel. Smoothness", id:8},
+            {name: "T. Contrast", id:9},
+            {name: "T. Directionality", id:10}
+        ],
+        selectedOption: {id: 1, name:'Entropy'}
+    };
+
+
     $scope.eventNames = [];
 
-    $scope.onDateChanged = function() {
-        var w = $scope.wavelengthInfo.selectedOption.name;
-        //Load background image
 
-        function loadBackgroundImage() {
-            RESTService.getClosestImage($scope, dateService.getDateAsString($scope), 2048, w, function(url) {
+    function loadBackgroundImage() {
+
+        var date = dateService.getDateAsString($scope);
+        var w = $scope.wavelengthInfo.selectedOption.name;
+        if($scope.isImageParametersSelected) {
+             var parameter = $scope.parameterInfo.selectedOption.id;
+            var url = "http://dmlab.cs.gsu.edu/dmlabapi/images/SDO/AIA/param/64/2k/?wave=" + w + "&starttime=" + date + "&param=" + parameter;
+            console.log(url);
+            canvasService.loadCanvasBackground($scope, url, function() {});
+
+        } else {
+            RESTService.getClosestImage($scope, date, 2048, w, function(url) {
                     canvasService.loadCanvasBackground($scope, url, function() {
-                        console.log("Background Loaded");
                     });
                 },
                 function(error) {
@@ -67,6 +89,11 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
                 }
             );
         }
+    }
+
+    $scope.onDateChanged = function() {
+        //Load background image
+        loadBackgroundImage();
 
         function loadEvents() {
             var selectedDateInMillis = dateService.getSelected($scope).getTime();
@@ -97,36 +124,27 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
 
     };
 
-    $scope.wavelengthChanged = function() {
-        RESTService.getClosestImage($scope, dateService.getDateAsString($scope), 1024, $scope.wavelengthInfo.selectedOption.name, function(url) {
-                canvasService.loadCanvasBackground($scope, url, function() {
-                    console.log("Background Loaded");
-                });
-            },
-            function(error) {
-
-            }
-        );
-    };
-
-    // $scope.$watch('popupEvent', function (newValue, oldValue, sc) {
-    //     //$scope.popupEvent = newValue;
-    //     event = newValue;
-    // });
-
     $scope.changeVisibleEventTypes = function(event) {
         RESTService.toggleVisibleTypes(event.code);
-        //console.log(RESTService.getVisibleEvents());
 
         $scope.modelList=canvasService.drawOnSun($scope, RESTService.getVisibleEvents());
-        //$scope.$broadcast('DrawEventsOnCanvas', RESTService.getVisibleEvents());
+    };
+
+    $scope.onWavelengthChanged = function() {
+        loadBackgroundImage();
+    };
+    $scope.onImageTypeChanged = function(isImageParametersSelected) {
+        $scope.isImageParametersSelected = isImageParametersSelected;
+        loadBackgroundImage();
+    };
+
+    $scope.onParameterTypeChanged = function() {
+        loadBackgroundImage();
     };
 
     $scope.onPopupEventChange = function(selectedEvent) {
         $scope.shouldHidePopupWindow = false;
         $scope.popupEvent = selectedEvent;
-        //event = selectedEvent;
-        // $scope.popupEvent.event;
     };
 
     $scope.onDateChanged();
