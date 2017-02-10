@@ -1,4 +1,4 @@
-var URL = "http://sedit.dmlab.cs.gsu.edu/";
+var URL = document.location.origin;
 
 angular.module("app")
     .constant("URL", URL)
@@ -22,6 +22,7 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
     $scope.progressbar = ngProgressFactory.createInstance();
     $scope.progressbar.setHeight('4px');
     $scope.progressbar.setColor('#34B7E3');
+    $scope.hideImageParameters = true;
 
 
     ngToast.create({
@@ -70,7 +71,6 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
 
 
     function loadBackgroundImage() {
-
         var date = dateService.getDateAsString($scope);
         var w = $scope.wavelengthInfo.selectedOption.name;
         if($scope.isImageParametersSelected) {
@@ -91,10 +91,9 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         }
     }
 
-    $scope.onDateChanged = function() {
-        //Load background image
-        loadBackgroundImage();
+    $scope.onSearch = function() {
 
+        canvasService.clearDrawings();
         function loadEvents() {
             var selectedDateInMillis = dateService.getSelected($scope).getTime();
             //var MS_PER_MINUTE = 60000; //60000 * 60 * 60 * 60;
@@ -147,7 +146,12 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         $scope.popupEvent = selectedEvent;
     };
 
-    $scope.onDateChanged();
+    $scope.onDateChanged = function() {
+        $scope.hideImageParameters = !dateService.isImageParametersAvailable($scope);
+        $scope.onImageTypeChanged(false);
+    };
+
+    $scope.onSearch();
 
     $scope.onGenerateVideoClicked = function(){
         $uibModal.open({

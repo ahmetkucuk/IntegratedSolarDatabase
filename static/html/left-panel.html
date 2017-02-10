@@ -8,12 +8,12 @@
         </h4>
     </div>
     <div>
-        <form ng-submit="onDateChanged()">
+        <form ng-submit="onSearch()">
             <div id="date-group" class="form-group">
                 <div class="input-group">
                     <input id="dateInput" type="text" class="form-control" uib-datepicker-popup="{{format}}"
                            is-open="popup1.opened" datepicker-options="dateOptions" ng-required="true"
-                           close-text="Close" alt-input-formats="altInputFormats" ng-model="searchForm.date"/>
+                           close-text="Close" alt-input-formats="altInputFormats" ng-model="searchForm.date" ng-change="onDateChanged()"/>
                         <span class="input-group-btn">
                             <button type="button" class="btn btn-default" ng-click="open1()">
                                 <i class="glyphicon glyphicon-calendar"></i>
@@ -28,7 +28,7 @@
                      minute-step="mstep" show-meridian="ismeridian"></div>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" ng-hide="hideImageParameters">
 
                 <label class="checkbox-inline">
                     <input
@@ -41,7 +41,7 @@
                 </label>
             </div>
 
-            <div class="form-group">
+            <div class="form-group" ng-hide="hideImageParameters">
                 <select class="form-control"
                         ng-change="onParameterTypeChanged()"
                         ng-options="option.name for option in parameterInfo.availableOptions track by option.id"

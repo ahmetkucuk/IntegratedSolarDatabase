@@ -32,7 +32,7 @@ angular.module("app").service("RESTService", function($resource) {
     };
 
     this.temporalQuery = function($scope, startTime, endTime, onSuccess, onError) {
-        var GetEvents = $resource(URL + "/api/query/temporal?starttime=" + startTime + "&endtime=" + endTime + "&tablenames=all&sortby=event_starttime&limit=20&offset=0");
+        var GetEvents = $resource(URL + "/api/query/temporal?starttime=" + startTime + "&endtime=" + endTime + "&tablenames=all&sortby=event_starttime&limit=100&offset=0");
         this.executeGetWithLoader(GetEvents, $scope, function(response) {
             currentEvents = response.Result;
             updateEventData();

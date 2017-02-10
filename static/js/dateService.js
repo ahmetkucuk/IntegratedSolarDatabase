@@ -25,6 +25,20 @@ angular.module("app").service("dateService", function() {
     return this.dateToString(this.getSelected($scope));
   };
 
+  this.isImageParametersAvailable = function($scope) {
+
+    var parameterStartTime = new Date(2012, 1, 1);
+    var parameterEndTime = new Date(2016, 10, 1);
+    var selectedDate = this.getSelected($scope);
+
+    if(selectedDate.getTime() > parameterStartTime.getTime() && selectedDate.getTime() < parameterEndTime.getTime()) {
+      return true;
+    } else {
+      return false;
+    }
+
+  };
+
   this.initDate = function($scope) {
 
     $scope.searchForm = {};
@@ -41,7 +55,7 @@ angular.module("app").service("dateService", function() {
     $scope.dateOptions = {
       formatYear: 'yy',
       maxDate: new Date(2020, 5, 22),
-      minDate: new Date(),
+      minDate: new Date(2010, 1, 1),
       startingDay: 1
     };
 

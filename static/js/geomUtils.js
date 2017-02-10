@@ -35,6 +35,18 @@ angular.module("canvas").factory('geomUtils', function(){
         return pixelCoordinates;
     };
 
+    fac.getCenterCoordinate = function(event, width, height) {
+
+        var c = event.coordinate.split(" ");
+        var x = c[0].substring(6);
+        var y = c[1].substring(0, c[1].length-1);
+        var point = {
+            x : parseFloat(x),
+            y : parseFloat(y)
+        };
+        return this.convertHPCToPixXY(point, width, height);
+    }
+
     return fac;
 
 });

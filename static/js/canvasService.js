@@ -49,6 +49,31 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
 
     }
 
+
+    function clearMarkers() {
+        if(!stage) {
+            return;
+        }
+
+        for(var i = 0; i < markers.length; i++) {
+            container.removeChild(markers[i]);
+            container.removeChild(polys[i]);      ///
+
+        }
+        markers = [];
+        polys=[];
+        stage.update();
+        canvasZoomHandler.updateMarkers(markers);
+    }
+
+    function resetMarkerAlpha() {
+
+        for(var i = 0; i < markers.length; i++) {
+            markers[i].shadow = null;
+        }
+        stage.update();
+    }
+
     this.drawOnSun = function($scope, events) {
 
         if(canvas == null) {
@@ -59,68 +84,10 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
         if(!events) return;
 
         for(var i = 0; i < events.length; i++) {
-            var centerCoordinate = findCenterCoordinate(events[i]);
+            var centerCoordinate = geomUtils.getCenterCoordinate(events[i], WIDTH, HEIGHT);
             drawGeometry(events[i], centerCoordinate);
             putMarker(events[i], centerCoordinate);
         }
-
-        function findCenterCoordinate(event) {
-
-            var c = event.coordinate.split(" ");
-            var x = c[0].substring(6);
-            var y = c[1].substring(0, c[1].length-1);
-            var point = {
-                x : parseFloat(x),
-                y : parseFloat(y)
-            };
-
-            return geomUtils.convertHPCToPixXY(point, WIDTH, HEIGHT);
-        }
-
-        function putMarker(event, coordinate) {
-
-            var addMakerImg = new Image();  ///
-           addMakerImg.src =  URL + "/static/img/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
-            //addMakerImg.src =  "http://helioviewer.org/resources/images/eventMarkers/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
-
-
-            addMakerImg.onload = markerDetails;
-
-            function markerDetails() { ///
-
-                var overlay1 = new createjs.Bitmap(addMakerImg); ///
-                var scale = canvasZoomHandler.getOverlayScale();
-                var markerWidth = this.width;
-                var markerHeight = this.height;
-
-
-                overlay1.x = coordinate.x - (markerWidth*scale/2);
-                overlay1.y = coordinate.y - markerHeight*scale;
-
-                overlay1.originX = coordinate.x;
-                overlay1.originY = coordinate.y;
-                overlay1.originW = markerWidth*scale;
-                overlay1.originH = markerHeight*scale;
-
-                overlay1.scaleX = scale;
-                overlay1.scaleY = scale;
-                container.addChild(overlay1);
-                //container.setChildIndex(overlay1, 1);
-                overlay1.addEventListener("click", function(clickEvent) {
-                    resetMarkerAlpha();
-                    overlay1.shadow = new createjs.Shadow("#FFF", 0, -4, 8);;
-                    $scope.onPopupEventChange(event);
-                    stage.update();
-                });
-
-
-                markers.push(overlay1); ///
-                stage.update();
-                canvasZoomHandler.updateMarkers(markers);
-            };
-
-        };
-
 
         function drawGeometry(event, coordinate) {
 
@@ -134,7 +101,6 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
 
                 var pixelCoordinates = geomUtils.parsePolygonAndConvertPixels(cc, WIDTH, HEIGHT); ///
                 var arrayOfNumbers = []; ///
-                // var arrayOfNumbers2 = [[10,10],[10,30],[30,20],[50,3],[10,10]]; ///
 
                 var maxX = 0;
                 var minX = 100000;
@@ -159,33 +125,50 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
                 circle.x = coordinate.x;
                 circle.y = coordinate.y;
                 container.addChild(circle);   ///
-
             }
-
         }
 
-        function clearMarkers() {
-           // console.log(markers.length);
+        function putMarker(event, coordinate) {
 
-            for(var i = 0; i < markers.length; i++) {
-                container.removeChild(markers[i]);
-                container.removeChild(polys[i]);      ///
+            var addMakerImg = new Image();  ///
+            addMakerImg.src =  URL + "/static/img/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
+            //addMakerImg.src =  "http://helioviewer.org/resources/images/eventMarkers/" +  event.eventtype + "@2x.png";// URL + "/static/img/zoomin.png";
 
-            }
-            markers = [];
-            polys=[];
-            stage.update();
-            canvasZoomHandler.updateMarkers(markers);
-        }
+            addMakerImg.onload = markerDetails;
 
-        function resetMarkerAlpha() {
+            function markerDetails() { ///
 
-            for(var i = 0; i < markers.length; i++) {
-                markers[i].shadow = null;
-            }
-            stage.update();
-        }
-        return markers;
+                var overlay1 = new createjs.Bitmap(addMakerImg); ///
+                var scale = canvasZoomHandler.getOverlayScale();
+                var markerWidth = this.width;
+                var markerHeight = this.height;
+
+                overlay1.x = coordinate.x - (markerWidth*scale/2);
+                overlay1.y = coordinate.y - markerHeight*scale;
+
+                overlay1.originX = coordinate.x;
+                overlay1.originY = coordinate.y;
+                overlay1.originW = markerWidth*scale;
+                overlay1.originH = markerHeight*scale;
+
+                overlay1.scaleX = scale;
+                overlay1.scaleY = scale;
+                container.addChild(overlay1);
+                overlay1.addEventListener("click", function(clickEvent) {
+                    //console.log("marker details");
+                    resetMarkerAlpha();
+                    overlay1.shadow = new createjs.Shadow("#FFF", 0, -4, 8);
+                    $scope.onPopupEventChange(event);
+                    stage.update();
+                });
+
+                markers.push(overlay1); ///
+                stage.update();
+                canvasZoomHandler.updateMarkers(markers);
+            };
+
+        };
+
     };
 
     var removed = false;
@@ -225,6 +208,10 @@ angular.module("canvas", []).service("canvasService", function(canvasZoomHandler
     };
 
     loadCanvas();
+
+    this.clearDrawings = function() {
+        clearMarkers();
+    }
 
 });
 
