@@ -148,8 +148,9 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
 
     $scope.onDateChanged = function() {
         $scope.hideImageParameters = !dateService.isImageParametersAvailable($scope);
-        $scope.onImageTypeChanged(false);
+        $scope.isImageParametersSelected = !$scope.hideImageParameters;
     };
+
 
     $scope.onSearch();
 

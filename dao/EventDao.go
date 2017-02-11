@@ -22,7 +22,7 @@ func OpenDBConnection(userName string, host string, dbName string, password stri
 	db, err = sql.Open("postgres", dbUrl)
 
 	if err != nil {
-		fmt.Println("error")
+		fmt.Println("error in openning database connection")
 	}
 
 	if err = db.Ping(); err != nil {

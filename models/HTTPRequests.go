@@ -3,6 +3,7 @@ import (
 	"github.com/astaxie/beego/context"
 	"strings"
 	"net/url"
+	"strconv"
 )
 
 
@@ -11,8 +12,8 @@ type TemporalRequest struct {
 	EndTime	string
 	TableNames	[]string
 	SortBy string
-	Limit string
-	Offset string
+	Limit int
+	Offset int
 	Interpolated bool
 }
 
@@ -39,15 +40,25 @@ type PreviewVideoRequest struct {
 	EventType string
 }
 
-func CreateTemporalRequest(input url.Values)  (request TemporalRequest, err error) {
-	r := TemporalRequest{}
+func CreateTemporalRequest(input url.Values)  (r TemporalRequest, err error) {
 
 	r.StartTime = input.Get("starttime")
 	r.EndTime = input.Get("endtime")
 	r.TableNames = strings.Split(input.Get("tablenames"), ",")
 	r.SortBy = input.Get("sortby")
-	r.Limit = input.Get("limit")
-	r.Offset = input.Get("offset")
+
+	r.Limit, err = strconv.Atoi(input.Get("limit"))
+
+	if err != nil {
+		return r, err
+	}
+
+	r.Offset, err = strconv.Atoi(input.Get("offset"))
+
+	if err != nil {
+		return r, err
+	}
+
 	interpolated := input.Get("interpolated")
 
 	if interpolated == "True" {
@@ -55,7 +66,6 @@ func CreateTemporalRequest(input url.Values)  (request TemporalRequest, err erro
 	} else {
 		r.Interpolated = false
 	}
-
 
 	return r, nil
 }
