@@ -54,12 +54,17 @@ func CreateTemporalRequest(input url.Values)  (r TemporalRequest, err error) {
 func (r TemporalRequest) Validate() error {
 
 	var sTime, err1 = utils.ParseDatetime(r.StartTime)
-	var eTime, err2 = utils.ParseDatetime(r.StartTime)
 
-	if err1 != nil || err2 != nil{
-		return validation.Errors{}
+	if err1 != nil {
+		return err1
 	}
+	var eTime, err2 = utils.ParseDatetime(r.EndTime)
+
+	if err2 != nil {
+		return err2
+	}
+
 	return validation.ValidateStruct(&r,
-		validation.Field(TimeTuple{s:sTime, e:eTime}, &dateRule{"Start Time should be before end time"}),
+		validation.Field(&r.StartTime, &dateRule{message: "Start Time should be before end time", timeRange:TimeRange{start:sTime, end:eTime}}),
 	)
 }
