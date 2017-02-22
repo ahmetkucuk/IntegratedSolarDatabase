@@ -1,26 +1,18 @@
 <div class="modal-header">
-    <h3 class="modal-title">Selected Event ID: {{event.id.split('/')[3]}}</h3>
+    <h3>High Resolution Interpolation Video</h3>
 </div>
 <div class="modal-body">
-    <div class="row">
-        <div class="col-md-4 col-md-offset-3">
-            <video width="250" controls>
-                <source src="/static/video/AR131movie.mp4" type="video/mp4">
-                <source src="/static/video/AR131movie.ogg" type="video/ogg">
-            </video>
-        </div>
-    </div>
-    <h3>Request High Resolution Video</h3>
+    <p uib-tooltip="A video in the time range of this event will be email to given address"><b>Selected Event ID: </b>{{event.id.split('/')[3]}}</p>
     <div class="row">
         <form name="generateVideoForm" novalidate>
             <div class="col-md-6">
-                <div class="form-group" ng-class="{ 'has-error': userForm.name.$invalid }" >
+                <div class="form-group" ng-class="{ 'has-error': user.institute.$invalid }" >
                     <label class="control-label">Institute</label>
-                    <input type="text" class="form-control" name="institute" ng-model="generateVideoInfo.institute" required placeholder="e.g. GSU" />
+                    <input type="text" class="form-control" name="institute" ng-model="user.institute" required placeholder="e.g. GSU" />
                 </div>
-                <div class="form-group" ng-class="{ 'has-error': generateVideoForm.email.$invalid }" >
+                <div class="form-group" ng-class="{ 'has-error': user.email.$invalid }" >
                     <label class="control-label">Email</label>
-                    <input type="email" class="form-control" name="email" ng-model="generateVideoInfo.email" required placeholder="e.g. example@gsu.edu" />
+                    <input type="email" class="form-control" name="email" ng-model="user.email" required placeholder="e.g. example@gsu.edu" />
                 </div>
             </div>
             <div class="col-md-6">
@@ -32,10 +24,15 @@
 
                         </select>
                     </div>
-                    <div class="form-group" ng-class="{ 'has-error': generateVideoForm.cadence.$invalid }" >
-                        <label class="control-label">Cadence</label>
-                        <input type="number" min="0" max="500" class="form-control" name="cadance" ng-model="generateVideoInfo.cadence" required placeholder="e.g. 100 (in ms)" value="100"/>
-                    </div>
+
+                <div class="form-group">
+                    <label class="control-label">Speed</label>
+                    <select class="form-control"
+                            ng-options="option.name for option in speedInfo.availableOptions track by option.id"
+                            ng-model="speedInfo.selectedSpeed">
+
+                    </select>
+                </div>
             </div>
         </form>
     </div>

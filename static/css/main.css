@@ -54,7 +54,7 @@ body {
     }
 }
 
-.event-popup {
+.popup {
     background-color: rgba(110, 119, 122, 0.6);
     border: 2px solid black;
     border-radius: 6px;
@@ -97,10 +97,21 @@ body {
     position: relative;
 }
 
-#markerWindow {
+#infoWindow {
     position: absolute;
     right: 25%;
     top: 2%;
+}
+
+#trajectoryWindow {
+    position: absolute;
+    right: 25%;
+    top: 50%;
+    bottom: 10%;
+}
+
+.trajectory-window {
+    background: black;
 }
 
 #footer {

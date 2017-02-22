@@ -37,7 +37,8 @@
 	<!--Angular Factories-->
 	<script src="/static/js/geomUtils.js">  </script>
 	<!--Angular Directives-->
-	<script src='/static/js/markerWindowDirective.js'> </script>
+	<script src='/static/js/infoWindowDirective.js'> </script>
+	<script src='/static/js/trajectoryWindowDirective.js'> </script>
 
 
 
@@ -55,7 +56,8 @@
 			</div>
 	</div>
 	<ng-include src="'/static/html/left-panel.html'"></ng-include>
-	<div marker-window on-generate-video-clicked="onGenerateVideoClicked()" on-close-popup-window="onClosePopupWindow()" selected-event="popupEvent" ng-hide="shouldHidePopupWindow" id="markerWindow"></div>
+	<div info-window on-generate-video-clicked="onGenerateVideoClicked()" on-close-info-window="onCloseInfoWindow()" selected-event="popupEvent" ng-init="shouldHideInfoWindow=true" ng-hide="shouldHideInfoWindow" id="infoWindow"></div>
+	<div trajectory-window on-close-trajectory-window="onCloseTrajectoryWindow()" selected-trajectory="trajectory"  ng-init="shouldHideTrajectoryWindow=true" ng-hide="shouldHideTrajectoryWindow" id="trajectoryWindow"></div>
 </div>
 </body>
 </html>

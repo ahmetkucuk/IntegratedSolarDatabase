@@ -43,9 +43,7 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
             {name: "0211", id:4},
             {name: "0304", id:5},
             {name: "0335", id:6},
-            {name: "1600", id:7},
-            {name: "1700", id:8},
-            {name: "4500", id:9}
+            {name: "1600", id:7}
         ],
         selectedOption: {id: 0, name:'0094'}
     };
@@ -141,14 +139,21 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         loadBackgroundImage();
     };
 
+    $scope.trajectory = {};
+    $scope.trajectory.url = "http://solev.dmlab.cs.gsu.edu/images/AR/3704.png";
+
     $scope.onPopupEventChange = function(selectedEvent) {
-        $scope.shouldHidePopupWindow = false;
+        $scope.shouldHideInfoWindow = false;
+        $scope.shouldHideTrajectoryWindow = false;
         $scope.popupEvent = selectedEvent;
     };
 
     $scope.onDateChanged = function() {
         $scope.hideImageParameters = !dateService.isImageParametersAvailable($scope);
-        $scope.isImageParametersSelected = !$scope.hideImageParameters;
+        if ($scope.hideImageParameters) {
+            $scope.isImageParametersSelected = false;
+            $scope.parameterChecked = false;
+        }
     };
 
 
@@ -176,8 +181,13 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         );
     };
 
-    $scope.onClosePopupWindow = function () {
-        $scope.shouldHidePopupWindow = true;
+    $scope.onCloseInfoWindow = function () {
+        $scope.shouldHideInfoWindow = true;
+    };
+
+
+    $scope.onCloseTrajectoryWindow = function () {
+        $scope.shouldHideTrajectoryWindow = true;
     };
 
     $interval(function() {$scope.popupEvent;}, 100);
@@ -195,14 +205,26 @@ angular.module("app").controller("VideoFormCtrl", function ($scope, $uibModalIns
             {name: "0211", id:4},
             {name: "0304", id:5},
             {name: "0335", id:6},
-            {name: "1600", id:7},
-            {name: "1700", id:8},
-            {name: "4500", id:9}
+            {name: "1600", id:7}
         ],
-        selectedOption: {id: 0, name:'0094'}
+        selectedWavelength: {id: 0, name:'0094'}
+    };
+
+    $scope.speedInfo = {
+        availableOptions: [
+            {name: "Slow", id: 0},
+            {name: "Medium", id:1},
+            {name: "High", id:2}
+        ],
+        selectedSpeed: {id: 0, name:'Slow'}
     };
     $scope.generateVideo = function () {
         $uibModalInstance.close();
+
+        console.log($scope.speedInfo.selectedSpeed)
+        console.log($scope.wavelengthInfo.selectedWavelength)
+        console.log($scope.user.institute)
+        console.log($scope.user.email)
     };
 
     $scope.cancel = function () {
