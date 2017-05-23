@@ -29,6 +29,24 @@ type PreviewVideoRequest struct {
 	EventType string
 }
 
+type SDOImageRequest struct {
+	Resolution string
+	Wavelength	string
+	StartTime string
+}
+
+type ParameterImageRequest struct {
+	Resolution string
+	Wavelength	string
+	StartTime string
+	ParameterID string
+}
+
+type ImageParameterRequest struct {
+	Wavelength	string
+	StartTime string
+}
+
 func CreateGenerateVideoRequest(input url.Values)  (request GenerateVideoRequest, err error) {
 	r := GenerateVideoRequest{}
 
@@ -74,3 +92,34 @@ func CreateSearchByIdRequest(input url.Values)  (SearchByIdRequest, error) {
 
 	return r, nil
 }
+
+func CreateSDOImageRequest(input url.Values)  (SDOImageRequest, error) {
+	r := SDOImageRequest{}
+
+	r.Resolution = input.Get("resolution")
+	r.Wavelength = input.Get("wavelength")
+	r.StartTime = input.Get("starttime")
+
+	return r, nil
+}
+
+func CreateParameterImageRequest(input url.Values)  (ParameterImageRequest, error) {
+	r := ParameterImageRequest{}
+
+	r.Resolution = input.Get("resolution")
+	r.Wavelength = input.Get("wavelength")
+	r.StartTime = input.Get("starttime")
+	r.ParameterID = input.Get("paramid")
+
+	return r, nil
+}
+
+func CreateImageParameterRequest(input url.Values)  (ImageParameterRequest, error) {
+	r := ImageParameterRequest{}
+
+	r.Wavelength = input.Get("wavelength")
+	r.StartTime = input.Get("starttime")
+
+	return r, nil
+}
+
