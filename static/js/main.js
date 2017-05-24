@@ -72,20 +72,24 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         var date = dateService.getDateAsString($scope);
         var w = $scope.wavelengthInfo.selectedOption.name;
         if($scope.isImageParametersSelected) {
-             var parameter = $scope.parameterInfo.selectedOption.id;
-            var url = "http://dmlab.cs.gsu.edu/dmlabapi/images/SDO/AIA/param/64/2k/?wave=" + w + "&starttime=" + date + "&param=" + parameter;
+            var parameter = $scope.parameterInfo.selectedOption.id;
+            var url = "http://dmlab.cs.gsu.edu/dmlabapi/images/SDO/AIA/param/64/512/?wave=" + w + "&starttime=" + date + "&param=" + parameter;
             console.log(url);
             canvasService.loadCanvasBackground($scope, url, function() {});
 
         } else {
+            var url = "http://dmlab.cs.gsu.edu/dmlabapi/images/SDO/AIA/2k/?wave=" + w + "&starttime=" + date;
+            canvasService.loadCanvasBackground($scope, url, function() {
+            });
+            /*
             RESTService.getClosestImage($scope, date, 2048, w, function(url) {
-                    canvasService.loadCanvasBackground($scope, url, function() {
-                    });
+
                 },
                 function(error) {
 
                 }
             );
+            */
         }
     }
 
@@ -116,9 +120,10 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
             );
         };
 
-        loadBackgroundImage();
-        loadEvents();
-
+        angular.element(document).ready(function () {
+            loadBackgroundImage();
+            loadEvents();
+        });
     };
 
     $scope.changeVisibleEventTypes = function(event) {

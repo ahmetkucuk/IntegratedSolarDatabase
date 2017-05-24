@@ -43,8 +43,10 @@ angular.module("app").service("dateService", function() {
 
     $scope.searchForm = {};
     var yesterday = new Date(); //Today
-    yesterday.setDate(yesterday.getDate()- 1);
-    $scope.searchForm.date = yesterday;
+    //yesterday.setDate(yesterday.getDate()- 1);
+    initialDate = new Date(2015, 7, 30)
+    yesterday.setDate(initialDate);
+    $scope.searchForm.date = initialDate;
 
     $scope.inlineOptions = {
       customClass: getDayClass,
@@ -54,7 +56,7 @@ angular.module("app").service("dateService", function() {
 
     $scope.dateOptions = {
       formatYear: 'yy',
-      maxDate: new Date(2020, 5, 22),
+      maxDate: new Date(2016, 7, 30),
       minDate: new Date(2010, 1, 1),
       startingDay: 1
     };
