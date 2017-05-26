@@ -1,19 +1,5 @@
 var URL = document.location.origin;
 
-angular.module("app")
-    .constant("URL", URL)
-    .config(function($locationProvider) {
-        return $locationProvider.html5Mode({
-            enabled: true,
-            requireBase: false
-        }).hashPrefix("!");
-    })
-    .config(function(ngToastProvider) {
-        ngToastProvider.configure({
-            horizontalPosition: 'center'
-        });
-    });
-
 angular.module("app").controller("AppCtrl", function($scope, $resource, $location, URL, dateService, RESTService, ngProgressFactory, canvasService, $interval, $uibModal, ngToast) {
 
     dateService.initDate($scope);
@@ -81,15 +67,6 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
             var url = "http://dmlab.cs.gsu.edu/dmlabapi/images/SDO/AIA/2k/?wave=" + w + "&starttime=" + date;
             canvasService.loadCanvasBackground($scope, url, function() {
             });
-            /*
-            RESTService.getClosestImage($scope, date, 2048, w, function(url) {
-
-                },
-                function(error) {
-
-                }
-            );
-            */
         }
     }
 
@@ -120,10 +97,8 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
             );
         };
 
-        angular.element(document).ready(function () {
-            loadBackgroundImage();
-            loadEvents();
-        });
+        loadBackgroundImage();
+        loadEvents();
     };
 
     $scope.changeVisibleEventTypes = function(event) {
@@ -161,9 +136,6 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         }
     };
 
-
-    $scope.onSearch();
-
     $scope.onGenerateVideoClicked = function(){
         $uibModal.open({
             templateUrl: 'static/html/video-form.html',
@@ -195,44 +167,24 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         $scope.shouldHideTrajectoryWindow = true;
     };
 
+    $scope.onClickARDetection = function () {
+        $uibModal.open({
+            templateUrl: 'static/html/detection-popup.html',
+            controller: 'EventDetectionCtrl',
+            resolve: {
+                eventType: function () {
+                    return "AR";
+                },
+                date: function () {
+                    return dateService.getDateAsString($scope);
+                }
+            }
+        });
+    };
+
     $interval(function() {$scope.popupEvent;}, 100);
 
-});
-
-angular.module("app").controller("VideoFormCtrl", function ($scope, $uibModalInstance, event) {
-    $scope.event = event;
-    $scope.wavelengthInfo = {
-        availableOptions: [
-            {name: "0094", id: 0},
-            {name: "0131", id:1},
-            {name: "0171", id:2},
-            {name: "0193", id:3},
-            {name: "0211", id:4},
-            {name: "0304", id:5},
-            {name: "0335", id:6},
-            {name: "1600", id:7}
-        ],
-        selectedWavelength: {id: 0, name:'0094'}
-    };
-
-    $scope.speedInfo = {
-        availableOptions: [
-            {name: "Slow", id: 0},
-            {name: "Medium", id:1},
-            {name: "High", id:2}
-        ],
-        selectedSpeed: {id: 0, name:'Slow'}
-    };
-    $scope.generateVideo = function () {
-        $uibModalInstance.close();
-
-        console.log($scope.speedInfo.selectedSpeed)
-        console.log($scope.wavelengthInfo.selectedWavelength)
-        console.log($scope.user.institute)
-        console.log($scope.user.email)
-    };
-
-    $scope.cancel = function () {
-        $uibModalInstance.dismiss('cancel');
-    };
+    angular.element(document).ready(function () {
+        $scope.onSearch();
+    });
 });

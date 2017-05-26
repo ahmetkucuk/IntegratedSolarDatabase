@@ -5,8 +5,6 @@ angular.module("app").service("RESTService", function($resource) {
     var eventNames;
     var visibleEventTypes = [];
 
-
-
     var loaderCounter = 0;
     this.executeGetWithLoader = function(request, $scope, callback) {
         loaderCounter = loaderCounter + 1;

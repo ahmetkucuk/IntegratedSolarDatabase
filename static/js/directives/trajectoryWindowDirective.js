@@ -7,6 +7,4 @@ angular.module("app").directive('trajectoryWindow', function() {
         },
         templateUrl: '/static/html/trajectory-window.html'
     };
-});/**
- * Created by ahmetkucuk on 2/22/17.
- */
+});

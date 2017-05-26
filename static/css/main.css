@@ -17,6 +17,8 @@ body {
     top: 2%;
     padding: 10px;
     width: 25%;
+    max-height: 90%;
+    overflow: scroll;
 }
 
 
@@ -129,4 +131,16 @@ body {
 
 .popup-element {
     margin-top: 10px;
+}
+
+.col-centered{
+    background: red;
+    bottom: 0;
+    left: 0;
+    margin: auto;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 256px;
+    height: 256px;
 }

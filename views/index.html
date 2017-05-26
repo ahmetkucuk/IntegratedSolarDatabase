@@ -5,6 +5,7 @@
 	<link rel='stylesheet' href='/static/third/bootstrap336/css/bootstrap.min.css'>
 	<link rel='stylesheet' href='/static/third/ngProgress/ngProgress.css'>
 	<link rel='stylesheet' href='/static/css/main.css'>
+	<link rel='stylesheet' href='/static/css/loader.css'>
 	<link rel='stylesheet' href='/static/third/ngToast/ngToast.min.css'>
 
     <script src="/static/third/jquery-2.2.4.min.js"></script>
@@ -21,24 +22,27 @@
 	<script src="/static/third/ngProgress/ngProgress.min.js"></script>
 	<script src="/static/third/ngToast/ngToast.min.js"></script>
 
-	<script src='/static/js/polygonDrawer.js'> </script>
+	<script src='/static/js/canvas/polygonDrawer.js'> </script>
 
 
 	<script src='/static/js/appModule.js'></script>
 	<!--Angular Controllers-->
-	<script src='/static/js/main.js'></script>
+	<script src='/static/js/controllers/EventDetectionController.js'></script>
+	<script src='/static/js/controllers/VideoFormController.js'></script>
+	<script src='/static/js/controllers/main.js'></script>
 
 	<!--Angular Services-->
-	<script src="/static/js/canvasService.js">  </script>
-	<script src="/static/js/canvasZoomHandler.js">  </script>
-	<script src="/static/js/RESTService.js"> </script>
-	<script src="/static/js/dateService.js">  </script>
+	<script src="/static/js/canvas/canvasService.js">  </script>
+	<script src="/static/js/canvas/canvasZoomHandler.js">  </script>
+	<script src="/static/js/services/RESTService.js"> </script>
+	<script src="/static/js/services/dateService.js">  </script>
 
 	<!--Angular Factories-->
-	<script src="/static/js/geomUtils.js">  </script>
+	<script src="/static/js/canvas/geomUtils.js">  </script>
 	<!--Angular Directives-->
-	<script src='/static/js/infoWindowDirective.js'> </script>
-	<script src='/static/js/trajectoryWindowDirective.js'> </script>
+	<script src='/static/js/directives/infoWindowDirective.js'> </script>
+	<script src='/static/js/directives/trajectoryWindowDirective.js'> </script>
+	<script src='/static/js/directives/onImageLoad.js'> </script>
 
 
 
