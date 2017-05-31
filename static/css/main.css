@@ -144,3 +144,7 @@ body {
     width: 256px;
     height: 256px;
 }
+
+#spatial-input th, #spatial-input td {
+    border-top: none !important;
+}

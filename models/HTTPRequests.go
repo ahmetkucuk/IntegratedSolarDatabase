@@ -47,6 +47,11 @@ type ImageParameterRequest struct {
 	StartTime string
 }
 
+type TrackIDRequest struct {
+	EventID	string
+	EventType string
+}
+
 func CreateGenerateVideoRequest(input url.Values)  (request GenerateVideoRequest, err error) {
 	r := GenerateVideoRequest{}
 
@@ -122,4 +127,14 @@ func CreateImageParameterRequest(input url.Values)  (ImageParameterRequest, erro
 
 	return r, nil
 }
+
+func CreateTrackIDRequest(input url.Values)  (TrackIDRequest, error) {
+	r := TrackIDRequest{}
+
+	r.EventID = input.Get("id")
+	r.EventType = input.Get("eventtype")
+
+	return r, nil
+}
+
 

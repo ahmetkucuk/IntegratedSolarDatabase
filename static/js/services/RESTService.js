@@ -30,11 +30,41 @@ angular.module("app").service("RESTService", function($resource) {
     };
 
     this.temporalQuery = function($scope, startTime, endTime, onSuccess, onError) {
-        var GetEvents = $resource(URL + "/api/query/temporal?starttime=" + startTime + "&endtime=" + endTime + "&tablenames=all&sortby=event_starttime&limit=100&offset=0");
+        var GetEvents = $resource(URL + "/api/query/temporal?starttime=" + startTime + "&endtime=" + endTime + "&tablenames=all&predicate=Overlaps&sortby=event_starttime&limit=100&offset=0");
         this.executeGetWithLoader(GetEvents, $scope, function(response) {
             currentEvents = response.Result;
             updateEventData();
             onSuccess(currentEvents);
+        });
+    };
+
+    this.spatioTemporalQuery = function($scope, startTime, endTime, spatialFilter, onSuccess, onError) {
+        var GetEvents = $resource(URL + "/api/query/spatiotemporal?starttime=" + startTime +
+            "&endtime=" + endTime +
+            "&xmin=" + spatialFilter.xmin +
+            "&xmax=" + spatialFilter.xmax +
+            "&ymin=" + spatialFilter.ymin +
+            "&ymax=" + spatialFilter.ymax +
+            "&tablenames=all&temporalpredicate=Overlaps&spatialpredicate=Overlaps&sortby=event_starttime&limit=100&offset=0");
+        this.executeGetWithLoader(GetEvents, $scope, function(response) {
+            currentEvents = response.Result;
+            updateEventData();
+            onSuccess(currentEvents);
+        });
+    };
+
+    this.getTrackId = function($scope, eventtype, id, onSuccess, onError) {
+        var requestURL = URL + "/api/query/solev/trackid?id=" + id + "&eventtype=" + eventtype;
+        console.log(requestURL);
+        var GetImage = $resource(requestURL);
+        this.executeGetWithLoader(GetImage, $scope, function(response) {
+            if (response.Status == "OK") {
+                console.log(response);
+                console.log(response.Result.trackid);
+                onSuccess(response.Result[0].trackid);
+            } else {
+                onError(response.Msg)
+            }
         });
     };
 

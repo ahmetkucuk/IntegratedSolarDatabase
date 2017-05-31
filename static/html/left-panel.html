@@ -36,12 +36,14 @@
                             ng-init='isImageParametersSelected=false'
                             ng-model="isImageParametersSelected"
                             ng-checked="parameterChecked"
+                            data-toggle="collapse"
+                            data-target="#parameter-type-div"
                             ng-click="onImageTypeChanged(isImageParametersSelected)">Image Parameters
 
                 </label>
             </div>
 
-            <div class="form-group" ng-hide="hideImageParameters">
+            <div id="parameter-type-div" class="form-group collapse" ng-hide="hideImageParameters">
                 <select class="form-control"
                         ng-change="onParameterTypeChanged()"
                         ng-options="option.name for option in parameterInfo.availableOptions track by option.id"
@@ -54,6 +56,60 @@
                         ng-options="option.name for option in wavelengthInfo.availableOptions track by option.id"
                         ng-model="wavelengthInfo.selectedOption"></select>
             </div>
+
+            <div class="form-group">
+                <div class="checkbox">
+                    <label data-toggle="collapse" data-target="#spatial-input-div">
+                        <input type="checkbox"
+                               ng-init='isSpatialSearchSelected=false'
+                               ng-model="isSpatialSearchSelected"
+                               ng-click="onSpatialInputClicked(isSpatialSearchSelected)"/> Spatial Search
+                    </label>
+                </div>
+            </div>
+            <div class="form-group collapse" id="spatial-input-div">
+                <table id="spatial-input" class="table table-condensed">
+                    <tr>
+                        <td style="vertical-align: middle">
+                            <div class="form-group">
+                                <span class="label label-default">X :
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control input-group-sm" ng-model="spatial.xmin" placeholder="Xmin" id="Xmin">
+                            </div>
+                        </td>
+
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control input-group-sm" ng-model="spatial.xmax" placeholder="Xmax" id="Xmax">
+                            </div>
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td style="vertical-align: middle">
+                            <div class="form-group">
+                                <span class="label label-default">Y :
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control" ng-model="spatial.ymin" placeholder="Ymin" id="Ymin">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <input type="text" class="form-control" ng-model="spatial.ymax" placeholder="Ymax" id="Ymax">
+                            </div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+
             <button type="submit" class="btn btn-success btn-lg">
                 <span class="glyphicon glyphicon-flash"></span> Search!
             </button>
@@ -80,20 +136,20 @@
         </form>
     </div>
 
-    <div>
-        <div id="event-detection-group" class="form-group">
+    <!--<div>-->
+        <!--<div id="event-detection-group" class="form-group">-->
 
-            <h3><b>Experimental Features</b></h3>
+            <!--<h3><b>Experimental Features</b></h3>-->
 
-            <button ng-click="onClickARDetection()" class="btn btn-success btn-sm">
-                <span class="glyphicon glyphicon-flash"></span> Detect AR
-            </button>
+            <!--<button ng-click="onClickARDetection()" class="btn btn-success btn-sm">-->
+                <!--<span class="glyphicon glyphicon-flash"></span> Detect AR-->
+            <!--</button>-->
 
-            <button class="btn btn-success btn-sm disabled">
-                <span class="glyphicon glyphicon-flash"></span> Detect CH
-            </button>
-        </div>
-    </div>
+            <!--<button class="btn btn-success btn-sm disabled">-->
+                <!--<span class="glyphicon glyphicon-flash"></span> Detect CH-->
+            <!--</button>-->
+        <!--</div>-->
+    <!--</div>-->
 
     <div>
         <p class="text-muted credit text-center">Developed by <a href="http://dmlab.cs.gsu.edu">DMLAB &copy; 2016</a>.

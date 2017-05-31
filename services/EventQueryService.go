@@ -5,13 +5,24 @@ import (
 )
 
 
-func EventsByTimeFilter(r models.TemporalRequest) (*models.EventListResponse) {
+func EventsByTemporalFilter(r models.TemporalRequest) (*models.EventListResponse) {
 
 	result := &models.EventListResponse {
 		Status: "OK",
 		StatusCode:1,
 		Msg:"Successful",
 		Result:dao.TemporalSearch(r),
+	}
+	return result
+}
+
+func EventsBySpatioTemporalFilter(r models.SpatioTemporalRequest) (*models.EventListResponse) {
+
+	result := &models.EventListResponse {
+		Status: "OK",
+		StatusCode:1,
+		Msg:"Successful",
+		Result:dao.SpatioTemporalSearch(r),
 	}
 	return result
 }

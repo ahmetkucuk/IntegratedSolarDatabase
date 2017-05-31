@@ -44,7 +44,7 @@ angular.module("app").service("dateService", function() {
     $scope.searchForm = {};
     var yesterday = new Date(); //Today
     //yesterday.setDate(yesterday.getDate()- 1);
-    initialDate = new Date(2015, 7, 30)
+    initialDate = new Date(2014, 7, 30);
     yesterday.setDate(initialDate);
     $scope.searchForm.date = initialDate;
 

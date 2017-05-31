@@ -8,25 +8,35 @@ import (
 	"strconv"
 )
 
-type TemporalRequest struct {
+type SpatioTemporalRequest struct {
 	StartTime	string
 	EndTime	string
 	TableNames	[]string
 	SortBy string
-	Predicate string
+	TemporalPredicate string
+	SpatialPredicate string
 	Limit int
 	Offset int
-	Interpolated bool
+	Xmin float64
+	Ymin float64
+	Xmax float64
+	Ymax float64
 }
 
 
-func CreateTemporalRequest(input url.Values)  (r TemporalRequest, err error) {
+func CreateSpatioTemporalRequest(input url.Values)  (r SpatioTemporalRequest, err error) {
 
 	r.StartTime = input.Get("starttime")
 	r.EndTime = input.Get("endtime")
 	r.TableNames = strings.Split(input.Get("tablenames"), ",")
 	r.SortBy = input.Get("sortby")
-	r.Predicate = input.Get("predicate")
+	r.TemporalPredicate = input.Get("temporalpredicate")
+	r.SpatialPredicate = input.Get("spatialpredicate")
+
+	r.Xmin, _ = strconv.ParseFloat(input.Get("xmin"), 64)
+	r.Xmax, _ = strconv.ParseFloat(input.Get("xmax"), 64)
+	r.Ymin, _ = strconv.ParseFloat(input.Get("ymin"), 64)
+	r.Ymax, _ = strconv.ParseFloat(input.Get("ymax"), 64)
 
 	r.Limit, err = strconv.Atoi(input.Get("limit"))
 
@@ -40,20 +50,13 @@ func CreateTemporalRequest(input url.Values)  (r TemporalRequest, err error) {
 		return r, err
 	}
 
-	interpolated := input.Get("interpolated")
-
-	if interpolated == "True" {
-		r.Interpolated = true
-	} else {
-		r.Interpolated = false
-	}
 	err = r.Validate()
 	return r, err
 }
 
 
 
-func (r TemporalRequest) Validate() error {
+func (r SpatioTemporalRequest) Validate() error {
 
 	var sTime, err1 = utils.ParseDatetime(r.StartTime)
 

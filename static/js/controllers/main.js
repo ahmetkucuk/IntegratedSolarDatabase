@@ -50,6 +50,13 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         selectedOption: {id: 1, name:'Entropy'}
     };
 
+    $scope.spatial = {
+        xmin: null,
+        xmax: null,
+        ymin: null,
+        ymax: null
+    };
+
 
     $scope.eventNames = [];
 
@@ -84,17 +91,33 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
             //kashem
             //$scope.videoTrack=[];
             //selectedDate = dateService.getSelected($scope);
-            RESTService.temporalQuery($scope, dateService.dateToString(startDate), dateService.dateToString(endDate),
-                function(result) {
-                    $scope.eventNames = RESTService.getEventTypes();
+            if ($scope.isSpatialSearchSelected) {
+                RESTService.spatioTemporalQuery($scope, dateService.dateToString(startDate), dateService.dateToString(endDate),
+                    $scope.spatial,
+                    function(result) {
+                        $scope.eventNames = RESTService.getEventTypes();
 
-                    $scope.modelList=canvasService.drawOnSun($scope, RESTService.getVisibleEvents());
-                    $scope.popupEvent = RESTService.getVisibleEvents()[0];
-                },
-                function(error) {
+                        $scope.modelList=canvasService.drawOnSun($scope, RESTService.getVisibleEvents());
+                        $scope.popupEvent = RESTService.getVisibleEvents()[0];
+                    },
+                    function(error) {
 
-                }
-            );
+                    }
+                );
+            } else {
+                RESTService.temporalQuery($scope, dateService.dateToString(startDate), dateService.dateToString(endDate),
+                    function(result) {
+                        $scope.eventNames = RESTService.getEventTypes();
+
+                        $scope.modelList=canvasService.drawOnSun($scope, RESTService.getVisibleEvents());
+                        $scope.popupEvent = RESTService.getVisibleEvents()[0];
+                    },
+                    function(error) {
+
+                    }
+                );
+            }
+
         };
 
         loadBackgroundImage();
@@ -120,12 +143,17 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
     };
 
     $scope.trajectory = {};
-    $scope.trajectory.url = "http://solev.dmlab.cs.gsu.edu/images/AR/3704.png";
 
     $scope.onPopupEventChange = function(selectedEvent) {
         $scope.shouldHideInfoWindow = false;
-        $scope.shouldHideTrajectoryWindow = false;
         $scope.popupEvent = selectedEvent;
+
+        RESTService.getTrackId($scope, selectedEvent.eventtype, selectedEvent.id, function (trackID) {
+            $scope.trajectory.url = "http://solev.dmlab.cs.gsu.edu/images/" + selectedEvent.eventtype + "/" + trackID + ".png";
+            $scope.shouldHideTrajectoryWindow = false;
+        }, function () {
+            $scope.shouldHideTrajectoryWindow = true;
+        });
     };
 
     $scope.onDateChanged = function() {
@@ -167,6 +195,10 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
         $scope.shouldHideTrajectoryWindow = true;
     };
 
+    $scope.onSpatialInputClicked = function (isSpatialSearchSelected) {
+        $scope.isSpatialSearchSelected = isSpatialSearchSelected;
+    };
+
     $scope.onClickARDetection = function () {
         $uibModal.open({
             templateUrl: 'static/html/detection-popup.html',
@@ -185,6 +217,8 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
     $interval(function() {$scope.popupEvent;}, 100);
 
     angular.element(document).ready(function () {
+
+        $scope.onDateChanged();
         $scope.onSearch();
     });
 });

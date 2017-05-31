@@ -14,7 +14,14 @@ type EventController struct {
 func (this *EventController) TemporalQuery() {
 
 	request, _ := models.CreateTemporalRequest(this.Input())
-	this.Data["json"] = services.EventsByTimeFilter(request)
+	this.Data["json"] = services.EventsByTemporalFilter(request)
+	this.ServeJSON()
+}
+
+func (this *EventController) SpatioTemporalQuery() {
+
+	request, _ := models.CreateSpatioTemporalRequest(this.Input())
+	this.Data["json"] = services.EventsBySpatioTemporalFilter(request)
 	this.ServeJSON()
 }
 

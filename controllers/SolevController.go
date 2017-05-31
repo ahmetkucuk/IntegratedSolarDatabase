@@ -24,3 +24,10 @@ func (ctrl *SolevController) PreviewVideo() {
 	ctrl.Data["json"] = services.PreviewVideo(request)
 	ctrl.ServeJSON()
 }
+
+func (ctrl *SolevController) GetTrackID() {
+
+	request, _ := models.CreateTrackIDRequest(ctrl.Input())
+	ctrl.Data["json"] = services.RetrieveTrackID(request)
+	ctrl.ServeJSON()
+}

@@ -40,3 +40,10 @@ type PreviewVideoResponse struct {
 	Msg	string
 	Link string
 }
+
+type TrackIDResponse struct {
+	Status	string
+	StatusCode	int
+	Msg	string
+	Result utils.JSONString
+}
