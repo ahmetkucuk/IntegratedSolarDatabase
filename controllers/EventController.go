@@ -25,15 +25,15 @@ func (this *EventController) SpatioTemporalQuery() {
 	this.ServeJSON()
 }
 
-func (this *EventController) ImageUrlQuery() {
-	request, _ := models.CreateImageRequest(this.Ctx.Input)
-	this.Data["json"] = services.FindClosestImage(request)
-	this.ServeJSON()
-}
-
 func (this *EventController) SearchByID() {
 	request, _ := models.CreateSearchByIdRequest(this.Input())
 	this.Data["json"] = services.SearchById(request)
+	this.ServeJSON()
+}
+
+func (this *EventController) CloseByEvents() {
+	request, _ := models.CreateCloseByEventRequest(this.Input())
+	this.Data["json"] = services.SearchCloseByEvents(request)
 	this.ServeJSON()
 }
 

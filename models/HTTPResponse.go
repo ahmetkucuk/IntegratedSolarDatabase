@@ -34,6 +34,13 @@ type SearchByIdResponse struct {
 	Result utils.JSONString
 }
 
+type CloseByEventsResponse struct {
+	Status	string
+	StatusCode	int
+	Msg	string
+	Result utils.JSONString
+}
+
 type PreviewVideoResponse struct {
 	Status	string
 	StatusCode	int

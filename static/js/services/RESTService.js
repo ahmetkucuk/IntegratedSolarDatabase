@@ -30,7 +30,7 @@ angular.module("app").service("RESTService", function($resource) {
     };
 
     this.temporalQuery = function($scope, startTime, endTime, onSuccess, onError) {
-        var GetEvents = $resource(URL + "/api/query/temporal?starttime=" + startTime + "&endtime=" + endTime + "&tablenames=all&predicate=Overlaps&sortby=event_starttime&limit=100&offset=0");
+        var GetEvents = $resource(URL + "/api/query/temporal?starttime=" + startTime + "&endtime=" + endTime + "&tablenames=all&predicate=Overlaps&sortby=event_starttime&limit=100&offset=0&web=True");
         this.executeGetWithLoader(GetEvents, $scope, function(response) {
             currentEvents = response.Result;
             updateEventData();
@@ -45,7 +45,7 @@ angular.module("app").service("RESTService", function($resource) {
             "&xmax=" + spatialFilter.xmax +
             "&ymin=" + spatialFilter.ymin +
             "&ymax=" + spatialFilter.ymax +
-            "&tablenames=all&temporalpredicate=Overlaps&spatialpredicate=Overlaps&sortby=event_starttime&limit=100&offset=0");
+            "&tablenames=all&temporalpredicate=Overlaps&spatialpredicate=Intersects&sortby=event_starttime&limit=100&offset=0&web=True");
         this.executeGetWithLoader(GetEvents, $scope, function(response) {
             currentEvents = response.Result;
             updateEventData();

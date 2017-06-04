@@ -9,6 +9,7 @@ import (
 	"time"
 	"encoding/json"
 	"errors"
+	"strings"
 )
 
 
@@ -82,13 +83,11 @@ func TemporalSearch(r models.TemporalRequest) (utils.JSONString) {
 	//select * from temporal_col_filter_page_all( ARRAY['ar_spt', 'ch_spt']::TEXT[], 'GreaterThan', '2014-12-01 21:36:23', '2014-12-02 01:36:23', 'event_starttime', 100, 0, ARRAY['kb_archivid', 'event_starttime', 'hpc_boundcc', 'hpc_coord', 'event_type']::TEXT[]);
 	var query  = ""
 	if r.Interpolated {
-		query = fmt.Sprintf(utils.INT_QUERY_TEMPORAL_COMMON_PAGE, utils.CreateTableNameString(r.TableNames), "Overlaps", r.StartTime, r.EndTime, r.SortBy, r.Limit, r.Offset)
+		query = fmt.Sprintf(utils.INT_QUERY_TEMPORAL_COMMON_PAGE, r.TableNames, "Overlaps", r.StartTime, r.EndTime, r.SortBy, r.Limit, r.Offset)
 	} else {
-		fmt.Println(r.TableNames[0])
-		if (len(r.TableNames) == 0) || (r.TableNames[0] == "") || (r.TableNames[0] == "all") {
-			query = fmt.Sprintf(utils.QUERY_TEMPORAL_COMMON_PAGE, utils.ALL_TABLES_ARRAY, "Overlaps", r.StartTime, r.EndTime, "event_starttime", r.Limit, r.Offset)
-		} else {
-			query = fmt.Sprintf(utils.QUERY_TEMPORAL_COMMON_PAGE, utils.CreateTableNameString(r.TableNames), "Overlaps", r.StartTime, r.EndTime, "event_starttime", r.Limit, r.Offset)
+		query = fmt.Sprintf(utils.QUERY_TEMPORAL_COMMON_PAGE, r.TableNames, "Overlaps", r.StartTime, r.EndTime, "event_starttime", r.Limit, r.Offset)
+		if !r.IsWEB {
+			query = fmt.Sprintf(utils.SELECT_KB_ARCHIVID, query)
 		}
 	}
 
@@ -104,13 +103,11 @@ func SpatioTemporalSearch(r models.SpatioTemporalRequest) (utils.JSONString) {
 	//colNames := "ARRAY['kb_archivid', 'event_starttime', 'hpc_boundcc', 'hpc_coord', 'event_type']::TEXT[]"
 	//select * from temporal_col_filter_page_all( ARRAY['ar_spt', 'ch_spt']::TEXT[], 'GreaterThan', '2014-12-01 21:36:23', '2014-12-02 01:36:23', 'event_starttime', 100, 0, ARRAY['kb_archivid', 'event_starttime', 'hpc_boundcc', 'hpc_coord', 'event_type']::TEXT[]);
 	var query  = ""
-	fmt.Println(r.TableNames[0])
-	if (len(r.TableNames) == 0) || (r.TableNames[0] == "") || (r.TableNames[0] == "all") {
-		query = fmt.Sprintf(utils.QUERY_SPATIOTEMPORAL_COMMON_PAGE, utils.ALL_TABLES_ARRAY, r.TemporalPredicate, r.SpatialPredicate, r.StartTime, r.EndTime, r.Xmin, r.Xmax, r.Ymin, r.Ymax, r.SortBy, r.Limit, r.Offset)
-	} else {
-		query = fmt.Sprintf(utils.QUERY_SPATIOTEMPORAL_COMMON_PAGE, utils.CreateTableNameString(r.TableNames), r.TemporalPredicate, r.SpatialPredicate, r.StartTime, r.EndTime, r.Xmin, r.Ymin, r.Xmax, r.Ymax, r.SortBy, r.Limit, r.Offset)
+	query = fmt.Sprintf(utils.QUERY_SPATIOTEMPORAL_COMMON_PAGE, r.TableNames, r.TemporalPredicate, r.SpatialPredicate, r.StartTime, r.EndTime, r.Xmin, r.Ymin, r.Xmax, r.Ymax, r.SortBy, r.Limit, r.Offset)
+	if !r.IsWEB {
+		query = fmt.Sprintf(utils.SELECT_KB_ARCHIVID, query)
 	}
-
+	fmt.Println(query)
 	resultJson, err := utils.GetJSON(db, query)
 	if err != nil {
 		fmt.Println("error: ", query, err)
@@ -163,6 +160,31 @@ func GetTrackIDbyEventID(r models.TrackIDRequest) (utils.JSONString, error) {
 	fmt.Println(resultJson)
 	if len(resultJson) <= 2 {
 		return resultJson, errors.New("Couldn't find the id")
+	}
+	return resultJson, nil
+}
+
+
+func GetCloseByEvents(r models.CloseByEventRequest) (utils.JSONString, error) {
+
+	query := utils.FIND_CLOSE_BY_EVENTS
+	query = strings.Replace(query, "event1", r.QueryEventType, -1)
+	query = strings.Replace(query, "event2", r.TargetEventType, -1)
+	fmt.Println(r.LookBack)
+	query = strings.Replace(query, "LookBack", fmt.Sprintf("%d", r.LookBack), -1)
+	query = strings.Replace(query, "QueryEventID", r.QueryEventID, -1)
+	query = strings.Replace(query, "SpatialBuffer", fmt.Sprintf("%.6f", r.SpatialBuffer), -1)
+
+	fmt.Println(query)
+	resultJson, err := utils.GetJSON(db, query)
+
+	if err != nil {
+		return resultJson, err
+	}
+
+	fmt.Println(resultJson)
+	if len(resultJson) <= 2 {
+		return resultJson, errors.New("Couldn't find the any event")
 	}
 	return resultJson, nil
 }

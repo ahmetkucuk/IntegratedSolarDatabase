@@ -68,6 +68,9 @@ func GetResultInBytes(db *sql.DB, sqlString string) ([]byte, error) {
 
 func CreateTableNameString(tnames []string) string {
 
+	if (len(tnames) == 0) || (tnames[0] == "") || (tnames[0] == "all") {
+		return ALL_TABLES_ARRAY
+	}
 	var buffer bytes.Buffer
 	buffer.WriteString("ARRAY['")
 	buffer.WriteString(strings.Join(tnames, "','"))

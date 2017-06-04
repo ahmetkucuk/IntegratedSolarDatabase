@@ -11,12 +11,13 @@ import (
 type TemporalRequest struct {
 	StartTime	string
 	EndTime	string
-	TableNames	[]string
+	TableNames	string
 	SortBy string
 	Predicate string
 	Limit int
 	Offset int
 	Interpolated bool
+	IsWEB bool
 }
 
 
@@ -24,7 +25,7 @@ func CreateTemporalRequest(input url.Values)  (r TemporalRequest, err error) {
 
 	r.StartTime = input.Get("starttime")
 	r.EndTime = input.Get("endtime")
-	r.TableNames = strings.Split(input.Get("tablenames"), ",")
+
 	r.SortBy = input.Get("sortby")
 	r.Predicate = input.Get("predicate")
 
@@ -47,6 +48,17 @@ func CreateTemporalRequest(input url.Values)  (r TemporalRequest, err error) {
 	} else {
 		r.Interpolated = false
 	}
+
+	web := input.Get("web")
+	if web == "True" {
+		r.IsWEB = true
+	} else {
+		r.IsWEB = false
+	}
+
+	tableNames := strings.Split(input.Get("tablenames"), ",")
+	r.TableNames = utils.CreateTableNameString(tableNames)
+
 	err = r.Validate()
 	return r, err
 }

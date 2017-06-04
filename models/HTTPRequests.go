@@ -3,6 +3,7 @@ import (
 	"github.com/astaxie/beego/context"
 	"strings"
 	"net/url"
+	"strconv"
 )
 
 
@@ -50,6 +51,14 @@ type ImageParameterRequest struct {
 type TrackIDRequest struct {
 	EventID	string
 	EventType string
+}
+
+type CloseByEventRequest struct {
+	QueryEventType	string
+	QueryEventID	string
+	TargetEventType	string
+	LookBack	int
+	SpatialBuffer	float64
 }
 
 func CreateGenerateVideoRequest(input url.Values)  (request GenerateVideoRequest, err error) {
@@ -133,6 +142,24 @@ func CreateTrackIDRequest(input url.Values)  (TrackIDRequest, error) {
 
 	r.EventID = input.Get("id")
 	r.EventType = input.Get("eventtype")
+
+	return r, nil
+}
+
+func CreateCloseByEventRequest(input url.Values)  (CloseByEventRequest, error) {
+	r := CloseByEventRequest{}
+
+	r.QueryEventType = input.Get("queryeventtype")
+	r.QueryEventID = input.Get("queryeventid")
+	r.TargetEventType = input.Get("targeteventtype")
+
+	r.LookBack, _  = strconv.Atoi(input.Get("lookback"))
+
+	spatialBuffer, err := strconv.ParseFloat(input.Get("spatialbuffer"), 64)
+	if err != nil {
+		spatialBuffer = 0
+	}
+	r.SpatialBuffer = spatialBuffer;
 
 	return r, nil
 }

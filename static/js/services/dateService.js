@@ -27,8 +27,8 @@ angular.module("app").service("dateService", function() {
 
   this.isImageParametersAvailable = function($scope) {
 
-    var parameterStartTime = new Date(2012, 1, 1);
-    var parameterEndTime = new Date(2016, 10, 1);
+    var parameterStartTime = new Date(2012, 0, 1);
+    var parameterEndTime = new Date(2016, 9, 1);
     var selectedDate = this.getSelected($scope);
 
     if(selectedDate.getTime() > parameterStartTime.getTime() && selectedDate.getTime() < parameterEndTime.getTime()) {

@@ -12,7 +12,7 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
 
 
     ngToast.create({
-        content: 'Welcome to SEDIT. You are using Alpha Version!',
+        content: 'Welcome to ISD. You are using Alpha Version!',
         timeout: 3000
     });
 
@@ -117,7 +117,6 @@ angular.module("app").controller("AppCtrl", function($scope, $resource, $locatio
                     }
                 );
             }
-
         };
 
         loadBackgroundImage();

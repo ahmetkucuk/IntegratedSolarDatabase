@@ -11,7 +11,7 @@ import (
 type SpatioTemporalRequest struct {
 	StartTime	string
 	EndTime	string
-	TableNames	[]string
+	TableNames	string
 	SortBy string
 	TemporalPredicate string
 	SpatialPredicate string
@@ -21,6 +21,7 @@ type SpatioTemporalRequest struct {
 	Ymin float64
 	Xmax float64
 	Ymax float64
+	IsWEB bool
 }
 
 
@@ -28,7 +29,6 @@ func CreateSpatioTemporalRequest(input url.Values)  (r SpatioTemporalRequest, er
 
 	r.StartTime = input.Get("starttime")
 	r.EndTime = input.Get("endtime")
-	r.TableNames = strings.Split(input.Get("tablenames"), ",")
 	r.SortBy = input.Get("sortby")
 	r.TemporalPredicate = input.Get("temporalpredicate")
 	r.SpatialPredicate = input.Get("spatialpredicate")
@@ -49,6 +49,16 @@ func CreateSpatioTemporalRequest(input url.Values)  (r SpatioTemporalRequest, er
 	if err != nil {
 		return r, err
 	}
+
+	web := input.Get("web")
+	if web == "True" {
+		r.IsWEB = true
+	} else {
+		r.IsWEB = false
+	}
+
+	tableNames := strings.Split(input.Get("tablenames"), ",")
+	r.TableNames = utils.CreateTableNameString(tableNames)
 
 	err = r.Validate()
 	return r, err

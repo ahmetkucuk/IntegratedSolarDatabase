@@ -50,3 +50,16 @@ func SearchById(r models.SearchByIdRequest) (*models.SearchByIdResponse) {
 	}
 	return result
 }
+
+func SearchCloseByEvents(r models.CloseByEventRequest) (*models.CloseByEventsResponse) {
+
+
+	results, _ := dao.GetCloseByEvents(r)
+	result := &models.CloseByEventsResponse {
+		Status: "OK",
+		StatusCode:1,
+		Msg:"Successful",
+		Result: results,
+	}
+	return result
+}
