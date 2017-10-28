@@ -24,5 +24,6 @@ func init() {
 	beego.Router("/api/query/searchById", &controllers.EventController{}, "get:SearchByID")
 	beego.Router("/api/query/closeByEvents", &controllers.EventController{}, "get:CloseByEvents")
 
+	beego.Router("/analytics", &controllers.AnalyticsController{})
 	beego.Router("/*", &controllers.MainController{})
 }

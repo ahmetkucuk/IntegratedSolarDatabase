@@ -88,9 +88,12 @@ func TemporalSearch(r models.TemporalRequest) (utils.JSONString) {
 		query = fmt.Sprintf(utils.QUERY_TEMPORAL_COMMON_PAGE, r.TableNames, "Overlaps", r.StartTime, r.EndTime, "event_starttime", r.Limit, r.Offset)
 		if !r.IsWEB {
 			query = fmt.Sprintf(utils.SELECT_KB_ARCHIVID, query)
+		} else {
+			query = query + ";";
 		}
 	}
 
+	fmt.Println(query)
 	resultJson, err := utils.GetJSON(db, query)
 	if err != nil {
 		fmt.Println("error: ", query, err)

@@ -1,0 +1,99 @@
+<html data-ng-app="analytics" data-ng-controller="AnalyticsCtrl">
+<head>
+	<title>Solar Event Database Analytics</title>
+	<link rel="icon" type="image/png" href="/static/img/favicon.png" />
+	<link rel='stylesheet' href='/static/third/bootstrap336/css/bootstrap.min.css'>
+
+    <script src="/static/third/jquery-2.2.4.min.js"></script>
+    <script src="/static/third/bootstrap336/js/bootstrap.min.js"></script>
+	<script src="/static/third/angular161/angular.js"></script>
+	<script src="/static/third/uibootstrap/ui-bootstrap-tpls-2.3.1.min.js"></script>
+
+	<script src="/static/third/angular161/angular-route.min.js"></script>
+	<script src="/static/third/angular161/angular-resource.min.js"></script>
+	<script src="/static/third/angular161/angular-animate.js">  </script>
+
+
+	<script src="/static/third/chartjs/Chart.bundle.min.js"></script>
+	<script src="/static/third/chartjs/angular-chart.min.js"></script>
+
+	<script src="/static/third/angular161/angular-sanitize.min.js"></script>
+
+	<script src='/static/js/sharedModule.js'></script>
+	<script src='/static/js/analyticsModule.js'></script>
+	<!--Angular Controllers-->
+	<script src='/static/js/controllers/analytics/analytics.js'></script>
+
+	<script src="/static/js/services/RESTService.js"> </script>
+
+
+
+</head>
+<body style="padding-top: 80px;">
+
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+	<div class="container-fluid">
+		<div class="navbar-header">
+			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+				<span class="sr-only">Toggle navigation</span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+				<span class="icon-bar"></span>
+			</button>
+			<a class="navbar-brand" href="../">
+				<span class="glyphicon glyphicon-chevron-left"></span>
+			</a>
+			<a class="navbar-brand" href="http://isd.dmlab.cs.gsu.edu/">ISD</a>
+		</div>
+		<div class="navbar-collapse collapse">
+			<ul class="nav navbar-nav navbar-left">
+				<li><a href="/">Event Statistics</a></li>
+				<li><a href="/">Image Parameters</a></li>
+			</ul>
+		</div>
+	</div>
+</div>
+
+<div class="container-fluid">
+	<div class="row">
+
+		<div class="col-sm-8">
+			<canvas id="line" class="chart chart-line" chart-data="data"
+					chart-labels="labels" chart-series="series" chart-options="options"
+					chart-dataset-override="datasetOverride" chart-click="onClick">
+			</canvas>
+		</div>
+
+		<div class="col-sm-4">
+			<div id="chart-02"></div>
+			<br>
+		</div>
+
+	</div>
+
+
+	<div class="row">
+
+		<div class="col-sm-4">
+			<div id="chart-03"></div>
+			<br>
+		</div>
+
+		<div class="col-sm-4">
+			<div id="chart-04"></div>
+			<br>
+		</div>
+
+		<div class="col-sm-4">
+			<div id="chart-05"></div>
+			<br>
+		</div>
+
+	</div>
+	<hr>
+	<p class="small text-muted">Built by <a href="https://dmlab.cs.gsu.edu">DMLAB GSU</a></p>
+</div>
+
+</body>
+</html>

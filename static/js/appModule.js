@@ -1,4 +1,4 @@
-angular.module('app', ["ngResource", "ngRoute", "ngAnimate", "canvas", "ui.bootstrap", "ngProgress", "ngToast"]);
+angular.module('app', ["shared", "ngResource", "ngRoute", "ngAnimate", "canvas", "ui.bootstrap", "ngProgress", "ngToast"]);
 
 angular.module("app")
     .constant("URL", URL)

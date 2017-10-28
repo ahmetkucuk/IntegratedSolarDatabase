@@ -1,4 +1,4 @@
-angular.module("app").service("RESTService", function($resource) {
+angular.module("shared").service("RESTService", function($resource) {
 
 
     var currentEvents;
@@ -55,13 +55,24 @@ angular.module("app").service("RESTService", function($resource) {
 
     this.getTrackId = function($scope, eventtype, id, onSuccess, onError) {
         var requestURL = URL + "/api/query/solev/trackid?id=" + id + "&eventtype=" + eventtype;
-        console.log(requestURL);
         var GetImage = $resource(requestURL);
         this.executeGetWithLoader(GetImage, $scope, function(response) {
             if (response.Status == "OK") {
-                console.log(response);
-                console.log(response.Result.trackid);
                 onSuccess(response.Result[0].trackid);
+            } else {
+                onError(response.Msg)
+            }
+        });
+    };
+
+    this.getTrackParameters = function($scope, onSuccess, onError) {
+        // var requestURL = URL + "/api/query/solev/trackid?id=" + id + "&eventtype=" + eventtype;
+        var requestURL = "http://dmlab.cs.gsu.edu/dmlabapi/images/SDO/AIA/2k/?wave=211&starttime=2012-02-13T20:10:00";
+        var GetImage = $resource(requestURL);
+        this.executeGetWithLoader(GetImage, $scope, function(response) {
+            console.log(response);
+            if (response.Status == "OK") {
+                console.log(response);
             } else {
                 onError(response.Msg)
             }
