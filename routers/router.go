@@ -24,6 +24,8 @@ func init() {
 	beego.Router("/api/query/searchById", &controllers.EventController{}, "get:SearchByID")
 	beego.Router("/api/query/closeByEvents", &controllers.EventController{}, "get:CloseByEvents")
 
-	beego.Router("/analytics", &controllers.AnalyticsController{})
+	beego.Router("/analytics/*", &controllers.AnalyticsController{})
+	beego.Router("/analytics/api/query/track/ts", &controllers.AnalyticsController{}, "get:TrackImageParameterAPI")
+	beego.Router("/analytics/api/query/sun/event/count/", &controllers.AnalyticsController{}, "get:EventCountByMonth")
 	beego.Router("/*", &controllers.MainController{})
 }

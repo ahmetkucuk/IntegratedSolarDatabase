@@ -61,6 +61,18 @@ type CloseByEventRequest struct {
 	SpatialBuffer	float64
 }
 
+type TrackImageParameterRequest struct {
+	EventID string
+	Wavelength	string
+	ParameterID string
+}
+
+type CountEventByMonthRequest struct {
+	EventType string
+	StartTime string
+	EndTime string
+}
+
 func CreateGenerateVideoRequest(input url.Values)  (request GenerateVideoRequest, err error) {
 	r := GenerateVideoRequest{}
 
@@ -160,6 +172,26 @@ func CreateCloseByEventRequest(input url.Values)  (CloseByEventRequest, error) {
 		spatialBuffer = 0
 	}
 	r.SpatialBuffer = spatialBuffer;
+
+	return r, nil
+}
+
+func CreateTrackImageParameterRequest(input url.Values)  (TrackImageParameterRequest, error) {
+	r := TrackImageParameterRequest{}
+
+	r.EventID = input.Get("id")
+	r.Wavelength = input.Get("wavelength")
+	r.ParameterID = input.Get("paramid")
+
+	return r, nil
+}
+
+func CreateEventCountByMonthRequest(input url.Values)  (CountEventByMonthRequest, error) {
+	r := CountEventByMonthRequest{}
+
+	r.EventType = input.Get("eventtype")
+	r.StartTime = input.Get("starttime")
+	r.EndTime = input.Get("endtime")
 
 	return r, nil
 }

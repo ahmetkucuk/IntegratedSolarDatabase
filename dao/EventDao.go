@@ -35,7 +35,6 @@ func OpenDBConnection(userName string, host string, dbName string, password stri
 
 func GetEventsFromQuery(query string) ([]*models.Event) {
 	result, err := utils.GetResultInBytes(db, query)
-	fmt.Println(query)
 	if err != nil {
 		fmt.Println("error %e", err)
 	}
@@ -93,7 +92,6 @@ func TemporalSearch(r models.TemporalRequest) (utils.JSONString) {
 		}
 	}
 
-	fmt.Println(query)
 	resultJson, err := utils.GetJSON(db, query)
 	if err != nil {
 		fmt.Println("error: ", query, err)
@@ -110,7 +108,6 @@ func SpatioTemporalSearch(r models.SpatioTemporalRequest) (utils.JSONString) {
 	if !r.IsWEB {
 		query = fmt.Sprintf(utils.SELECT_KB_ARCHIVID, query)
 	}
-	fmt.Println(query)
 	resultJson, err := utils.GetJSON(db, query)
 	if err != nil {
 		fmt.Println("error: ", query, err)
@@ -144,7 +141,6 @@ func GetClosestImage(r models.ImageRequest) (models.ImageUrl) {
 func GetEventByIdAndTableName(r models.SearchByIdRequest) (utils.JSONString) {
 	query := fmt.Sprintf(utils.EVENT_BY_TABLENAME_AND_ID,  r.EventType, r.Id)
 	resultJson, err := utils.GetJSON(db, query)
-	fmt.Println(query)
 	if err != nil {
 		fmt.Println("error %e", err)
 	}
@@ -153,14 +149,12 @@ func GetEventByIdAndTableName(r models.SearchByIdRequest) (utils.JSONString) {
 
 func GetTrackIDbyEventID(r models.TrackIDRequest) (utils.JSONString, error) {
 	query := fmt.Sprintf(utils.TRACKID_BY_TABLENAME_AND_EVENTID,  (r.EventType + "i"), r.EventID)
-	fmt.Println(query)
 	resultJson, err := utils.GetJSON(db, query)
 
 	if err != nil {
 		return resultJson, err
 	}
 
-	fmt.Println(resultJson)
 	if len(resultJson) <= 2 {
 		return resultJson, errors.New("Couldn't find the id")
 	}
@@ -185,9 +179,24 @@ func GetCloseByEvents(r models.CloseByEventRequest) (utils.JSONString, error) {
 		return resultJson, err
 	}
 
-	fmt.Println(resultJson)
 	if len(resultJson) <= 2 {
 		return resultJson, errors.New("Couldn't find the any event")
 	}
 	return resultJson, nil
+}
+
+func CountEventByMonth(r models.CountEventByMonthRequest) (utils.JSONString, error) {
+	query := fmt.Sprintf(utils.COUNT_EVENT_BY_MONTH,  r.EventType, r.StartTime, r.EndTime)
+	fmt.Println(query)
+	resultJson, err := utils.GetJSON(db, query)
+
+	if err != nil {
+		return resultJson, err
+	}
+
+	if len(resultJson) <= 2 {
+		return resultJson, errors.New("Couldn't find the any event")
+	}
+	return resultJson, nil
+
 }

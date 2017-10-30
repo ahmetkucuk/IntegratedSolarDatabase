@@ -65,14 +65,25 @@ angular.module("shared").service("RESTService", function($resource) {
         });
     };
 
-    this.getTrackParameters = function($scope, onSuccess, onError) {
-        // var requestURL = URL + "/api/query/solev/trackid?id=" + id + "&eventtype=" + eventtype;
-        var requestURL = "http://dmlab.cs.gsu.edu/dmlabapi/images/SDO/AIA/2k/?wave=211&starttime=2012-02-13T20:10:00";
-        var GetImage = $resource(requestURL);
-        this.executeGetWithLoader(GetImage, $scope, function(response) {
-            console.log(response);
+    this.getTrackParameters = function($scope, id, wave, param, onSuccess, onError) {
+        var requestURL = URL + "analytics/api/query/track/ts?id=" + id + "&wavelength=" + wave + "&paramid=" + param;
+        var GetTrackParameters= $resource(requestURL);
+        this.executeGetWithLoader(GetTrackParameters, $scope, function(response) {
             if (response.Status == "OK") {
                 console.log(response);
+            } else {
+                onError(response.Msg)
+            }
+        });
+    };
+
+    this.getEventCountByMonth = function($scope, eventType, starttime, endtime, onSuccess, onError) {
+        var requestURL = URL + "analytics/api/query/sun/event/count?eventtype=" + eventType + "&starttime=" + starttime + "&endtime=" + endtime;
+        var GetEventCount = $resource(requestURL);
+        this.executeGetWithLoader(GetEventCount, $scope, function(response) {
+            console.log(response);
+            if (response.Status == "OK") {
+                onSuccess(response.Result)
             } else {
                 onError(response.Msg)
             }

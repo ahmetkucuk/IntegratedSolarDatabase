@@ -1,8 +1,9 @@
-<html data-ng-app="analytics" data-ng-controller="AnalyticsCtrl">
+<html data-ng-app="analytics">
 <head>
 	<title>Solar Event Database Analytics</title>
 	<link rel="icon" type="image/png" href="/static/img/favicon.png" />
 	<link rel='stylesheet' href='/static/third/bootstrap336/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='/static/third/ngProgress/ngProgress.css'>
 
     <script src="/static/third/jquery-2.2.4.min.js"></script>
     <script src="/static/third/bootstrap336/js/bootstrap.min.js"></script>
@@ -18,82 +19,39 @@
 	<script src="/static/third/chartjs/angular-chart.min.js"></script>
 
 	<script src="/static/third/angular161/angular-sanitize.min.js"></script>
+	<script src="/static/third/ngProgress/ngProgress.min.js"></script>
 
 	<script src='/static/js/sharedModule.js'></script>
 	<script src='/static/js/analyticsModule.js'></script>
-	<!--Angular Controllers-->
-	<script src='/static/js/controllers/analytics/analytics.js'></script>
-
-	<script src="/static/js/services/RESTService.js"> </script>
-
-
 
 </head>
-<body style="padding-top: 80px;">
+<body style="padding-top: 80px;" ng-controller="AnalyticsCtrl">
 
+<!-- HEADER AND NAVBAR -->
+<header>
+	<nav class="navbar navbar-default navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">ISD</a>
+			</div>
 
-<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-	<div class="container-fluid">
-		<div class="navbar-header">
-			<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-				<span class="sr-only">Toggle navigation</span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-				<span class="icon-bar"></span>
-			</button>
-			<a class="navbar-brand" href="../">
-				<span class="glyphicon glyphicon-chevron-left"></span>
-			</a>
-			<a class="navbar-brand" href="http://isd.dmlab.cs.gsu.edu/">ISD</a>
-		</div>
-		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav navbar-left">
-				<li><a href="/">Event Statistics</a></li>
-				<li><a href="/">Image Parameters</a></li>
+				<li><a href="/analytics/sun"><i class="fa fa-home"></i>Sun</a></li>
+				<li><a href="/analytics/event"><i class="fa fa-shield"></i>Event</a></li>
 			</ul>
 		</div>
-	</div>
+	</nav>
+</header>
+
+<div class="container">
+	<div ng-view></div>
 </div>
 
-<div class="container-fluid">
-	<div class="row">
-
-		<div class="col-sm-8">
-			<canvas id="line" class="chart chart-line" chart-data="data"
-					chart-labels="labels" chart-series="series" chart-options="options"
-					chart-dataset-override="datasetOverride" chart-click="onClick">
-			</canvas>
-		</div>
-
-		<div class="col-sm-4">
-			<div id="chart-02"></div>
-			<br>
-		</div>
-
-	</div>
-
-
-	<div class="row">
-
-		<div class="col-sm-4">
-			<div id="chart-03"></div>
-			<br>
-		</div>
-
-		<div class="col-sm-4">
-			<div id="chart-04"></div>
-			<br>
-		</div>
-
-		<div class="col-sm-4">
-			<div id="chart-05"></div>
-			<br>
-		</div>
-
-	</div>
-	<hr>
-	<p class="small text-muted">Built by <a href="https://dmlab.cs.gsu.edu">DMLAB GSU</a></p>
-</div>
+<!--Angular Controllers-->
+<script src='/static/js/controllers/analytics/analytics.js'></script>
+<script src='/static/js/controllers/analytics/EventController.js'></script>
+<script src='/static/js/controllers/analytics/SunController.js'></script>
+<script src="/static/js/services/RESTService.js"> </script>
 
 </body>
 </html>

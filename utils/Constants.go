@@ -33,6 +33,7 @@ const (
 	TRACKID_BY_TABLENAME_AND_EVENTID string = "SELECT trackid from %s WHERE kbarchivid = '%s';"
 
 	FIND_CLOSE_BY_EVENTS string = "SELECT event2.kb_archivid, event2.event_type from event1, event2 WHERE tsrange(event2.event_starttime, event2.event_endtime) && tsrange(event1.event_starttime - interval 'LookBack hour', event1.event_endtime - interval 'LookBack hour') AND event1.kb_archivid = 'QueryEventID' AND ST_Intersects(ST_Buffer(rotate_hgs_polygon(event1.hgs_bbox, LookBack), SpatialBuffer), event2.hgs_bbox);"
+	COUNT_EVENT_BY_MONTH string = "select to_char(event_starttime,'Mon') as month, extract(year from event_starttime) as year, extract(month from event_starttime) as month_id, Count(*) as number_of_events from %s WHERE tsrange(event_starttime, event_endtime) && tsrange('%s', '%s') group by 1,2,3 Order by 2,3;"
 
 	IMAGE_URL_BASE string = "http://sdo.gsfc.nasa.gov/assets/img/browse/"
 

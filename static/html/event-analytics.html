@@ -1,0 +1,51 @@
+<div class="container-fluid" ng-controller="EventCtrl">
+    <div class="row">
+        <div class="col-sm-6 col-md-offset-3">
+            <form ng-submit="searchEventStats()">
+                <div class="input-group">
+                    <input ng-model="eventID" type="text" class="form-control" placeholder="Search with Event ID">
+                    <span class="input-group-btn">
+                        <input type="submit" class="btn btn-primary" type="button">Search!</input>
+                    </span>
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-sm-8">
+            <canvas id="line" class="chart chart-line" chart-data="data"
+                    chart-labels="labels" chart-series="series" chart-options="options"
+                    chart-dataset-override="datasetOverride" chart-click="onClick">
+            </canvas>
+        </div>
+
+        <div class="col-sm-4">
+            <div id="chart-02"></div>
+            <br>
+        </div>
+
+    </div>
+
+
+    <div class="row">
+
+        <div class="col-sm-4">
+            <div id="chart-03"></div>
+            <br>
+        </div>
+
+        <div class="col-sm-4">
+            <div id="chart-04"></div>
+            <br>
+        </div>
+
+        <div class="col-sm-4">
+            <div id="chart-05"></div>
+            <br>
+        </div>
+
+    </div>
+    <hr>
+    <p class="small text-muted">Built by <a href="https://dmlab.cs.gsu.edu">DMLAB GSU</a></p>
+</div>
