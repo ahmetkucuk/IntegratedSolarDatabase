@@ -67,8 +67,8 @@ type TrackImageParameterRequest struct {
 	ParameterID string
 }
 
-type CountEventByMonthRequest struct {
-	EventType string
+type EventTypesRangeRequest struct {
+	EventTypes []string
 	StartTime string
 	EndTime string
 }
@@ -186,12 +186,12 @@ func CreateTrackImageParameterRequest(input url.Values)  (TrackImageParameterReq
 	return r, nil
 }
 
-func CreateEventCountByMonthRequest(input url.Values)  (CountEventByMonthRequest, error) {
-	r := CountEventByMonthRequest{}
+func CreateEventTypesRangeRequest(input url.Values)  (EventTypesRangeRequest, error) {
+	r := EventTypesRangeRequest{}
 
-	r.EventType = input.Get("eventtype")
 	r.StartTime = input.Get("starttime")
 	r.EndTime = input.Get("endtime")
+	r.EventTypes = strings.Split(input.Get("eventtypes"), ",")
 
 	return r, nil
 }

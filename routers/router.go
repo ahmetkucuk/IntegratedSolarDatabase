@@ -27,5 +27,6 @@ func init() {
 	beego.Router("/analytics/*", &controllers.AnalyticsController{})
 	beego.Router("/analytics/api/query/track/ts", &controllers.AnalyticsController{}, "get:TrackImageParameterAPI")
 	beego.Router("/analytics/api/query/sun/event/count/", &controllers.AnalyticsController{}, "get:EventCountByMonth")
+	beego.Router("/analytics/api/query/sun/event/area/", &controllers.AnalyticsController{}, "get:EventAreaSumByMonth")
 	beego.Router("/*", &controllers.MainController{})
 }

@@ -8,21 +8,28 @@ angular.module("analytics")
 angular.module("analytics").config(function($routeProvider, $locationProvider, URL) {
 
         $routeProvider.when('/analytics', {
-            templateUrl : URL + 'static/html/sun-analytics.html',
-            controller  : 'SunCtrl'
+            templateUrl : URL + 'static/html/general-analytics.html',
+            controller  : 'GeneralCtrl'
         })
-        .when('/analytics/sun', {
-            templateUrl : URL + 'static/html/sun-analytics.html',
-            controller  : 'SunCtrl'
+        .when('/analytics/general', {
+            templateUrl : URL + 'static/html/general-analytics.html',
+            controller  : 'GeneralCtrl'
         })
-
         .when('/analytics/event', {
             templateUrl : URL + 'static/html/event-analytics.html',
             controller  : 'EventCtrl'
         })
-        .when('/analytics/event/:eventID', {
+        .when('/analytics/event/:wavelength/:param/:eventID*', {
             templateUrl : URL + 'static/html/event-analytics.html',
             controller  : 'EventCtrl'
+        }).
+        when('/analytics/eventtype/', {
+            templateUrl : URL + 'static/html/eventtype-analytics.html',
+            controller  : 'EventTypeCtrl'
+        }).
+        when('/analytics/eventtype/:eventType/:wavelength/:param', {
+                templateUrl : URL + 'static/html/eventtype-analytics.html',
+                controller  : 'EventTypeCtrl'
         }).
         otherwise({
             redirect: '/analytics'

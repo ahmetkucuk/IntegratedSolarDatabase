@@ -1,0 +1,48 @@
+<div class="container-fluid">
+    <div class="row">
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                Event Type:
+                <select class="form-control"
+                        ng-change="onEventTypeChange()"
+                        ng-options="option.name for option in eventTypeInfo.availableOptions track by option.id"
+                        ng-model="eventTypeInfo.selectedOption"></select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                Wavelength:
+                <select class="form-control"
+                        ng-change="onWavelengthChanged()"
+                        ng-options="option.name for option in wavelengthInfo.availableOptions track by option.id"
+                        ng-model="wavelengthInfo.selectedOption"
+                        ng-disabled="true"></select>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div id="parameter-type-div" class="form-group">
+                Parameter:
+                <select class="form-control"
+                        ng-change="onParameterTypeChanged()"
+                        ng-options="option.name for option in parameterInfo.availableOptions track by option.id"
+                        ng-model="parameterInfo.selectedOption"
+                        ng-disabled="true"></select>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+
+        <div class="col-sm-6">
+            <canvas id="count_by_month" class="chart chart-bar"
+                    chart-data="count_by_month_data" chart-labels="count_by_month_labels" chart-options="count_by_month_options">
+            </canvas>
+        </div>
+        <div class="col-sm-6">
+            <canvas id="area_by_month" class="chart chart-bar"
+                    chart-data="area_by_month_data" chart-labels="area_by_month_labels" chart-options="area_by_month_options">
+            </canvas>
+        </div>
+
+    </div>
+</div>

@@ -1,6 +1,25 @@
-<div class="container-fluid" ng-controller="EventCtrl">
+<div class="container-fluid">
     <div class="row">
-        <div class="col-sm-6 col-md-offset-3">
+        <div class="col-sm-3">
+            <div class="form-group">
+                Wavelength:
+                <select class="form-control"
+                        ng-change="onWavelengthChanged()"
+                        ng-options="option.name for option in wavelengthInfo.availableOptions track by option.id"
+                        ng-model="wavelengthInfo.selectedOption"></select>
+            </div>
+        </div>
+        <div class="col-sm-3">
+            <div id="parameter-type-div" class="form-group">
+                Parameter:
+                <select class="form-control"
+                        ng-change="onParameterTypeChanged()"
+                        ng-options="option.name for option in parameterInfo.availableOptions track by option.id"
+                        ng-model="parameterInfo.selectedOption"></select>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            Event ID:
             <form ng-submit="searchEventStats()">
                 <div class="input-group">
                     <input ng-model="eventID" type="text" class="form-control" placeholder="Search with Event ID">

@@ -5,10 +5,10 @@ import (
 	"solardatabase/dao"
 )
 
-func CountEventByMonth(r models.CountEventByMonthRequest) (*models.CloseByEventsResponse) {
+func CountEventTypeByMonth(r models.EventTypesRangeRequest) (*models.CloseByEventsResponse) {
 
 
-	results, _ := dao.CountEventByMonth(r)
+	results, _ := dao.AggregateEventAttributeByMonth(r, false)
 	result := &models.CloseByEventsResponse {
 		Status: "OK",
 		StatusCode:1,
@@ -17,3 +17,17 @@ func CountEventByMonth(r models.CountEventByMonthRequest) (*models.CloseByEvents
 	}
 	return result
 }
+
+func AreaSumEventTypeByMonth(r models.EventTypesRangeRequest) (*models.CloseByEventsResponse) {
+
+
+	results, _ := dao.AggregateEventAttributeByMonth(r, true)
+	result := &models.CloseByEventsResponse {
+		Status: "OK",
+		StatusCode:1,
+		Msg:"Successful",
+		Result: results,
+	}
+	return result
+}
+

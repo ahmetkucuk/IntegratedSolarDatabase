@@ -4,6 +4,7 @@ angular.module("shared").service("RESTService", function($resource) {
     var currentEvents;
     var eventNames;
     var visibleEventTypes = [];
+    var DMLAB_URL = "http://dmlab.cs.gsu.edu/dmlabapi/";
 
     var loaderCounter = 0;
     this.executeGetWithLoader = function(request, $scope, callback) {
@@ -66,22 +67,30 @@ angular.module("shared").service("RESTService", function($resource) {
     };
 
     this.getTrackParameters = function($scope, id, wave, param, onSuccess, onError) {
-        var requestURL = URL + "analytics/api/query/track/ts?id=" + id + "&wavelength=" + wave + "&paramid=" + param;
-        var GetTrackParameters= $resource(requestURL);
-        this.executeGetWithLoader(GetTrackParameters, $scope, function(response) {
+        // var requestURL = DMLAB_URL + "analytics/api/query/track/ts?id=" + id + "&wavelength=" + wave + "&paramid=" + param;
+        var requestURL = DMLAB_URL + "params/SDO/AIA/param/track/ts?id=" + id + "&wave=" + wave + "&param=" + param;
+        var GetTrackParameters = $resource(requestURL);
+        GetTrackParameters.query(function(response) {
+            onSuccess(response);
+        });
+    };
+
+    this.getEventCountByMonth = function($scope, eventType, starttime, endtime, onSuccess, onError) {
+        var requestURL = URL + "analytics/api/query/sun/event/count?eventtypes=" + eventType + "&starttime=" + starttime + "&endtime=" + endtime;
+        var GetEventCount = $resource(requestURL);
+        this.executeGetWithLoader(GetEventCount, $scope, function(response) {
             if (response.Status == "OK") {
-                console.log(response);
+                onSuccess(response.Result)
             } else {
                 onError(response.Msg)
             }
         });
     };
 
-    this.getEventCountByMonth = function($scope, eventType, starttime, endtime, onSuccess, onError) {
-        var requestURL = URL + "analytics/api/query/sun/event/count?eventtype=" + eventType + "&starttime=" + starttime + "&endtime=" + endtime;
+    this.getAreaSumByMonth = function($scope, eventType, starttime, endtime, onSuccess, onError) {
+        var requestURL = URL + "analytics/api/query/sun/event/area?eventtypes=" + eventType + "&starttime=" + starttime + "&endtime=" + endtime;
         var GetEventCount = $resource(requestURL);
         this.executeGetWithLoader(GetEventCount, $scope, function(response) {
-            console.log(response);
             if (response.Status == "OK") {
                 onSuccess(response.Result)
             } else {

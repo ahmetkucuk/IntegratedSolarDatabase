@@ -185,8 +185,19 @@ func GetCloseByEvents(r models.CloseByEventRequest) (utils.JSONString, error) {
 	return resultJson, nil
 }
 
-func CountEventByMonth(r models.CountEventByMonthRequest) (utils.JSONString, error) {
-	query := fmt.Sprintf(utils.COUNT_EVENT_BY_MONTH,  r.EventType, r.StartTime, r.EndTime)
+func AggregateEventAttributeByMonth(r models.EventTypesRangeRequest, isArea bool) (utils.JSONString, error) {
+	var query = ""
+
+	if len(r.EventTypes) == 1 {
+		if isArea {
+			query = fmt.Sprintf(utils.AREASUM_EVENT_TYPE_BY_MONTH,  r.EventTypes[0], r.StartTime, r.EndTime)
+		} else {
+			query = fmt.Sprintf(utils.COUNT_EVENT_TYPE_BY_MONTH,  r.EventTypes[0], r.StartTime, r.EndTime)
+		}
+	} else {
+		query = utils.CreateAggragateAllEventsByMonthQuery(r.EventTypes, r.StartTime, r.EndTime, isArea)
+	}
+
 	fmt.Println(query)
 	resultJson, err := utils.GetJSON(db, query)
 
@@ -198,5 +209,4 @@ func CountEventByMonth(r models.CountEventByMonthRequest) (utils.JSONString, err
 		return resultJson, errors.New("Couldn't find the any event")
 	}
 	return resultJson, nil
-
 }

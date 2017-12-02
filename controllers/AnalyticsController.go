@@ -25,7 +25,14 @@ func (this *AnalyticsController) TrackImageParameterAPI() {
 
 func (this *AnalyticsController) EventCountByMonth() {
 
-	request, _ := models.CreateEventCountByMonthRequest(this.Input())
-	this.Data["json"] = services.CountEventByMonth(request)
+	request, _ := models.CreateEventTypesRangeRequest(this.Input())
+	this.Data["json"] = services.CountEventTypeByMonth(request)
+	this.ServeJSON()
+}
+
+func (this *AnalyticsController) EventAreaSumByMonth() {
+
+	request, _ := models.CreateEventTypesRangeRequest(this.Input())
+	this.Data["json"] = services.AreaSumEventTypeByMonth(request)
 	this.ServeJSON()
 }
