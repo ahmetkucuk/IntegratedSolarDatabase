@@ -1,7 +1,7 @@
 # SolarDatabaseServer
 Solar Database API with Golang on Beego
 
-##Publication
+## Publication
 https://link.springer.com/chapter/10.1007/978-3-319-64367-0_25
 
 ## Requirements: 
