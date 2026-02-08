@@ -1,7 +1,10 @@
 # SolarDatabaseServer
-A try for Solar Database API with Golang on Beego
+Solar Database API with Golang on Beego
 
-Requirements: 
+##Publication
+https://link.springer.com/chapter/10.1007/978-3-319-64367-0_25
+
+## Requirements: 
 
 Golang  -> check web site for installation. Make sure you create a workspace folder
 
